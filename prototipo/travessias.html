@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Travessias — uma jornada interseccional pelos dados educacionais brasileiros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root {
+    /* Paleta do Observatório */
+    --orange: #E67E22;
+    --orange-deep: #D35400;
+    --orange-soft: #F5B271;
+    --orange-pale: #FBE4CC;
+    --brown: #5A3825;
+    --brown-soft: #8B5A3C;
+    --brown-deep: #3D2418;
+    --cream: #FAF4E8;
+    --cream-warm: #F5EBD7;
+    --paper: #FCF8F0;
+    --ink: #2A1F18;
+    --ink-soft: #5A4A3F;
+    --ink-faint: #9A8B7E;
+    --rule: #D6C9B8;
+    --mark: #A82E2E;
+    --mark-soft: #F2D5D0;
+    --highlight: #FFF3D9;
+
+    /* Cores das personagens — agora dentro da paleta do Observatório */
+    --helena: #D35400;       /* laranja-deep */
+    --helena-glow: #E67E22;  /* laranja médio */
+    --davi: #5A3825;          /* marrom escuro */
+    --davi-glow: #8B5A3C;    /* marrom médio */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+  .sans { font-family: 'Work Sans', sans-serif; }
+
+  /* ============= NAV (consistente com Observatório) ============= */
+  nav.brand-bar {
+    border-bottom: 1px solid var(--rule);
+    padding: 1rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    backdrop-filter: blur(8px);
+    background: rgba(250, 244, 232, 0.94);
+  }
+  nav.brand-bar .logo {
+    display: flex; align-items: center; gap: 0.7rem;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 700; color: var(--orange-deep);
+    font-size: 0.95rem; letter-spacing: -0.01em;
+  }
+  nav.brand-bar .logo-mark {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--orange); position: relative; overflow: hidden;
+  }
+  nav.brand-bar .logo-mark::before {
+    content: ''; position: absolute;
+    top: 50%; left: 0; width: 100%; height: 50%;
+    background: var(--orange-deep);
+  }
+  nav.brand-bar .nav-links {
+    display: flex; gap: 2rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem; color: var(--brown);
+  }
+  nav.brand-bar .nav-links a {
+    color: inherit; text-decoration: none; transition: color 0.2s;
+  }
+  nav.brand-bar .nav-links a:hover { color: var(--orange-deep); }
+  nav.brand-bar .nav-links a.current {
+    color: var(--orange-deep); font-weight: 600;
+  }
+
+  /* ============= INTRO ============= */
+  .intro {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 6rem 2rem 4rem; text-align: center;
+    position: relative;
+    background: linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%);
+    overflow: hidden;
+  }
+  /* Decorative shapes inspired by site */
+  .intro::before {
+    content: '';
+    position: absolute;
+    top: 8%; right: -120px;
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230,126,34,0.08), transparent 70%);
+    pointer-events: none;
+  }
+  .intro::after {
+    content: '';
+    position: absolute;
+    bottom: 5%; left: -100px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(90,56,37,0.06), transparent 70%);
+    pointer-events: none;
+  }
+
+  .intro .breadcrumb {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--orange-deep);
+    margin-bottom: 2rem; font-weight: 700;
+    z-index: 2;
+  }
+  .intro h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+    font-weight: 600; line-height: 1.05;
+    letter-spacing: -0.02em; max-width: 920px;
+    margin-bottom: 2rem;
+    color: var(--ink);
+    z-index: 2;
+  }
+  .intro h1 em {
+    font-style: italic; color: var(--orange-deep);
+    font-weight: 500;
+  }
+  .intro .lead {
+    font-size: 1.18rem; color: var(--ink-soft);
+    max-width: 620px; line-height: 1.7;
+    margin-bottom: 3rem;
+    z-index: 2;
+  }
+  .intro .characters {
+    display: flex; gap: 5rem; margin-top: 1rem; align-items: flex-start;
+    z-index: 2;
+  }
+  .char-intro {
+    text-align: center;
+    max-width: 220px;
+  }
+  .char-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    border: 3px solid var(--paper);
+  }
+  .char-dot.helena { background: var(--helena); }
+  .char-dot.davi { background: var(--davi); }
+  .char-name {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.95rem; letter-spacing: 0.05em;
+    text-transform: uppercase; font-weight: 700;
+    color: var(--brown);
+    margin-bottom: 0.3rem;
+  }
+  .char-where {
+    font-size: 0.95rem; color: var(--ink-soft);
+    font-style: italic; margin-bottom: 0.6rem;
+  }
+  .char-desc {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .scroll-cue {
+    position: absolute; bottom: 2rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--ink-faint);
+    animation: float 2s ease-in-out infinite;
+    z-index: 2;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  /* ============= JOURNEY (sticky stage) ============= */
+  .journey { position: relative; }
+  .stage-wrap {
+    position: sticky; top: 0; height: 100vh; z-index: 1;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    background: var(--paper); pointer-events: none;
+    padding-top: 60px; /* compensa nav fixa */
+  }
+  .stage-meta {
+    position: absolute; top: 8vh; left: 0; right: 0;
+    text-align: center; pointer-events: none;
+    padding: 0 1rem;
+  }
+  .stage-act {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--orange-deep);
+    margin-bottom: 0.5rem; font-weight: 700;
+    transition: opacity 0.4s;
+  }
+  .stage-title {
+    font-family: 'Lora', serif;
+    font-size: clamp(1.3rem, 2.4vw, 1.8rem); font-weight: 500; color: var(--ink);
+    transition: opacity 0.5s;
+    line-height: 1.2;
+  }
+  .stage-title em { font-style: italic; color: var(--orange-deep); }
+  #stage { width: min(940px, 92vw); height: 60vh; }
+  .stage-source {
+    position: absolute; bottom: 4vh;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.74rem; color: var(--ink-faint);
+    text-align: center; max-width: 80%;
+    transition: opacity 0.5s;
+    padding: 0 1rem;
+  }
+
+  /* ============= SCROLL TRACK ============= */
+  .scroll-track { position: relative; z-index: 2; pointer-events: none; }
+  .step {
+    min-height: 90vh;
+    display: flex; align-items: center;
+    padding: 0 2rem; pointer-events: none;
+  }
+  .step-card {
+    max-width: 400px;
+    background: rgba(252, 248, 240, 0.97);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--ink);
+    border-radius: 4px;
+    padding: 1.6rem 1.8rem;
+    box-shadow: 0 8px 32px rgba(90, 56, 37, 0.08);
+    pointer-events: auto;
+    transform: translateY(20px); opacity: 0;
+    transition: opacity 0.6s, transform 0.6s, border-color 0.4s;
+  }
+  .step.in-view .step-card {
+    transform: translateY(0); opacity: 1;
+  }
+  .step-card.left { margin-right: auto; }
+  .step-card.right { margin-left: auto; }
+  .step-card.center { margin: 0 auto; }
+  .step-card.helena-accent { border-left-color: var(--helena); }
+  .step-card.davi-accent { border-left-color: var(--davi); }
+  .step-card.mark-accent { border-left-color: var(--mark); }
+  .step-card .ato-tag {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.66rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--orange-deep);
+    margin-bottom: 0.6rem; font-weight: 600;
+  }
+  .step-card.helena-accent .ato-tag { color: var(--helena); }
+  .step-card.davi-accent .ato-tag { color: var(--davi); }
+  .step-card.mark-accent .ato-tag { color: var(--mark); }
+  .step-card h3 {
+    font-family: 'Lora', serif;
+    font-size: 1.4rem; font-weight: 600;
+    line-height: 1.2; margin-bottom: 0.7rem;
+    letter-spacing: -0.01em; color: var(--ink);
+  }
+  .step-card h3 em { font-style: italic; color: var(--orange-deep); }
+  .step-card.davi-accent h3 em { color: var(--brown-soft); }
+  .step-card.mark-accent h3 em { color: var(--mark); }
+  .step-card p {
+    font-size: 0.98rem; color: var(--ink-soft);
+    line-height: 1.6; margin-bottom: 0.7rem;
+  }
+  .step-card p:last-child { margin-bottom: 0; }
+  .step-card strong { color: var(--ink); font-weight: 600; }
+  .step-card .voice {
+    font-style: italic; color: var(--ink);
+    border-top: 1px dashed var(--rule);
+    padding-top: 0.8rem; margin-top: 0.8rem;
+    font-size: 0.95rem;
+    font-family: 'Lora', serif;
+  }
+  .step-card .voice::before { content: '— '; color: var(--ink-faint); }
+
+  /* Act divider — pílula entre dimensões */
+  .act-divider {
+    height: 30vh; display: flex;
+    align-items: center; justify-content: center;
+    pointer-events: none;
+    z-index: 1; position: relative;
+  }
+  .act-divider .pill {
+    background: var(--orange-deep); color: var(--cream);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.5rem; border-radius: 24px;
+    pointer-events: auto;
+    box-shadow: 0 4px 14px rgba(211, 84, 0, 0.25);
+    font-weight: 600;
+  }
+
+  /* ============= EPILOGUE — agora com mensagem de resistência ============= */
+  .epilogue {
+    position: relative; z-index: 3;
+    background: var(--cream-warm);
+    padding: 6rem 2rem;
+    border-top: 1px solid var(--rule);
+  }
+  .epilogue-inner {
+    max-width: 760px; margin: 0 auto; text-align: center;
+  }
+  .epilogue .epi-eyebrow {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--orange-deep);
+    font-weight: 700; margin-bottom: 1.5rem;
+  }
+  .epilogue h2 {
+    font-family: 'Lora', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 500; line-height: 1.3;
+    color: var(--brown); margin-bottom: 1.5rem;
+  }
+  .epilogue h2 em {
+    font-style: italic; color: var(--orange-deep); font-weight: 500;
+  }
+  .epilogue .epi-body {
+    text-align: left;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--orange);
+    border-radius: 4px;
+    padding: 2.2rem 2.4rem;
+    margin: 2.5rem 0;
+  }
+  .epilogue .epi-body p {
+    font-size: 1.08rem;
+    color: var(--ink);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .epilogue .epi-body p:last-child { margin-bottom: 0; }
+  .epilogue .epi-body p strong {
+    color: var(--brown); font-weight: 600;
+  }
+  .epilogue .epi-body p em {
+    color: var(--orange-deep);
+    font-style: italic;
+    font-weight: 500;
+  }
+  .epilogue .citation {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    margin-top: 2rem;
+    line-height: 1.6;
+  }
+  .epilogue .actions {
+    display: flex; gap: 1rem; justify-content: center;
+    flex-wrap: wrap; margin-top: 2.5rem;
+  }
+  .epilogue .btn {
+    padding: 0.85rem 1.6rem;
+    background: var(--orange-deep); color: white;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.82rem; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid var(--orange-deep);
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .epilogue .btn:hover { background: var(--orange); border-color: var(--orange); }
+  .epilogue .btn.ghost {
+    background: transparent; color: var(--orange-deep);
+  }
+  .epilogue .btn.ghost:hover { background: var(--orange-deep); color: white; }
+
+  /* SVG ANIMATIONS */
+  @keyframes halo-pulse {
+    0%, 100% { stroke-opacity: 0.18; stroke-width: 14; }
+    50% { stroke-opacity: 0.4; stroke-width: 22; }
+  }
+  .halo.active { animation: halo-pulse 2.4s ease-in-out infinite; }
+
+  @keyframes mark-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.18); }
+  }
+  .mark-arc.pulsing {
+    animation: mark-pulse 1.4s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+
+  @media (max-width: 700px) {
+    .step-card { max-width: 88vw; }
+    .step-card.left, .step-card.right, .step-card.center { margin: 0 auto; }
+    .intro .characters { flex-direction: column; gap: 2rem; }
+    #stage { height: 55vh; }
+    .stage-title { font-size: 1.05rem; padding: 0 1rem; }
+    nav.brand-bar .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============= NAV ============= -->
+<nav class="brand-bar">
+  <div class="logo">
+    <div class="logo-mark"></div>
+    <span>Observatório de Equidade Educacional</span>
+  </div>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#">Sobre</a>
+    <a href="#">Notícias</a>
+    <a href="#" class="current">Travessias</a>
+    <a href="./insights3_dinamico.html">Painel de Dados</a>
+    <a href="#">Publicações</a>
+    <a href="#">Contato</a>
+  </div>
+</nav>
+
+<!-- ============= INTRO ============= -->
+<section class="intro">
+  <div class="breadcrumb">Plataforma de Dados · Onboarding Interseccional</div>
+  <h1>Duas crianças nascem<br>no <em>mesmo dia</em>.</h1>
+  <p class="lead">Os dados educacionais brasileiros nunca contam suas histórias por inteiro. Mas, lidos com olhar interseccional, deixam ver muito mais do que parecia. Vamos seguir as duas — Helena e Davi — pelos próximos dezesseis anos.</p>
+  <div class="characters">
+    <div class="char-intro">
+      <div class="char-dot helena"></div>
+      <div class="char-name">Helena</div>
+      <div class="char-where">Campinas, SP</div>
+      <div class="char-desc">Branca, classe média baixa. Mãe pedagoga, pai bancário.</div>
+    </div>
+    <div class="char-intro">
+      <div class="char-dot davi"></div>
+      <div class="char-name">Davi</div>
+      <div class="char-where">Petrolina, PE</div>
+      <div class="char-desc">Menino negro, classe popular. Mãe diarista, pai pedreiro.</div>
+    </div>
+  </div>
+  <div class="scroll-cue">Role para começar ↓</div>
+</section>
+
+<!-- ============= JOURNEY ============= -->
+<div class="journey">
+  <div class="stage-wrap">
+    <div class="stage-meta">
+      <div class="stage-act" id="stage-act">Ato 1 · Nascer</div>
+      <div class="stage-title" id="stage-title">Acesso à creche · Brasil, <em>2023</em></div>
+    </div>
+    <svg id="stage"></svg>
+    <div class="stage-source" id="stage-source">Fonte: PNAD Contínua / IBGE · 2023</div>
+  </div>
+
+  <div class="scroll-track">
+
+    <!-- ATO 1 -->
+    <div class="step" data-scene="ato1-1">
+      <div class="step-card center">
+        <div class="ato-tag">Ato 1 · 0 a 3 anos</div>
+        <h3>O Brasil tem <em>38,7%</em> das crianças de 0–3 anos na creche.</h3>
+        <p>É a média nacional do PNAD Contínua. O Plano Nacional de Educação previa 50% até 2024 — não chegamos lá. Mas a média esconde mais do que mostra.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato1-2">
+      <div class="step-card left helena-accent">
+        <div class="ato-tag">Helena · 18 meses</div>
+        <h3>Mãe pedagoga, vaga próxima de casa.</h3>
+        <p>No <strong>quintil mais alto de renda</strong>, o atendimento em creche já passa de 50%. Helena entra cedo, com rotina de leitura compartilhada em casa.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato1-3">
+      <div class="step-card right davi-accent">
+        <div class="ato-tag">Davi · 0 a 4 anos</div>
+        <h3>Avó negra, raiz nordestina, até a pré-escola.</h3>
+        <p>No <strong>quintil mais pobre, apenas 11,2% das crianças de 0–1 ano são atendidas</strong> — embora a demanda chegue a 45%. Davi fica com a avó. Aprende com ela cantigas, oração, palavras de afeto e as primeiras letras. O sistema não conta isso como aprendizagem.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato1-mark">
+      <div class="step-card center mark-accent">
+        <div class="ato-tag">A primeira marca fica</div>
+        <h3>Os pontos guardam <em>memória</em>.</h3>
+        <p>Helena entra com vocabulário institucional ampliado. Davi entra com vínculo afetivo intenso e capital cultural negro — nem melhor nem pior, simplesmente outro. Cada arco que aparecer em torno dos pontos, daqui pra frente, é uma marca acumulada na trajetória.</p>
+      </div>
+    </div>
+
+    <div class="act-divider"><span class="pill">Ato 2 · Aprender</span></div>
+
+    <!-- ATO 2 -->
+    <div class="step" data-scene="ato2-1">
+      <div class="step-card center">
+        <div class="ato-tag">Ato 2 · 6 a 14 anos</div>
+        <h3>O 5º ano e a primeira régua.</h3>
+        <p>O SAEB mede aprendizagem adequada em Língua Portuguesa pelo corte oficial INEP (proficiência ≥ 225). <strong>Em escolas públicas brasileiras, 40,5% dos estudantes do 5º ano</strong> atingem esse patamar. É a média que sai nas manchetes — e é a primeira que precisa ser desagregada.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato2-2">
+      <div class="step-card left">
+        <div class="ato-tag">Quando se desagrega por raça/cor</div>
+        <h3>Brancos e amarelos: <em>46,9%</em>. Pretos e pardos: <em>37,5%</em>.</h3>
+        <p>Diferença de <strong>9,3 pontos percentuais</strong>. Mesma escala, mesma régua, escolas diferentes, histórias diferentes. E quando se cruza raça com sexo e quintil socioeconômico, a faixa se abre ainda mais: do topo (meninas brancas no INSE alto, 63,6%) ao chão (meninos pretos no INSE baixo, 23,7%) são quase <strong>40 pontos percentuais</strong>.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato2-3">
+      <div class="step-card right helena-accent">
+        <div class="ato-tag">Helena · marca de gênero</div>
+        <h3>"Aplicada", não "inteligente".</h3>
+        <p>Décadas de pesquisa documentam: meninas — inclusive brancas de classe média — são lidas como esforçadas, organizadas, comportadas. Meninos como criativos, talentosos.</p>
+        <p class="voice">A professora sempre diz que sou aplicada. Eu queria que ela dissesse que sou inteligente.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato2-4">
+      <div class="step-card left davi-accent">
+        <div class="ato-tag">Davi · marca de raça</div>
+        <h3>O olhar que vê o menino negro como "agitado".</h3>
+        <p>Pesquisas etnográficas brasileiras desde os anos 1990 mostram que crianças negras — especialmente meninos — recebem em média <strong>menos elogios cognitivos e mais correções disciplinares</strong>. Não como hostilidade explícita: como ambiente.</p>
+        <p class="voice">Quando eu mexo, a tia chama atenção. Quando o Pedro mexe, ela ri.</p>
+      </div>
+    </div>
+
+    <div class="act-divider"><span class="pill">Ato 3 · Decidir</span></div>
+
+    <!-- ATO 3 -->
+    <div class="step" data-scene="ato3-1">
+      <div class="step-card center">
+        <div class="ato-tag">Ato 3 · 15 a 17 anos</div>
+        <h3>Ensino Médio. Matemática vira o <em>filtro</em>.</h3>
+        <p>É aqui que carreiras começam a se tornar (im)possíveis. E é aqui que as marcas dos atos anteriores cobram juros.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato3-2">
+      <div class="step-card left helena-accent">
+        <div class="ato-tag">Helena</div>
+        <h3>Bom desempenho em LP. Em matemática, <em>desliza</em>.</h3>
+        <p>No PISA 2022 o Brasil tem uma das menores diferenças de gênero em matemática (5 pontos a favor dos meninos, contra 9 da média OCDE). Mas estudos longitudinais brasileiros mostram que essa diferença <strong>cresce ao longo do Ensino Médio</strong> — alimentada por ameaça do estereótipo, expectativas de professoras e pressões familiares para escolhas "compatíveis com o feminino". Helena escolhe humanas. "Foi escolha dela."</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato3-3">
+      <div class="step-card right davi-accent">
+        <div class="ato-tag">Davi</div>
+        <h3>Trabalha à tarde. Estuda à noite.</h3>
+        <p>Adolescentes negros do Nordeste têm taxa de trabalho juvenil várias vezes maior que brancos do Sudeste. Davi gosta de matemática. Mas chega ao 3º ano com <strong>menos horas de estudo possíveis</strong>, não menos vontade.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato3-4">
+      <div class="step-card center mark-accent">
+        <div class="ato-tag">O que o gráfico mostra agora</div>
+        <h3>Os dois caem em matemática — por <em>razões diferentes</em>.</h3>
+        <p>Uma análise por gênero esconde Davi. Uma análise por raça esconde Helena. A leitura interseccional mostra os dois custos simultaneamente — e revela que não são o "mesmo problema".</p>
+      </div>
+    </div>
+
+    <div class="act-divider"><span class="pill">Ato 4 · Atravessar</span></div>
+
+    <!-- ATO 4 -->
+    <div class="step" data-scene="ato4-1">
+      <div class="step-card center">
+        <div class="ato-tag">Ato 4 · 17 a 19 anos</div>
+        <h3>O ENEM. A travessia.</h3>
+        <p>Aos 19 anos, <strong>79,4% dos jovens brancos</strong> concluíram o Ensino Médio. Entre pretos: <strong>62,1%</strong>. A primeira peneira já passou.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato4-2">
+      <div class="step-card left helena-accent">
+        <div class="ato-tag">Helena · entra</div>
+        <h3>Universidade pública estadual em São Paulo.</h3>
+        <p>Letras. A família comemora. Helena também. E carrega, sem nomear, a marca de quem aprendeu a se desenhar pequena diante das exatas.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato4-3">
+      <div class="step-card right davi-accent">
+        <div class="ato-tag">Davi · entra</div>
+        <h3>Federal, via cotas raciais. Engenharia.</h3>
+        <p>A Lei 12.711/2012 é a razão pela qual o ponto de Davi sobe agora. Sem ela, não subiria. Com ela, sobe — e Davi enfrenta uma nova realidade: a de ser frequentemente o único homem negro na sala. E também a de fazer parte de uma geração de jovens negros que, pela primeira vez na história brasileira, ocupa em massa esses espaços.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato4-4">
+      <div class="step-card center">
+        <div class="ato-tag">Pertencimento</div>
+        <h3>Entrar não é o mesmo que <em>ficar</em>.</h3>
+        <p>Estudos da ANDIFES mostram que estudantes cotistas em cursos de alto prestígio têm taxa de evasão maior — não por desempenho, por permanência material e simbólica. A travessia continua dentro da universidade. E continua, também, com redes de apoio: coletivos negros universitários, programas de permanência, professoras e professores que abrem caminhos.</p>
+      </div>
+    </div>
+
+    <div class="act-divider"><span class="pill">Ato 5 · Ganhar</span></div>
+
+    <!-- ATO 5 -->
+    <div class="step" data-scene="ato5-1">
+      <div class="step-card center">
+        <div class="ato-tag">Ato 5 · 22 anos em diante</div>
+        <h3>Os dois se formam. Os dois trabalham.</h3>
+        <p>Mas o mercado de trabalho brasileiro lê seus diplomas com olhares diferentes — e paga, em média, com cifras diferentes.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato5-2">
+      <div class="step-card left">
+        <div class="ato-tag">A hierarquia do rendimento</div>
+        <h3>Mesma escolaridade, salários diferentes.</h3>
+        <p>Segundo a PNAD Contínua, uma <strong>mulher negra com ensino superior ganha em média menos que um homem branco com ensino médio</strong>. A escolaridade não anula a hierarquia — apenas a desloca.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato5-3">
+      <div class="step-card right mark-accent">
+        <div class="ato-tag">As marcas seguem trabalhando</div>
+        <h3>Não é fim. É <em>continuidade</em>.</h3>
+        <p>Helena negocia salário com a marca de quem aprendeu a se diminuir. Davi entra em ambientes corporativos brancos com marcas, mas também com estratégias — repertório de enfrentamento, redes negras profissionais, vocabulário político construído em coletivo. Os dois carregam. Os dois agem.</p>
+      </div>
+    </div>
+
+    <div class="act-divider"><span class="pill">Ato 6 · Hoje</span></div>
+
+    <!-- ATO 6 -->
+    <div class="step" data-scene="ato6-1">
+      <div class="step-card center">
+        <div class="ato-tag">Ato 6 · A matriz</div>
+        <h3>Todas as travessias, ao mesmo tempo.</h3>
+        <p>Patricia Hill Collins chama isso de <strong>matriz de dominação</strong>: marcadores sociais não atuam em camadas separadas, atuam em sistema. Cada ponto que você vê agora carrega a história inteira.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato6-2">
+      <div class="step-card left">
+        <div class="ato-tag">A tese</div>
+        <h3>Interseccionalidade não é <em>somar desvantagens</em>.</h3>
+        <p>É reconhecer que cada posição na matriz produz uma experiência <strong>qualitativamente distinta</strong> — com seus custos, suas estratégias de enfrentamento, suas formas próprias de resistência.</p>
+      </div>
+    </div>
+
+    <div class="step" data-scene="ato6-3">
+      <div class="step-card right">
+        <div class="ato-tag">Por que isso importa</div>
+        <h3>Um indicador médio nunca falou de Helena. Nunca falou de Davi.</h3>
+        <p>Política pública pensada na média é política pensada em ninguém. Os filtros interseccionais deste portal existem para tornar visíveis as travessias que as médias escondem — e para que se possa agir sobre elas.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============= EPILOGUE — agora com mensagem de resistência ============= -->
+<section class="epilogue">
+  <div class="epilogue-inner">
+    <div class="epi-eyebrow">Encerramento</div>
+    <h2>Helena e Davi atravessam encruzilhadas.<br>E <em>constroem</em>, atravessando.</h2>
+
+    <div class="epi-body">
+      <p>As trajetórias que você acompanhou não são histórias de derrota. Helena, com suas marcas de gênero, segue formada, lendo, escrevendo, criando. Davi, com suas marcas de raça e classe, é hoje engenheiro — e parte de uma rede de profissionais negros que abrem caminho para os próximos.</p>
+
+      <p>A leitura interseccional <strong>não existe para confirmar sofrimento</strong>. Existe para tornar visíveis os <em>sistemas que precisam mudar</em> — e, igualmente importante, as <em>estratégias de resistência que já operam dentro deles</em>: a avó que ensinou as primeiras letras, a professora que viu o que ninguém via, o coletivo universitário que segurou no momento de quase desistir, a rede que construiu repertório onde antes havia silêncio.</p>
+
+      <p>Essa é, afinal, a contribuição central do feminismo negro brasileiro — de Lélia Gonzalez, Sueli Carneiro, Beatriz Nascimento, Conceição Evaristo: <strong>desigualdade não é destino, e quem é marcado também age, cria, inventa, transforma</strong>. Os dados deste portal mostram desigualdade. As pessoas que os dados representam mostram, todos os dias, que ela pode ser combatida.</p>
+    </div>
+
+    <p class="citation">As trajetórias de Helena e Davi foram construídas a partir de dados oficiais (PNAD Contínua, SAEB, INEP, SIM/SINASC) e da literatura acadêmica brasileira sobre educação, raça e gênero. Cada número e cada fala têm fonte rastreável.</p>
+
+    <div class="actions">
+      <a href="./insights3_dinamico.html" class="btn">Explorar a plataforma de dados</a>
+      <a href="https://github.com/gabrielfortes-nees/observatorio-equidade-educacional-nees/tree/main/handoff" class="btn ghost" target="_blank" rel="noopener">Ver fontes e metodologia</a>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ===========================================================
+   STAGE
+   =========================================================== */
+const stage = d3.select('#stage');
+const stageEl = document.getElementById('stage');
+
+let W, H, M, w, h;
+function measure() {
+  const rect = stageEl.getBoundingClientRect();
+  W = rect.width; H = rect.height;
+  M = { top: 50, right: 70, bottom: 70, left: 160 };
+  w = W - M.left - M.right;
+  h = H - M.top - M.bottom;
+}
+measure();
+stage.attr('viewBox', `0 0 ${W} ${H}`).attr('preserveAspectRatio', 'xMidYMid meet');
+
+const gAxis   = stage.append('g').attr('transform', `translate(${M.left},${M.top})`);
+const gBars   = stage.append('g').attr('transform', `translate(${M.left},${M.top})`);
+const gAnno   = stage.append('g').attr('transform', `translate(${M.left},${M.top})`);
+const gTrails = stage.append('g').attr('transform', `translate(${M.left},${M.top})`);
+const gDots   = stage.append('g').attr('transform', `translate(${M.left},${M.top})`);
+
+/* Character state */
+const characters = {
+  helena: { color: 'var(--helena)', glow: 'var(--helena-glow)', name: 'Helena',
+            px: w*0.4, py: h*0.5, visible: false, marks: [], focused: false },
+  davi:   { color: 'var(--davi)',   glow: 'var(--davi-glow)',   name: 'Davi',
+            px: w*0.6, py: h*0.5, visible: false, marks: [], focused: false }
+};
+
+function buildDot(key) {
+  const c = characters[key];
+  const g = gDots.append('g').attr('class', `dot dot-${key}`)
+    .attr('transform', `translate(${c.px},${c.py})`).style('opacity', 0);
+  g.append('circle').attr('class', 'halo')
+    .attr('r', 22).attr('fill', 'none')
+    .attr('stroke', c.glow).attr('stroke-opacity', 0).attr('stroke-width', 0);
+  g.append('circle').attr('class', 'ring').attr('r', 13).attr('fill', 'white');
+  g.append('circle').attr('class', 'core').attr('r', 10).attr('fill', c.color);
+  g.append('g').attr('class', 'marks');
+  g.append('text').attr('class', 'label').attr('text-anchor', 'middle').attr('y', -22)
+    .attr('font-family', 'Work Sans').attr('font-size', 12).attr('font-weight', 600)
+    .attr('fill', 'var(--ink)').text(c.name);
+  return g;
+}
+buildDot('helena');
+buildDot('davi');
+
+/* ===========================================================
+   ANIMATION PRIMITIVES
+   =========================================================== */
+const EASE = d3.easeCubicInOut;
+const D_AXIS = 600;
+const D_BARS = 800;
+const D_DOTS = 1100;
+
+function showDot(key, delay = 0) {
+  characters[key].visible = true;
+  d3.select(`.dot-${key}`).transition().delay(delay).duration(500).style('opacity', 1);
+}
+function hideDot(key, delay = 0) {
+  characters[key].visible = false;
+  d3.select(`.dot-${key}`).transition().delay(delay).duration(400).style('opacity', 0);
+}
+function placeDot(key, x, y) {
+  const c = characters[key];
+  c.px = x; c.py = y;
+  d3.select(`.dot-${key}`).interrupt()
+    .attr('transform', `translate(${x},${y})`);
+}
+function moveDot(key, x, y, delay = 0, duration = D_DOTS, withTrail = true) {
+  const c = characters[key];
+  const fromX = c.px, fromY = c.py;
+  c.px = x; c.py = y;
+  const dist = Math.hypot(x - fromX, y - fromY);
+  if (withTrail && c.visible && dist > 30) {
+    const trail = gTrails.append('line')
+      .attr('x1', fromX).attr('y1', fromY).attr('x2', fromX).attr('y2', fromY)
+      .attr('stroke', c.color).attr('stroke-width', 2)
+      .attr('stroke-dasharray', '3,4').attr('opacity', 0.5);
+    trail.transition().delay(delay).duration(duration).ease(EASE)
+      .attr('x2', x).attr('y2', y);
+    trail.transition().delay(delay + duration + 200).duration(800)
+      .attr('opacity', 0).remove();
+  }
+  d3.select(`.dot-${key}`).transition().delay(delay).duration(duration).ease(EASE)
+    .attr('transform', `translate(${x},${y})`);
+}
+
+function focusDot(key) {
+  const other = key === 'helena' ? 'davi' : 'helena';
+  characters[key].focused = true;
+  characters[other].focused = false;
+  d3.select(`.dot-${key} .halo`).classed('active', true)
+    .transition().duration(500)
+    .attr('stroke-opacity', 0.3).attr('stroke-width', 16);
+  d3.select(`.dot-${other} .halo`).classed('active', false)
+    .transition().duration(500)
+    .attr('stroke-opacity', 0).attr('stroke-width', 0);
+  if (characters[other].visible) {
+    d3.select(`.dot-${other}`).transition().duration(500).style('opacity', 0.4);
+  }
+  d3.select(`.dot-${key}`).transition().duration(500).style('opacity', 1);
+  d3.select(`.dot-${key} .core`).transition().duration(500).attr('r', 11);
+  d3.select(`.dot-${other} .core`).transition().duration(500).attr('r', 10);
+  d3.select(`.dot-${key} .label`).transition().duration(500)
+    .attr('font-size', 13).attr('font-weight', 700);
+  d3.select(`.dot-${other} .label`).transition().duration(500)
+    .attr('font-size', 12).attr('font-weight', 600);
+  const matchClass = `bar-char-${key}`;
+  gBars.selectAll('rect.bar').each(function() {
+    const sel = d3.select(this);
+    if (sel.classed(matchClass)) {
+      sel.transition().duration(400).attr('opacity', 0.95);
+    } else {
+      sel.transition().duration(400).attr('opacity', 0.3);
+    }
+  });
+}
+
+function focusBoth() {
+  characters.helena.focused = false;
+  characters.davi.focused = false;
+  ['helena', 'davi'].forEach(key => {
+    d3.select(`.dot-${key} .halo`).classed('active', false)
+      .transition().duration(500).attr('stroke-opacity', 0).attr('stroke-width', 0);
+    if (characters[key].visible) {
+      d3.select(`.dot-${key}`).transition().duration(500).style('opacity', 1);
+    }
+    d3.select(`.dot-${key} .core`).transition().duration(500).attr('r', 10);
+    d3.select(`.dot-${key} .label`).transition().duration(500)
+      .attr('font-size', 12).attr('font-weight', 600);
+  });
+  gBars.selectAll('rect.bar').transition().duration(400).attr('opacity', 0.7);
+}
+
+function addMark(key, label, delay = 0) {
+  const c = characters[key];
+  if (c.marks.includes(label)) {
+    pulseMarks(key, [label]);
+    return;
+  }
+  c.marks.push(label);
+  const idx = c.marks.length - 1;
+  const totalSlots = 6;
+  const startAngle = -Math.PI/2 + idx * (Math.PI*2 / totalSlots);
+  const endAngle = startAngle + (Math.PI*2 / totalSlots) * 0.7;
+  const arc = d3.arc().innerRadius(15).outerRadius(19)
+    .startAngle(startAngle).endAngle(endAngle);
+  const path = d3.select(`.dot-${key} .marks`).append('path')
+    .attr('class', 'mark-arc')
+    .attr('d', arc())
+    .attr('fill', 'var(--mark)')
+    .attr('opacity', 0)
+    .attr('transform', 'scale(0.4)')
+    .attr('data-label', label);
+  path.transition().delay(delay).duration(700).ease(d3.easeBackOut.overshoot(1.5))
+    .attr('opacity', 0.9).attr('transform', 'scale(1)');
+  setTimeout(() => pulseMarks(key, [label]), delay + 700);
+}
+
+function pulseMarks(key, only = null) {
+  const sel = d3.select(`.dot-${key}`).selectAll('.mark-arc');
+  sel.classed('pulsing', false);
+  if (only) {
+    sel.filter(function(){ return only.includes(this.getAttribute('data-label')); })
+      .classed('pulsing', true);
+  } else {
+    sel.classed('pulsing', true);
+  }
+  setTimeout(() => sel.classed('pulsing', false), 2800);
+}
+
+function clearLayer(layer) {
+  layer.selectAll('*').interrupt().remove();
+}
+
+function setMeta(act, title, source) {
+  const a = document.getElementById('stage-act');
+  const t = document.getElementById('stage-title');
+  const s = document.getElementById('stage-source');
+  [a,t,s].forEach(el => el.style.opacity = '0');
+  setTimeout(() => {
+    a.innerHTML = act; t.innerHTML = title; s.innerHTML = source;
+    [a,t,s].forEach(el => el.style.opacity = '1');
+  }, 280);
+}
+
+function drawAxes(opts) {
+  const { xDomain, xLabel, xTicks=5, xFormat=d=>d, yDomain, yLabel, yPercent=false } = opts;
+  clearLayer(gAxis);
+  const x = d3.scaleLinear().domain(xDomain).range([0, w]);
+  let y = null;
+  if (yDomain) y = d3.scaleLinear().domain(yDomain).range([h, 0]);
+
+  const xAxis = gAxis.append('g').attr('transform', `translate(0,${h})`).style('opacity', 0);
+  xAxis.call(d3.axisBottom(x).ticks(xTicks).tickFormat(xFormat));
+  xAxis.select('.domain').attr('stroke', 'var(--rule)');
+  xAxis.selectAll('.tick line').attr('stroke', 'var(--rule)');
+  xAxis.selectAll('.tick text')
+    .attr('font-family', 'Work Sans').attr('font-size', 11).attr('fill', 'var(--ink-faint)');
+  xAxis.transition().duration(D_AXIS).style('opacity', 1);
+
+  if (xLabel) {
+    gAxis.append('text')
+      .attr('x', w/2).attr('y', h + 50).attr('text-anchor', 'middle')
+      .attr('font-family', 'Work Sans').attr('font-size', 10.5)
+      .attr('letter-spacing', '0.15em').attr('fill', 'var(--ink-soft)')
+      .style('text-transform', 'uppercase').style('opacity', 0)
+      .text(xLabel)
+      .transition().delay(200).duration(500).style('opacity', 1);
+  }
+
+  if (y) {
+    const yAxis = gAxis.append('g').style('opacity', 0);
+    yAxis.call(d3.axisLeft(y).ticks(5).tickFormat(d => d + (yPercent ? '%' : '')));
+    yAxis.select('.domain').attr('stroke', 'var(--rule)');
+    yAxis.selectAll('.tick line').attr('stroke', 'var(--rule)');
+    yAxis.selectAll('.tick text')
+      .attr('font-family', 'Work Sans').attr('font-size', 11).attr('fill', 'var(--ink-faint)');
+    yAxis.transition().duration(D_AXIS).style('opacity', 1);
+    if (yLabel) {
+      gAxis.append('text')
+        .attr('transform', `translate(-70,${h/2}) rotate(-90)`)
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'Work Sans').attr('font-size', 10.5)
+        .attr('letter-spacing', '0.15em').attr('fill', 'var(--ink-soft)')
+        .style('text-transform', 'uppercase').style('opacity', 0)
+        .text(yLabel)
+        .transition().delay(200).duration(500).style('opacity', 1);
+    }
+  }
+  return { x, y };
+}
+
+/* ===========================================================
+   SCENES
+   =========================================================== */
+
+const scenes = {
+
+  /* ATO 1 */
+  'ato1-1': () => {
+    setMeta('Ato 1 · Nascer (0 a 3 anos)', 'Acesso à creche · Brasil',
+            'Fonte: PNAD Contínua / IBGE');
+    clearLayer(gBars); clearLayer(gAnno);
+    const { x } = drawAxes({ xDomain: [0,100], xLabel: 'crianças 0–3 anos em creche (%)', xFormat: d=>d+'%' });
+
+    setTimeout(() => {
+      gBars.append('rect').attr('class','bar')
+        .attr('x',0).attr('y',h*0.45).attr('width',0).attr('height',30)
+        .attr('fill','var(--ink-soft)').attr('opacity',0.35)
+        .transition().duration(D_BARS).attr('width', x(38.7));
+      gBars.append('text')
+        .attr('x', x(38.7)+8).attr('y', h*0.45+20)
+        .attr('font-family','Work Sans').attr('font-size',14).attr('font-weight',600)
+        .attr('fill','var(--ink)').style('opacity',0).text('38,7% — média Brasil')
+        .transition().delay(D_BARS-200).duration(400).style('opacity',1);
+    }, 300);
+    hideDot('helena'); hideDot('davi');
+    focusBoth();
+  },
+
+  'ato1-2': () => {
+    setMeta('Ato 1 · Por <em>quintil de renda</em>', 'Acesso à creche · cinco grupos',
+            'Fonte: PNAD Contínua · estudo Todos Pela Educação');
+    clearLayer(gBars); clearLayer(gAnno);
+    const { x } = drawAxes({ xDomain: [0,100], xLabel: 'crianças 0–3 anos em creche (%)', xFormat: d=>d+'%' });
+    const quintis = [
+      { id:'q1', label:'Q1 (mais pobre)', value:26, char:'davi' },
+      { id:'q2', label:'Q2', value:32 },
+      { id:'q3', label:'Q3', value:39 },
+      { id:'q4', label:'Q4', value:46 },
+      { id:'q5', label:'Q5 (mais rico)', value:53, char:'helena' }
+    ];
+    const yBand = d3.scaleBand().domain(quintis.map(d=>d.label)).range([0,h]).padding(0.4);
+
+    setTimeout(() => {
+      gBars.selectAll('rect').data(quintis).enter().append('rect')
+        .attr('class', d => 'bar' + (d.char ? ` bar-char-${d.char}` : ''))
+        .attr('x',0).attr('y', d => yBand(d.label)).attr('height', yBand.bandwidth())
+        .attr('width',0)
+        .attr('fill', d => d.char === 'helena' ? 'var(--helena)'
+                          : d.char === 'davi' ? 'var(--davi)'
+                          : 'var(--ink-faint)')
+        .attr('opacity', 0.7)
+        .transition().duration(D_BARS).delay((d,i)=>i*60).attr('width', d => x(d.value));
+      gBars.selectAll('text').data(quintis).enter().append('text')
+        .attr('x',-12).attr('y', d=>yBand(d.label)+yBand.bandwidth()/2)
+        .attr('dy','0.35em').attr('text-anchor','end')
+        .attr('font-family','Work Sans').attr('font-size',11)
+        .attr('fill','var(--ink-soft)').style('opacity',0).text(d=>d.label)
+        .transition().delay(300).duration(500).style('opacity',1);
+    }, 300);
+
+    placeDot('helena', x(53), yBand('Q5 (mais rico)') + yBand.bandwidth()/2);
+    showDot('helena', 1100);
+    moveDot('helena', x(53)+35, yBand('Q5 (mais rico)') + yBand.bandwidth()/2, 1200, D_DOTS, false);
+    setTimeout(() => focusDot('helena'), 1400);
+  },
+
+  'ato1-3': () => {
+    setMeta('Ato 1 · A <em>demanda não atendida</em>', 'Q1 atendido 26%, demanda 45%',
+            'Fonte: Todos Pela Educação · Panorama da Educação Infantil');
+    clearLayer(gAnno);
+    const x = d3.scaleLinear().domain([0,100]).range([0,w]);
+    const yBand = d3.scaleBand()
+      .domain(['Q1 (mais pobre)','Q2','Q3','Q4','Q5 (mais rico)']).range([0,h]).padding(0.4);
+    const q1Y = yBand('Q1 (mais pobre)');
+
+    setTimeout(() => {
+      gAnno.append('rect')
+        .attr('x', x(26)).attr('y', q1Y).attr('width',0).attr('height', yBand.bandwidth())
+        .attr('fill','var(--mark)').attr('opacity',0.18)
+        .attr('stroke','var(--mark)').attr('stroke-width',1.2).attr('stroke-dasharray','4,3')
+        .transition().duration(D_BARS).attr('width', x(45.2-26));
+      gAnno.append('text')
+        .attr('x', x((26+45.2)/2)).attr('y', q1Y - 8).attr('text-anchor','middle')
+        .attr('font-family','Work Sans').attr('font-size',10).attr('font-weight',600)
+        .attr('fill','var(--mark)').style('opacity',0).text('demanda não atendida')
+        .transition().delay(500).duration(400).style('opacity',1);
+    }, 200);
+
+    placeDot('davi', x(0), q1Y + yBand.bandwidth()/2);
+    showDot('davi', 600);
+    moveDot('davi', x(20), q1Y + yBand.bandwidth()/2, 1200, D_DOTS, false);
+    setTimeout(() => focusDot('davi'), 1400);
+  },
+
+  'ato1-mark': () => {
+    setMeta('Ato 1 · A <em>memória</em> do ponto', 'Cada arco vermelho é uma marca acumulada',
+            'A "mochila" deixa de ser metáfora e vira camada visual');
+    focusBoth();
+    if (!characters.helena.marks.includes('vocabulário')) addMark('helena', 'vocabulário', 200);
+    if (!characters.davi.marks.includes('atraso institucional')) addMark('davi', 'atraso institucional', 600);
+  },
+
+  /* ATO 2 */
+  'ato2-1': () => {
+    setMeta('Ato 2 · Aprender (5º ano EF)', 'Aprendizagem adequada · Língua Portuguesa',
+            'Fonte: SAEB 2023 microdados · corte oficial INEP (≥225) · escolas públicas');
+    clearLayer(gBars); clearLayer(gAnno);
+    const { x } = drawAxes({ xDomain:[0,100], xLabel:'estudantes com aprendizagem adequada (%)', xFormat:d=>d+'%' });
+
+    setTimeout(() => {
+      gBars.append('rect').attr('class','bar')
+        .attr('x',0).attr('y',h*0.45).attr('width',0).attr('height',30)
+        .attr('fill','var(--ink-soft)').attr('opacity',0.35)
+        .transition().duration(D_BARS).attr('width', x(40.5));
+      gBars.append('text')
+        .attr('x', x(40.5)+8).attr('y', h*0.45+20)
+        .attr('font-family','Work Sans').attr('font-size',14).attr('font-weight',600)
+        .attr('fill','var(--ink)').style('opacity',0).text('40,5% — média Brasil (públicas)')
+        .transition().delay(D_BARS-200).duration(400).style('opacity',1);
+    }, 300);
+
+    showDot('helena'); showDot('davi');
+    focusBoth();
+    moveDot('helena', x(40.5)-25, h*0.45+15, 800);
+    moveDot('davi', x(40.5)+25, h*0.45+15, 800);
+  },
+
+  'ato2-2': () => {
+    setMeta('Ato 2 · Por <em>raça/cor</em>', '9,3 pontos percentuais de diferença',
+            'Fonte: SAEB 2023 microdados · corte oficial INEP (≥225) · escolas públicas');
+    clearLayer(gBars); clearLayer(gAnno);
+    const { x } = drawAxes({ xDomain:[0,100], xLabel:'estudantes com aprendizagem adequada (%)', xFormat:d=>d+'%' });
+    const groups = [
+      { id:'br', label:'Brancos / amarelos', value:46.9, color:'var(--helena)', char:'helena' },
+      { id:'pr', label:'Pretos / pardos',    value:37.5, color:'var(--davi)', char:'davi' }
+    ];
+    const yBand = d3.scaleBand().domain(groups.map(d=>d.label)).range([h*0.15, h*0.85]).padding(0.5);
+
+    setTimeout(() => {
+      gBars.selectAll('rect').data(groups).enter().append('rect')
+        .attr('class', d => `bar bar-char-${d.char}`)
+        .attr('y', d => yBand(d.label)).attr('height', yBand.bandwidth())
+        .attr('width',0).attr('fill', d => d.color).attr('opacity', 0.7)
+        .transition().duration(D_BARS).attr('width', d => x(d.value));
+      gBars.selectAll('text.lbl').data(groups).enter().append('text').attr('class','lbl')
+        .attr('x',-12).attr('y', d=>yBand(d.label)+yBand.bandwidth()/2)
+        .attr('dy','0.35em').attr('text-anchor','end')
+        .attr('font-family','Work Sans').attr('font-size',11)
+        .attr('fill','var(--ink-soft)').text(d=>d.label);
+      gBars.selectAll('text.val').data(groups).enter().append('text').attr('class','val')
+        .attr('x', d=>x(d.value)-10).attr('y', d=>yBand(d.label)+yBand.bandwidth()/2)
+        .attr('dy','0.35em').attr('text-anchor','end')
+        .attr('font-family','Work Sans').attr('font-size',13).attr('font-weight',700)
+        .attr('fill','white').style('opacity',0).text(d=>d.value+'%')
+        .transition().delay(D_BARS-100).duration(400).style('opacity',1);
+    }, 300);
+
+    setTimeout(() => {
+      gAnno.append('line')
+        .attr('x1', x(37.5)).attr('x2', x(46.9))
+        .attr('y1', h*0.85+10).attr('y2', h*0.85+10)
+        .attr('stroke','var(--mark)').attr('stroke-width',2).style('opacity',0)
+        .transition().duration(400).style('opacity',1);
+      gAnno.append('text')
+        .attr('x', x((37.5+46.9)/2)).attr('y', h*0.85+25).attr('text-anchor','middle')
+        .attr('font-family','Work Sans').attr('font-size',11).attr('font-weight',600)
+        .attr('fill','var(--mark)').style('opacity',0).text('9,3 pp')
+        .transition().duration(400).style('opacity',1);
+    }, 1500);
+
+    focusBoth();
+    moveDot('helena', x(46.9)+30, yBand(groups[0].label) + yBand.bandwidth()/2, 1300, D_DOTS, false);
+    moveDot('davi', x(37.5)+30, yBand(groups[1].label) + yBand.bandwidth()/2, 1300, D_DOTS, false);
+  },
+
+  'ato2-3': () => {
+    setMeta('Ato 2 · Helena · marca de <em>gênero</em>', '"Aplicada", não "inteligente"',
+            'Carvalho (2003) · Patto (1990) · literatura sobre stereotype threat');
+    focusDot('helena');
+    if (!characters.helena.marks.includes('gênero')) addMark('helena', 'gênero', 400);
+    else pulseMarks('helena', ['gênero']);
+  },
+
+  'ato2-4': () => {
+    setMeta('Ato 2 · Davi · marca de <em>raça</em>', 'O olhar que vê o menino negro como "agitado"',
+            'Cavalleiro (2000) · Gomes (2003) · Rosemberg & Piza (1996)');
+    focusDot('davi');
+    if (!characters.davi.marks.includes('raça')) addMark('davi', 'raça', 400);
+    else pulseMarks('davi', ['raça']);
+  },
+
+  /* ATO 3 */
+  'ato3-1': () => {
+    setMeta('Ato 3 · Decidir (3º ano EM)', 'Proficiência em <em>matemática</em> × tempo disponível',
+            'Construção ilustrativa · SAEB · PNAD trabalho juvenil · PISA');
+    clearLayer(gBars); clearLayer(gAnno);
+    const { x, y } = drawAxes({
+      xDomain:[0,30], xLabel:'horas semanais de trabalho/cuidado',
+      yDomain:[0,100], yLabel:'proficiência em matemática (%)',
+      yPercent:true, xTicks:6
+    });
+    setTimeout(() => {
+      gBars.append('rect')
+        .attr('x',0).attr('y',0).attr('width', x(8)).attr('height', y(60))
+        .attr('fill','var(--highlight)').attr('opacity',0)
+        .transition().duration(700).attr('opacity',0.4);
+      gBars.append('text')
+        .attr('x', x(4)).attr('y', y(82)).attr('text-anchor','middle')
+        .attr('font-family','Lora').attr('font-style','italic')
+        .attr('font-size',12).attr('fill','var(--ink-faint)').style('opacity',0)
+        .text('zona "esperada" — pouco trabalho, alta proficiência')
+        .transition().delay(400).duration(500).style('opacity',1);
+    }, 300);
+    placeDot('helena', x(0), y(0));
+    placeDot('davi', x(0), y(0));
+    focusBoth();
+    moveDot('helena', x(2), y(72), 200, 1200, false);
+    moveDot('davi', x(3), y(60), 200, 1200, false);
+  },
+
+  'ato3-2': () => {
+    setMeta('Ato 3 · Helena <em>desliza</em>', 'Não por capacidade — por ambiente',
+            'PISA 2022: Brasil com 5 pp de diferença de gênero em matemática (média OCDE: 9 pp) · efeito cresce ao longo do EM');
+    const x = d3.scaleLinear().domain([0,30]).range([0,w]);
+    const y = d3.scaleLinear().domain([0,100]).range([h,0]);
+    focusDot('helena');
+    moveDot('helena', x(3), y(48), 400, 1300, true);
+    setTimeout(() => {
+      gAnno.append('path')
+        .attr('d', `M ${x(3)+18} ${y(72)+5} Q ${x(7)} ${y(60)} ${x(3)+18} ${y(48)-5}`)
+        .attr('fill','none').attr('stroke','var(--mark)').attr('stroke-width',1.5)
+        .attr('stroke-dasharray','3,3').attr('opacity',0)
+        .transition().duration(600).attr('opacity',0.6);
+      gAnno.append('text')
+        .attr('x', x(8)).attr('y', y(60))
+        .attr('font-family','Lora').attr('font-style','italic')
+        .attr('font-size',12).attr('fill','var(--mark)').style('opacity',0)
+        .text('queda por gênero')
+        .transition().delay(600).duration(400).style('opacity',1);
+    }, 800);
+  },
+
+  'ato3-3': () => {
+    setMeta('Ato 3 · Davi <em>desliza</em>', 'Não por interesse — por tempo escasso',
+            'PNAD: jovens negros do Nordeste com taxa de trabalho juvenil várias vezes maior');
+    const x = d3.scaleLinear().domain([0,30]).range([0,w]);
+    const y = d3.scaleLinear().domain([0,100]).range([h,0]);
+    gAnno.selectAll('*').transition().duration(400).style('opacity',0).remove();
+    focusDot('davi');
+    moveDot('davi', x(20), y(42), 400, 1300, true);
+    setTimeout(() => {
+      gAnno.append('path')
+        .attr('d', `M ${x(3)+12} ${y(60)} Q ${x(12)} ${y(50)} ${x(20)-12} ${y(42)+5}`)
+        .attr('fill','none').attr('stroke','var(--mark)').attr('stroke-width',1.5)
+        .attr('stroke-dasharray','3,3').attr('opacity',0)
+        .transition().duration(600).attr('opacity',0.6);
+      gAnno.append('text')
+        .attr('x', x(13)).attr('y', y(58))
+        .attr('font-family','Lora').attr('font-style','italic')
+        .attr('font-size',12).attr('fill','var(--mark)').style('opacity',0)
+        .text('queda por tempo escasso')
+        .transition().delay(600).duration(400).style('opacity',1);
+    }, 800);
+  },
+
+  'ato3-4': () => {
+    setMeta('Ato 3 · Caem por <em>razões diferentes</em>', 'Mesma queda no Y, motivos divergentes',
+            'Análise por gênero esconde Davi · análise por raça esconde Helena');
+    focusBoth();
+    if (!characters.helena.marks.includes('autoexpectativa')) addMark('helena', 'autoexpectativa', 200);
+    if (!characters.davi.marks.includes('tempo escasso')) addMark('davi', 'tempo escasso', 600);
+  },
+
+  /* ATO 4 */
+  'ato4-1': () => {
+    setMeta('Ato 4 · Atravessar (17 a 19 anos)', 'Conclusão do <em>Ensino Médio</em> aos 19',
+            'Fonte: PNAD Contínua / IBGE · Anuário Educação');
+    clearLayer(gBars); clearLayer(gAnno);
+    const { x } = drawAxes({ xDomain:[0,100], xLabel:'concluíram EM aos 19 anos (%)', xFormat:d=>d+'%' });
+    const groups = [
+      { id:'br', label:'Brancos', value:79.4, color:'var(--helena)', char:'helena' },
+      { id:'pa', label:'Pardos', value:66.6, color:'var(--ink-faint)' },
+      { id:'pr', label:'Pretos', value:62.1, color:'var(--davi)', char:'davi' }
+    ];
+    const yBand = d3.scaleBand().domain(groups.map(d=>d.label)).range([h*0.1, h*0.9]).padding(0.4);
+
+    setTimeout(() => {
+      gBars.selectAll('rect').data(groups).enter().append('rect')
+        .attr('class', d => 'bar' + (d.char ? ` bar-char-${d.char}` : ''))
+        .attr('y', d=>yBand(d.label)).attr('height', yBand.bandwidth())
+        .attr('width',0).attr('fill', d=>d.color).attr('opacity',0.7)
+        .transition().duration(D_BARS).delay((d,i)=>i*80).attr('width', d=>x(d.value));
+      gBars.selectAll('text.lbl').data(groups).enter().append('text').attr('class','lbl')
+        .attr('x',-12).attr('y', d=>yBand(d.label)+yBand.bandwidth()/2)
+        .attr('dy','0.35em').attr('text-anchor','end')
+        .attr('font-family','Work Sans').attr('font-size',11)
+        .attr('fill','var(--ink-soft)').text(d=>d.label);
+      gBars.selectAll('text.val').data(groups).enter().append('text').attr('class','val')
+        .attr('x', d=>x(d.value)-10).attr('y', d=>yBand(d.label)+yBand.bandwidth()/2)
+        .attr('dy','0.35em').attr('text-anchor','end')
+        .attr('font-family','Work Sans').attr('font-size',13).attr('font-weight',700)
+        .attr('fill','white').style('opacity',0).text(d=>d.value+'%')
+        .transition().delay(D_BARS).duration(400).style('opacity',1);
+    }, 300);
+    focusBoth();
+    moveDot('helena', x(79.4)+30, yBand('Brancos')+yBand.bandwidth()/2, 1300, D_DOTS, false);
+    moveDot('davi', x(62.1)+30, yBand('Pretos')+yBand.bandwidth()/2, 1300, D_DOTS, false);
+  },
+
+  'ato4-2': () => {
+    setMeta('Ato 4 · Helena <em>entra</em>', 'Letras · pública · Sudeste',
+            'PNAD · taxa de frequência líquida ES — brancos: 36%');
+    focusDot('helena');
+    d3.select('.dot-helena .core').transition().duration(400).attr('r',14)
+      .transition().duration(500).attr('r',11);
+  },
+
+  'ato4-3': () => {
+    setMeta('Ato 4 · Davi <em>entra via cotas raciais</em>', 'Engenharia · federal · Nordeste',
+            'Lei 12.711/2012 · INEP · estudos ANDIFES');
+    focusDot('davi');
+    d3.select('.dot-davi .core').transition().duration(400).attr('r',14)
+      .transition().duration(500).attr('r',11);
+    if (!characters.davi.marks.includes('pertencimento')) addMark('davi', 'pertencimento', 400);
+    else pulseMarks('davi', ['pertencimento']);
+  },
+
+  'ato4-4': () => {
+    setMeta('Ato 4 · A travessia <em>continua</em>', 'Entrar não é o mesmo que ficar',
+            'ANDIFES · estudos sobre permanência de estudantes cotistas');
+    focusBoth();
+  },
+
+  /* ATO 5 */
+  'ato5-1': () => {
+    setMeta('Ato 5 · Ganhar (22 anos +)', 'Rendimento médio mensal · ensino superior',
+            'PNAD Contínua Rendimento de Todas as Fontes · IBGE · valores aproximados');
+    clearLayer(gBars); clearLayer(gAnno);
+    const { x } = drawAxes({
+      xDomain:[0,6000], xLabel:'rendimento médio mensal (R$) · ensino superior',
+      xTicks:4, xFormat: d => 'R$ ' + d.toLocaleString('pt-BR')
+    });
+    const groups = [
+      { id:'hb', label:'Homem branco', value:5400, color:'var(--ink-soft)' },
+      { id:'mb', label:'Mulher branca', value:3800, color:'var(--helena)', char:'helena' },
+      { id:'hn', label:'Homem negro', value:3500, color:'var(--davi)', char:'davi' },
+      { id:'mn', label:'Mulher negra', value:2600, color:'var(--mark)' }
+    ];
+    const yBand = d3.scaleBand().domain(groups.map(d=>d.label)).range([h*0.05, h*0.95]).padding(0.32);
+
+    setTimeout(() => {
+      gBars.selectAll('rect').data(groups).enter().append('rect')
+        .attr('class', d => 'bar' + (d.char ? ` bar-char-${d.char}` : ''))
+        .attr('y', d=>yBand(d.label)).attr('height', yBand.bandwidth())
+        .attr('width',0).attr('fill', d=>d.color).attr('opacity',0.7)
+        .transition().duration(D_BARS).delay((d,i)=>i*100).attr('width', d=>x(d.value));
+      gBars.selectAll('text.lbl').data(groups).enter().append('text').attr('class','lbl')
+        .attr('x',-12).attr('y', d=>yBand(d.label)+yBand.bandwidth()/2)
+        .attr('dy','0.35em').attr('text-anchor','end')
+        .attr('font-family','Work Sans').attr('font-size',10.5)
+        .attr('fill','var(--ink-soft)').text(d=>d.label);
+      gBars.selectAll('text.val').data(groups).enter().append('text').attr('class','val')
+        .attr('x', d=>x(d.value)-8).attr('y', d=>yBand(d.label)+yBand.bandwidth()/2)
+        .attr('dy','0.35em').attr('text-anchor','end')
+        .attr('font-family','Work Sans').attr('font-size',11).attr('font-weight',700)
+        .attr('fill','white').style('opacity',0)
+        .text(d => 'R$ ' + d.value.toLocaleString('pt-BR'))
+        .transition().delay(D_BARS+200).duration(400).style('opacity',1);
+    }, 300);
+    focusBoth();
+    moveDot('helena', x(3800)+30, yBand('Mulher branca')+yBand.bandwidth()/2, 1400, D_DOTS, false);
+    moveDot('davi', x(3500)+30, yBand('Homem negro')+yBand.bandwidth()/2, 1400, D_DOTS, false);
+  },
+
+  'ato5-2': () => {
+    setMeta('Ato 5 · A <em>hierarquia</em> do diploma', 'Mesma escolaridade, salários diferentes',
+            'PNAD Contínua · diferenças de rendimento por raça e gênero');
+    const x = d3.scaleLinear().domain([0,6000]).range([0,w]);
+    const yBand = d3.scaleBand().domain(['Homem branco','Mulher branca','Homem negro','Mulher negra'])
+      .range([h*0.05, h*0.95]).padding(0.32);
+    clearLayer(gAnno);
+    setTimeout(() => {
+      const yHelena = yBand('Mulher branca')+yBand.bandwidth()/2;
+      const yTop = yBand('Homem branco')+yBand.bandwidth()/2;
+      gAnno.append('rect')
+        .attr('x', x(3800)).attr('y', yTop-5)
+        .attr('width',0).attr('height', yHelena - yTop + 10)
+        .attr('fill','var(--mark)').attr('opacity',0.1)
+        .attr('stroke','var(--mark)').attr('stroke-width',1).attr('stroke-dasharray','3,3')
+        .transition().duration(700).attr('width', x(5400-3800));
+      gAnno.append('text')
+        .attr('x', x((3800+5400)/2)).attr('y', (yTop+yHelena)/2)
+        .attr('dy','0.35em').attr('text-anchor','middle')
+        .attr('font-family','Work Sans').attr('font-size',10.5).attr('font-weight',600)
+        .attr('fill','var(--mark)').style('opacity',0)
+        .text('hierarquia que o diploma não desmonta')
+        .transition().delay(500).duration(500).style('opacity',1);
+    }, 200);
+    focusBoth();
+  },
+
+  'ato5-3': () => {
+    setMeta('Ato 5 · As marcas seguem <em>trabalhando</em>', 'Cada arco já tem história',
+            'A "mochila" deixa de ser metáfora e vira indicador');
+    focusBoth();
+    if (!characters.helena.marks.includes('autoavaliação salarial'))
+      addMark('helena', 'autoavaliação salarial', 200);
+    if (!characters.davi.marks.includes('repertório de enfrentamento'))
+      addMark('davi', 'repertório de enfrentamento', 600);
+  },
+
+  /* ATO 6 */
+  'ato6-1': () => {
+    setMeta('Ato 6 · A <em>matriz</em>', 'Todas as travessias simultaneamente',
+            'Inspirado na matriz de dominação de Patricia Hill Collins (2000)');
+    clearLayer(gBars); clearLayer(gAnno); clearLayer(gAxis); clearLayer(gTrails);
+
+    const x = d3.scaleLinear().domain([0,100]).range([0,w]);
+    const y = d3.scaleLinear().domain([0.5,5.5]).range([h,0]);
+    const ages = [
+      { age:1, label:'Nascer' },
+      { age:2, label:'Aprender' },
+      { age:3, label:'Decidir' },
+      { age:4, label:'Atravessar' },
+      { age:5, label:'Ganhar' }
+    ];
+
+    setTimeout(() => {
+      gAxis.selectAll('.row').data(ages).enter().append('line').attr('class','row')
+        .attr('x1',0).attr('x2',w)
+        .attr('y1', d=>y(d.age)).attr('y2', d=>y(d.age))
+        .attr('stroke','var(--rule)').attr('stroke-dasharray','2,4').style('opacity',0)
+        .transition().duration(500).delay((d,i)=>i*60).style('opacity',0.6);
+      gAxis.selectAll('.rowtext').data(ages).enter().append('text').attr('class','rowtext')
+        .attr('x',-12).attr('y', d=>y(d.age))
+        .attr('dy','0.35em').attr('text-anchor','end')
+        .attr('font-family','Work Sans').attr('font-size',10)
+        .attr('letter-spacing','0.12em').style('text-transform','uppercase')
+        .attr('fill','var(--ink-faint)').style('opacity',0).text(d=>d.label)
+        .transition().delay(300).duration(500).style('opacity',1);
+      gAxis.append('text')
+        .attr('x', w/2).attr('y', h+40).attr('text-anchor','middle')
+        .attr('font-family','Work Sans').attr('font-size',10.5)
+        .attr('letter-spacing','0.15em').style('text-transform','uppercase')
+        .attr('fill','var(--ink-soft)').style('opacity',0)
+        .text('posição na matriz de privilégio →')
+        .transition().delay(400).duration(500).style('opacity',1);
+    }, 200);
+
+    const helenaPath = [
+      { x:75, y:1 }, { x:70, y:2 }, { x:60, y:3 }, { x:65, y:4 }, { x:55, y:5 }
+    ];
+    const daviPath = [
+      { x:25, y:1 }, { x:30, y:2 }, { x:28, y:3 }, { x:45, y:4 }, { x:50, y:5 }
+    ];
+    const lineGen = d3.line().x(d=>x(d.x)).y(d=>y(d.y)).curve(d3.curveCatmullRom);
+
+    setTimeout(() => {
+      const pH = gBars.append('path').attr('d', lineGen(helenaPath))
+        .attr('fill','none').attr('stroke','var(--helena)').attr('stroke-width',2.5);
+      const lenH = pH.node().getTotalLength();
+      pH.attr('stroke-dasharray', lenH).attr('stroke-dashoffset', lenH)
+        .transition().duration(2200).ease(d3.easeCubicInOut).attr('stroke-dashoffset', 0);
+      const pD = gBars.append('path').attr('d', lineGen(daviPath))
+        .attr('fill','none').attr('stroke','var(--davi)').attr('stroke-width',2.5);
+      const lenD = pD.node().getTotalLength();
+      pD.attr('stroke-dasharray', lenD).attr('stroke-dashoffset', lenD)
+        .transition().duration(2200).ease(d3.easeCubicInOut).attr('stroke-dashoffset', 0);
+      helenaPath.forEach((p,i) => {
+        gBars.append('circle').attr('cx', x(p.x)).attr('cy', y(p.y)).attr('r',0)
+          .attr('fill','var(--helena)').attr('opacity',0.5)
+          .transition().delay(i*440).duration(400).attr('r',3);
+      });
+      daviPath.forEach((p,i) => {
+        gBars.append('circle').attr('cx', x(p.x)).attr('cy', y(p.y)).attr('r',0)
+          .attr('fill','var(--davi)').attr('opacity',0.5)
+          .transition().delay(i*440).duration(400).attr('r',3);
+      });
+    }, 800);
+
+    focusBoth();
+    const lastH = helenaPath[helenaPath.length-1];
+    const lastD = daviPath[daviPath.length-1];
+    placeDot('helena', x(helenaPath[0].x), y(helenaPath[0].y));
+    placeDot('davi', x(daviPath[0].x), y(daviPath[0].y));
+    moveDot('helena', x(lastH.x), y(lastH.y), 800, 2200, false);
+    moveDot('davi', x(lastD.x), y(lastD.y), 800, 2200, false);
+  },
+
+  'ato6-2': () => {
+    setMeta('Ato 6 · A <em>tese</em>', 'Não é somar desvantagens',
+            'Crenshaw (1989) · Collins (2000) · Lélia Gonzalez (1984) · Sueli Carneiro (2005)');
+    focusBoth();
+    pulseMarks('helena');
+    pulseMarks('davi');
+  },
+
+  'ato6-3': () => {
+    setMeta('Ato 6 · Por que isso <em>importa</em>', 'Política pública na média é política em ninguém',
+            'Os filtros interseccionais do portal tornam visíveis as travessias que as médias escondem');
+    focusBoth();
+  }
+};
+
+/* Scroll observer */
+const allSteps = document.querySelectorAll('.step');
+let currentScene = null;
+let sceneTimer = null;
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      const sceneKey = entry.target.dataset.scene;
+      if (sceneKey && sceneKey !== currentScene) {
+        clearTimeout(sceneTimer);
+        sceneTimer = setTimeout(() => {
+          currentScene = sceneKey;
+          if (scenes[sceneKey]) scenes[sceneKey]();
+        }, 80);
+      }
+    }
+  });
+}, { threshold: 0.5, rootMargin: '-20% 0px -30% 0px' });
+
+allSteps.forEach(s => observer.observe(s));
+
+setTimeout(() => { if (scenes['ato1-1']) scenes['ato1-1'](); }, 300);
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    measure();
+    stage.attr('viewBox', `0 0 ${W} ${H}`);
+    if (currentScene && scenes[currentScene]) scenes[currentScene]();
+  }, 200);
+});
+</script>
+</body>
+</html>

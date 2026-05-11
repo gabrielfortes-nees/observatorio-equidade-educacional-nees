@@ -53,7 +53,7 @@ as_named_obj_n <- function(dt) {
 
 MAPA <- list(
   meta = list(
-    indicador = "% aprendizagem adequada em LP — 5º EF (prof. ≥ 200)",
+    indicador = "% aprendizagem adequada em LP — 5º EF (corte oficial INEP, prof. ≥ 225)",
     fonte = "SAEB 2023 microdados aluno · escolas públicas · 27 UFs",
     n_total = nrow(saeb),
     gerado_em = format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

@@ -978,7 +978,8 @@
     <a href="#">Home</a>
     <a href="#">Sobre</a>
     <a href="#">Notícias</a>
-    <a href="#" class="current">Plataforma de Dados</a>
+    <a href="./travessias.html">Travessias</a>
+    <a href="#" class="current">Painel de Dados</a>
     <a href="#">Publicações</a>
     <a href="#">Contato</a>
   </div>
@@ -1593,9 +1594,9 @@ const stories = {
 const _storyPatches = {
   L1: {
     dataKey: 'L1',
-    title: 'A média diz <em>{{narrativa.media_brasil}}%</em>. Mas do topo ao chão são <em>25 pontos</em> de diferença.',
-    text: `<p>O SAEB 2023 diz que <strong>{{narrativa.media_brasil}}% dos estudantes do 5º ano</strong> de escolas públicas atingem aprendizagem adequada em Língua Portuguesa. É a média que vai para as manchetes. Quando se desagrega por raça/cor, a faixa abre: brancos e amarelos chegam a {{narrativa.media_branca_amarela}}%; pretos e pardos, a {{narrativa.media_preta_parda}}%.</p>
-    <p>O gap racial bruto é de <strong>{{narrativa.gap_racial_pp}} pontos percentuais</strong>. Mas ele é só o começo: cruzando raça, sexo e quintil socioeconômico (INSE), a distância vai de <strong>quase 73% (meninos brancos no INSE alto) a 39% (meninos pretos no INSE baixo)</strong> — uma faixa de 25 pontos que nenhuma média captura. A média não fala de quase ninguém.</p>`
+    title: 'A média diz <em>{{narrativa.media_brasil}}%</em>. Mas do topo ao chão são quase <em>{{narrativa.gap_amplitude_pp}} pontos</em> de diferença.',
+    text: `<p>Pelo corte oficial do INEP (proficiência ≥ 225 na escala SAEB), <strong>{{narrativa.media_brasil}}% dos estudantes do 5º ano</strong> em escolas públicas brasileiras atingem aprendizagem adequada em Língua Portuguesa. É a média que vai para as manchetes. Quando se desagrega por raça/cor, a faixa abre: brancos e amarelos chegam a {{narrativa.media_branca_amarela}}%; pretos e pardos, a {{narrativa.media_preta_parda}}%.</p>
+    <p>O gap racial bruto é de <strong>{{narrativa.gap_racial_pp}} pontos percentuais</strong>. Mas ele é só o começo. Cruzando raça, sexo e quintil socioeconômico (INSE), a distância vai do topo ({{narrativa.topo_grupo}}: {{narrativa.topo_value}}%) ao chão ({{narrativa.chao_grupo}}: {{narrativa.chao_value}}%) — uma amplitude de <strong>{{narrativa.gap_amplitude_pp}} pontos percentuais</strong> que nenhuma média captura. A média não fala de quase ninguém.</p>`
   },
   L2: {
     dataKey: 'L2',

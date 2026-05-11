@@ -69,7 +69,15 @@ ordem <- c(
 )
 agg <- agg[match(ordem, agg$label)]
 
+## Gap "narrativo" (♂brancos INSE alto vs ♀pretas INSE baixo — espinha do storytelling)
 gap_topo_chao <- agg$adequado_pct[1] - agg$adequado_pct[8]
+
+## Gap "amplitude real" (max - min entre os 8 grupos)
+gap_amplitude <- round(max(agg$adequado_pct, na.rm = TRUE) - min(agg$adequado_pct, na.rm = TRUE), 1)
+topo_grupo  <- agg$label[which.max(agg$adequado_pct)]
+chao_grupo  <- agg$label[which.min(agg$adequado_pct)]
+topo_value  <- max(agg$adequado_pct, na.rm = TRUE)
+chao_value  <- min(agg$adequado_pct, na.rm = TRUE)
 
 ## ---------- Estrutura JSON ----------
 L1 <- list(
@@ -86,10 +94,15 @@ L1 <- list(
     media_brasil = round(media_brasil, 1),
     media_branca_amarela = round(media_branca, 1),
     media_preta_parda = round(media_preta, 1),
-    gap_racial_pp = round(gap_racial, 1)
+    gap_racial_pp = round(gap_racial, 1),
+    gap_amplitude_pp = gap_amplitude,
+    topo_grupo  = topo_grupo,
+    topo_value  = topo_value,
+    chao_grupo  = chao_grupo,
+    chao_value  = chao_value
   ),
   viz = list(
-    indicador = "% aprendizagem adequada em LP (proficiência ≥ 200)",
+    indicador = "% aprendizagem adequada em LP (corte oficial INEP — proficiência ≥ 225)",
     media_brasil = round(media_brasil, 1),
     grupos = lapply(seq_len(nrow(agg)), function(i) {
       list(
@@ -98,7 +111,7 @@ L1 <- list(
         n = agg$n[i]
       )
     }),
-    anotacao = sprintf("do topo ao chão: %.0f pontos", gap_topo_chao)
+    anotacao = sprintf("do topo ao chão: %.0f pontos (amplitude real entre os 8 grupos)", gap_amplitude)
   )
 )
 

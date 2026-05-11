@@ -30,10 +30,11 @@ ESCOL_LBL <- c(
 )
 
 ## ---------- Pontos de corte "aprendizagem adequada" SAEB ----------
-## Escala SAEB 0–500; usamos os cortes consensuais para "nível 3+"
-ADEQ_LP_5EF <- 200
-ADEQ_LP_9EF <- 250
-ADEQ_LP_3EM <- 300
+## Cortes OFICIAIS INEP / Todos pela Educação (Anuário Brasileiro da Educação Básica)
+## Escala SAEB 0–500
+ADEQ_LP_5EF <- 225     # >= 225 = aprendizagem adequada em LP no 5º EF
+ADEQ_LP_9EF <- 275     # >= 275 = aprendizagem adequada em LP no 9º EF
+ADEQ_LP_3EM <- 325     # >= 325 = aprendizagem adequada em LP no 3º EM
 
 ## ---------- Util ----------
 cat_step <- function(msg) cat(sprintf("[%s] %s\n", format(Sys.time(), "%H:%M:%S"), msg))

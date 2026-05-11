@@ -6,59 +6,64 @@
     "fonte": "SAEB 2023 — microdados aluno · Inep/MEC · cruzamentos por raça (Q04), sexo (Q01) e INSE quintilizado",
     "etapa": "5º ano EF · Língua Portuguesa",
     "n_total": 1716465,
-    "gerado_em": "2026-05-11 00:27:58"
+    "gerado_em": "2026-05-11 09:57:41"
   },
   "narrativa": {
-    "media_brasil": 58.6,
-    "media_branca_amarela": 64.4,
-    "media_preta_parda": 56,
-    "gap_racial_pp": 8.4
+    "media_brasil": 40.5,
+    "media_branca_amarela": 46.9,
+    "media_preta_parda": 37.5,
+    "gap_racial_pp": 9.3,
+    "gap_amplitude_pp": 39.9,
+    "topo_grupo": "Meninas brancas · INSE alto",
+    "topo_value": 63.6,
+    "chao_grupo": "Meninos pretos · INSE baixo",
+    "chao_value": 23.7
   },
   "viz": {
-    "indicador": "% aprendizagem adequada em LP (proficiência ≥ 200)",
-    "media_brasil": 58.6,
+    "indicador": "% aprendizagem adequada em LP (corte oficial INEP — proficiência ≥ 225)",
+    "media_brasil": 40.5,
     "grupos": [
       {
         "label": "Meninos brancos · INSE alto",
-        "value": 72.8,
+        "value": 55.8,
         "n": 83527
       },
       {
         "label": "Meninas brancas · INSE alto",
-        "value": 79.9,
+        "value": 63.6,
         "n": 75390
       },
       {
         "label": "Meninos pretos · INSE alto",
-        "value": 62.4,
+        "value": 44.2,
         "n": 93490
       },
       {
         "label": "Meninas pretas · INSE alto",
-        "value": 71.5,
+        "value": 53.2,
         "n": 82280
       },
       {
         "label": "Meninos brancos · INSE baixo",
-        "value": 40.3,
+        "value": 25.4,
         "n": 39159
       },
       {
         "label": "Meninas brancas · INSE baixo",
-        "value": 48,
+        "value": 30.6,
         "n": 38771
       },
       {
         "label": "Meninos pretos · INSE baixo",
-        "value": 38.7,
+        "value": 23.7,
         "n": 123815
       },
       {
         "label": "Meninas pretas · INSE baixo",
-        "value": 47.8,
+        "value": 29.4,
         "n": 137568
       }
     ],
-    "anotacao": "do topo ao chão: 25 pontos"
+    "anotacao": "do topo ao chão: 40 pontos (amplitude real entre os 8 grupos)"
   }
 }
