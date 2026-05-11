@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "leitura": "L3",
+    "titulo_curto": "Infraestrutura como direito",
+    "eyebrow": "Leitura 03 · Contrafactual · infraestrutura escolar como política",
+    "fonte": "Censo Escolar 2025 (IN_AGUA_POTAVEL + IN_BANHEIRO_PNE + IN_ALIMENTACAO) × SAEB 2023 5º EF — agregado por município",
+    "contrafactual": true,
+    "cf_key": "infra",
+    "n_escolas": 180540,
+    "n_ufs_match": 27,
+    "gerado_em": "2026-05-11 01:16:01"
+  },
+  "narrativa": {
+    "pct_escolas_3_3": 45.7,
+    "pct_escolas_faltando": 54.3,
+    "adequado_q1": 40.2,
+    "adequado_q4": 63.5,
+    "gap_adequado_pp": 23.3,
+    "gap_pontos": 26.7
+  },
+  "viz": {
+    "indicador": "Por quartil municipal de cobertura 3/3 (água + banheiro PNE + alimentação)",
+    "titulo_real": "Mais infraestrutura → mais aprendizagem",
+    "titulo_off": "Menos infraestrutura → mais distância da aprendizagem",
+    "bars": [
+      {
+        "label": "Q1 (menos infra)",
+        "real": 40.2,
+        "off": 40.2,
+        "infra_pct": 30.8,
+        "prof_media": 190.2,
+        "n_ufs": 6,
+        "color_key": "counterfactual"
+      },
+      {
+        "label": "Q2",
+        "real": 56.6,
+        "off": 40.2,
+        "infra_pct": 43.9,
+        "prof_media": 209.2,
+        "n_ufs": 7,
+        "color_key": "brown"
+      },
+      {
+        "label": "Q3",
+        "real": 59.6,
+        "off": 40.2,
+        "infra_pct": 51.6,
+        "prof_media": 213.6,
+        "n_ufs": 7,
+        "color_key": "orangeSoft"
+      },
+      {
+        "label": "Q4 (mais infra)",
+        "real": 63.5,
+        "off": 40.2,
+        "infra_pct": 65.5,
+        "prof_media": 216.9,
+        "n_ufs": 7,
+        "color_key": "orange"
+      }
+    ],
+    "callout": "Em 54.3% das escolas brasileiras falta ao menos um item básico (água potável, banheiro acessível ou alimentação). Comparando municípios no quartil mais e menos infraestruturados: a aprendizagem adequada em LP varia 23.3 pp; a proficiência média varia 26.7 pontos SAEB."
+  }
+}

@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Equidade Educacional · 9 leituras dos dados brasileiros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root {
+    --orange: #E67E22;
+    --orange-deep: #D35400;
+    --orange-soft: #F5B271;
+    --orange-pale: #FBE4CC;
+    --brown: #5A3825;
+    --brown-soft: #8B5A3C;
+    --cream: #FAF4E8;
+    --cream-warm: #F5EBD7;
+    --paper: #FCF8F0;
+    --ink: #2A1F18;
+    --ink-soft: #5A4A3F;
+    --ink-faint: #9A8B7E;
+    --rule: #D6C9B8;
+    --mark: #A82E2E;
+    --mark-soft: #F2D5D0;
+    --highlight: #FFF3D9;
+    --counterfactual: #6B2D2D;
+    --counterfactual-soft: #C76B6B;
+    --counterfactual-bg: #FAEFE8;
+    --quali-bg: #F2EAD8;
+    --quali-border: #C4B596;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+  .sans { font-family: 'Work Sans', sans-serif; }
+
+  /* ============= NAV ============= */
+  nav.brand-bar {
+    border-bottom: 1px solid var(--rule);
+    padding: 1rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(8px);
+    background: rgba(250, 244, 232, 0.94);
+  }
+  nav.brand-bar .logo {
+    display: flex; align-items: center; gap: 0.7rem;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 700; color: var(--orange-deep);
+    font-size: 0.95rem; letter-spacing: -0.01em;
+  }
+  nav.brand-bar .logo-mark {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--orange); position: relative; overflow: hidden;
+  }
+  nav.brand-bar .logo-mark::before {
+    content: ''; position: absolute;
+    top: 50%; left: 0; width: 100%; height: 50%;
+    background: var(--orange-deep);
+  }
+  nav.brand-bar .nav-links {
+    display: flex; gap: 2rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem; color: var(--brown);
+  }
+  nav.brand-bar .nav-links a {
+    color: inherit; text-decoration: none; transition: color 0.2s;
+  }
+  nav.brand-bar .nav-links a:hover { color: var(--orange-deep); }
+  nav.brand-bar .nav-links a.current {
+    color: var(--orange-deep); font-weight: 600;
+  }
+
+  /* ============= PAGE HEADER ============= */
+  .page-header {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3.5rem 2.5rem 2rem;
+  }
+  .page-header .breadcrumb {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+  }
+  .page-header h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+    max-width: 880px;
+  }
+  .page-header h1 em {
+    font-style: italic;
+    color: var(--orange-deep);
+    font-weight: 500;
+  }
+  .page-header .lede {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 720px;
+    margin-bottom: 1.5rem;
+  }
+  .page-header .meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+    padding-top: 1.2rem;
+    margin-top: 0.5rem;
+  }
+  .page-header .meta strong { color: var(--brown); font-weight: 600; }
+
+  /* ============= TABS — TWO LEVEL NAVIGATION ============= */
+  .nav-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    min-height: 280px;
+    position: relative;
+  }
+  .nav-prompt {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    transition: opacity 0.3s;
+  }
+
+  /* ===== Level 1: 3 dimension cards ===== */
+  .level-1 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.4rem;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .level-1.hiding { opacity: 0; transform: translateY(-6px); pointer-events: none; }
+  .level-1.hidden { display: none; }
+
+  .dim-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 2rem 1.8rem 1.8rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+    font-family: 'Lora', serif;
+    position: relative;
+    overflow: hidden;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .dim-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: var(--orange);
+    transition: height 0.3s;
+  }
+  .dim-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(90, 56, 37, 0.1);
+    border-color: var(--orange-soft);
+  }
+  .dim-card:hover::before { height: 7px; }
+
+  .dim-card .dim-num {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+  .dim-card .dim-title {
+    font-family: 'Lora', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 0.8rem;
+  }
+  .dim-card .dim-title em {
+    font-style: italic;
+    color: var(--orange-deep);
+    font-weight: 500;
+  }
+  .dim-card .dim-sub {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 1.4rem;
+  }
+  .dim-card .dim-cta {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    font-weight: 600;
+    margin-top: auto;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .dim-card .dim-cta::after {
+    content: '→';
+    font-size: 1rem;
+    transition: transform 0.25s;
+  }
+  .dim-card:hover .dim-cta::after { transform: translateX(4px); }
+
+  /* ===== Level 2: 3 reading cards ===== */
+  .level-2 {
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.9rem;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .level-2.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .level-2.hidden { display: none; }
+
+  .l2-back {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem;
+    margin-bottom: 0.4rem;
+  }
+  .l2-back .back-btn {
+    background: transparent;
+    border: none;
+    color: var(--ink-faint);
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    padding: 0.3rem 0;
+    transition: color 0.2s;
+  }
+  .l2-back .back-btn:hover { color: var(--orange-deep); }
+  .l2-back .crumb-current {
+    color: var(--orange-deep);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .reading-tab {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1rem 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    color: var(--ink);
+    position: relative;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .reading-tab:hover {
+    border-color: var(--orange-soft);
+    background: var(--cream);
+  }
+  .reading-tab.active {
+    background: var(--orange-pale);
+    border-color: var(--orange-deep);
+    border-width: 1.5px;
+    color: var(--brown);
+  }
+  .reading-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -7px; left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px;
+    background: var(--orange-pale);
+    border-right: 1.5px solid var(--orange-deep);
+    border-bottom: 1.5px solid var(--orange-deep);
+    rotate: 45deg;
+  }
+  .reading-tab .tab-num {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .reading-tab.active .tab-num { color: var(--orange-deep); }
+  .reading-tab.is-counterfactual {
+    border-left: 3px solid var(--counterfactual);
+  }
+  .reading-tab.is-counterfactual .cf-badge {
+    position: absolute;
+    top: 0.6rem; right: 0.6rem;
+    background: var(--counterfactual);
+    color: white;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+  }
+  .reading-tab.is-counterfactual.active {
+    background: var(--counterfactual-bg);
+    border-color: var(--counterfactual);
+    color: var(--counterfactual);
+  }
+  .reading-tab.is-counterfactual.active::after {
+    background: var(--counterfactual-bg);
+    border-right-color: var(--counterfactual);
+    border-bottom-color: var(--counterfactual);
+  }
+
+  /* ============= CONTENT AREA ============= */
+  .content-area {
+    max-width: 1200px;
+    margin: 1.5rem auto 4rem;
+    padding: 0 2.5rem;
+    min-height: 200px;
+  }
+  .content-area.empty { min-height: 0; }
+  .story-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 2.6rem 3rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 3rem;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(90, 56, 37, 0.04);
+    animation: fadeInStory 0.45s ease-out;
+    overflow: hidden;
+  }
+  @keyframes fadeInStory {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .story-card.is-counterfactual {
+    background: linear-gradient(180deg, white 0%, #fdf6f1 100%);
+    border-color: var(--counterfactual-soft);
+  }
+  .story-card.is-counterfactual::before {
+    content: 'E SE...';
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    background: var(--counterfactual);
+    color: white;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.22em;
+    font-weight: 700; padding: 0.35rem 0.7rem;
+    border-radius: 2px;
+  }
+  .story-text {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 2.4rem;
+  }
+  .story-text .story-eyebrow {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+  }
+  .story-card.is-counterfactual .story-eyebrow {
+    color: var(--counterfactual);
+  }
+  .story-text h3 {
+    font-family: 'Lora', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+    transition: opacity 0.3s;
+  }
+  .story-text h3 em {
+    font-style: italic;
+    color: var(--orange-deep);
+    font-weight: 500;
+  }
+  .story-card.is-counterfactual h3 em {
+    color: var(--counterfactual);
+  }
+  .story-text p {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    margin-bottom: 0.9rem;
+  }
+  .story-text p strong {
+    color: var(--ink); font-weight: 600;
+  }
+  .story-text .story-source {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+    padding-top: 0.9rem;
+    margin-top: auto;
+    line-height: 1.5;
+  }
+
+  .story-viz {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-bottom: 2.4rem;
+  }
+  .story-viz .viz-frame {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1.5rem;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ===== Quali footer ===== */
+  .quali-footer {
+    grid-column: 1 / -1;
+    background: var(--quali-bg);
+    border-top: 1px solid var(--quali-border);
+    margin: 0 -3rem;
+    padding: 1.4rem 3rem 1.6rem;
+    display: flex;
+    gap: 1.4rem;
+    align-items: flex-start;
+  }
+  .quali-footer .quali-mark {
+    flex: 0 0 auto;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--brown);
+    font-weight: 700;
+    background: white;
+    padding: 0.35rem 0.7rem;
+    border-radius: 2px;
+    border: 1px solid var(--quali-border);
+    margin-top: 0.1rem;
+    white-space: nowrap;
+  }
+  .quali-footer .quali-text {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.94rem;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .quali-footer .quali-text strong {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--brown);
+  }
+  .quali-footer .quali-text .ref {
+    font-family: 'Work Sans', sans-serif;
+    font-style: normal;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    display: block;
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+
+  /* COUNTERFACTUAL TOGGLE */
+  .scenario-toggle {
+    display: inline-flex;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+    padding: 3px;
+    margin-bottom: 1rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    align-self: flex-start;
+  }
+  .scenario-toggle button {
+    background: transparent;
+    border: none;
+    padding: 0.45rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    transition: all 0.25s;
+  }
+  .scenario-toggle button.active {
+    background: var(--counterfactual);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(107, 45, 45, 0.25);
+  }
+  .scenario-toggle button.real.active {
+    background: var(--brown);
+  }
+  .effect-callout {
+    margin-top: 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--mark-soft);
+    border-left: 3px solid var(--mark);
+    border-radius: 2px;
+    font-family: 'Lora', serif;
+    font-size: 0.92rem;
+    color: var(--counterfactual);
+    line-height: 1.5;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.4s, max-height 0.4s, padding 0.4s, margin-top 0.4s;
+    padding-top: 0; padding-bottom: 0;
+    margin-top: 0;
+  }
+  .story-card.is-counterfactual.scenario-on .effect-callout {
+    opacity: 1; max-height: 200px;
+    padding: 1rem 1.2rem;
+    margin-top: 1rem;
+  }
+  .effect-callout strong {
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 700;
+    color: var(--counterfactual);
+  }
+  .evidence-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.68rem;
+    color: var(--ink-faint);
+    margin-top: 0.4rem;
+    cursor: help;
+    position: relative;
+  }
+  .evidence-badge .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .evidence-badge.strong .dot { background: #4a7c59; }
+  .evidence-badge.moderate .dot { background: var(--orange); }
+  .evidence-badge.indirect .dot { background: var(--ink-faint); }
+  .evidence-badge .tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background: var(--ink);
+    color: white;
+    padding: 0.6rem 0.8rem;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    width: 240px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    margin-bottom: 0.4rem;
+    z-index: 10;
+  }
+  .evidence-badge:hover .tooltip { opacity: 1; }
+
+  /* ============= SYNTHESIS ============= */
+  .synthesis {
+    max-width: 1200px;
+    margin: 4rem auto 4rem;
+    padding: 0 2.5rem;
+  }
+  .synthesis-card {
+    background: var(--brown);
+    color: var(--cream);
+    border-radius: 6px;
+    padding: 3rem 3rem;
+    position: relative; overflow: hidden;
+  }
+  .synthesis-card::before {
+    content: ''; position: absolute;
+    top: -50px; right: -50px;
+    width: 250px; height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230,126,34,0.15), transparent 70%);
+  }
+  .synthesis-card .syn-eyebrow {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--orange-soft);
+    font-weight: 600; margin-bottom: 1.2rem;
+  }
+  .synthesis-card h2 {
+    font-family: 'Lora', serif;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 600; line-height: 1.2;
+    margin-bottom: 1rem;
+    max-width: 740px;
+  }
+  .synthesis-card h2 em {
+    font-style: italic; color: var(--orange-soft); font-weight: 500;
+  }
+  .synthesis-card .syn-lede {
+    font-size: 1.05rem; line-height: 1.65;
+    color: rgba(250, 244, 232, 0.85);
+    max-width: 640px; margin-bottom: 2rem;
+  }
+  .syn-controls {
+    display: flex; gap: 0.5rem;
+    margin-bottom: 1.2rem; flex-wrap: wrap;
+  }
+  .syn-btn {
+    background: transparent;
+    border: 1px solid rgba(250, 244, 232, 0.3);
+    color: var(--cream);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.55rem 1rem;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-weight: 500;
+  }
+  .syn-btn:hover {
+    border-color: var(--orange-soft);
+    background: rgba(230,126,34,0.15);
+  }
+  .syn-btn.active {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: white;
+    font-weight: 600;
+  }
+  .syn-btn.cumulative {
+    border-color: var(--orange-soft);
+    background: rgba(245, 178, 113, 0.1);
+  }
+  .syn-btn.cumulative.active {
+    background: var(--mark);
+    border-color: var(--mark);
+  }
+  .syn-viz {
+    background: rgba(252, 248, 240, 0.06);
+    border-radius: 4px;
+    padding: 1.2rem;
+    min-height: 280px;
+  }
+  .syn-narrative {
+    margin-top: 1.2rem;
+    font-size: 0.95rem; line-height: 1.6;
+    color: rgba(250, 244, 232, 0.9);
+    font-style: italic;
+    border-left: 3px solid var(--orange);
+    padding-left: 1.2rem;
+    min-height: 3rem;
+    transition: opacity 0.4s;
+  }
+
+  /* ============= SILENCED VOICES ============= */
+  .silenced {
+    max-width: 1100px;
+    margin: 4rem auto 0;
+    padding: 0 2.5rem;
+  }
+  .silenced-card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-left: 5px solid var(--mark);
+    border-radius: 4px;
+    padding: 2.4rem 2.6rem;
+    position: relative;
+  }
+  .silenced-card .sil-eyebrow {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--mark);
+    font-weight: 700; margin-bottom: 1rem;
+  }
+  .silenced-card h2 {
+    font-family: 'Lora', serif;
+    font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+    font-weight: 600; line-height: 1.25;
+    color: var(--ink); margin-bottom: 1.3rem;
+    max-width: 720px;
+  }
+  .silenced-card h2 em {
+    font-style: italic; color: var(--mark); font-weight: 500;
+  }
+  .silenced-card .sil-thesis {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 1.18rem;
+    color: var(--brown);
+    border-left: 3px solid var(--orange-deep);
+    padding-left: 1.2rem;
+    margin-bottom: 1.6rem;
+    line-height: 1.55;
+  }
+  .silenced-card .sil-body {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+    max-width: 760px;
+  }
+  .silenced-card .sil-body strong {
+    color: var(--ink); font-weight: 600;
+  }
+  .silenced-card .sil-list {
+    background: var(--cream);
+    border-left: 3px solid var(--brown-soft);
+    padding: 1.1rem 1.4rem;
+    margin: 1.2rem 0;
+    font-size: 0.94rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    max-width: 760px;
+  }
+  .silenced-card .sil-list strong {
+    color: var(--brown); font-weight: 600;
+  }
+  .silenced-card .sil-close {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    color: var(--ink);
+    line-height: 1.65;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.2rem;
+    margin-top: 1.4rem;
+    max-width: 760px;
+  }
+  .silenced-card .sil-close em {
+    font-style: italic; color: var(--mark);
+  }
+  .silenced-card .sil-citation {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    margin-top: 1rem;
+    line-height: 1.5;
+  }
+
+  /* ============= BRIDGE ============= */
+  .bridge {
+    max-width: 720px; margin: 5rem auto 3rem;
+    padding: 0 2.5rem; text-align: center;
+  }
+  .bridge .bridge-eyebrow {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--orange-deep);
+    font-weight: 700; margin-bottom: 1rem;
+  }
+  .bridge h2 {
+    font-family: 'Lora', serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 600; line-height: 1.2;
+    color: var(--brown);
+    margin-bottom: 1rem;
+  }
+  .bridge h2 em {
+    font-style: italic; color: var(--orange-deep); font-weight: 500;
+  }
+  .bridge p {
+    font-size: 1.05rem; color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  /* ============= MAP MOCKUP ============= */
+  .explore {
+    background: var(--cream-warm);
+    padding: 3rem 2.5rem 5rem;
+    border-top: 1px solid var(--rule);
+  }
+  .explore-inner {
+    max-width: 1200px; margin: 0 auto;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 6px; overflow: hidden;
+    box-shadow: 0 12px 40px rgba(90, 56, 37, 0.06);
+    position: relative;
+  }
+  .explore-inner::after {
+    content: 'PRÉVIA · em desenvolvimento';
+    position: absolute;
+    top: 1.2rem; right: 1.2rem;
+    background: var(--orange);
+    color: white;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.18em;
+    text-transform: uppercase; font-weight: 700;
+    padding: 0.4rem 0.8rem;
+    border-radius: 3px; z-index: 5;
+  }
+  .explore-toolbar {
+    background: var(--cream);
+    padding: 1.2rem 2rem;
+    border-bottom: 1px solid var(--rule);
+    display: flex; gap: 2rem;
+    flex-wrap: wrap; align-items: flex-end;
+  }
+  .filter-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .filter-group label {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--ink-faint);
+    font-weight: 600;
+  }
+  .filter-pill {
+    background: white; border: 1px solid var(--rule);
+    border-radius: 4px; padding: 0.5rem 0.9rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem; color: var(--brown);
+    display: flex; align-items: center; gap: 0.5rem;
+    min-width: 140px;
+  }
+  .filter-pill::after {
+    content: '▾'; margin-left: auto;
+    color: var(--ink-faint); font-size: 0.7rem;
+  }
+  .filter-checks { display: flex; gap: 0.7rem; }
+  .filter-check {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem; color: var(--brown);
+  }
+  .filter-check .box {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--rule);
+    border-radius: 3px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: white;
+  }
+  .filter-check.checked .box {
+    background: var(--orange); border-color: var(--orange);
+  }
+  .filter-check.checked .box::after {
+    content: '✓'; color: white; font-size: 11px; font-weight: 700;
+  }
+  .explore-body {
+    display: grid; grid-template-columns: 1.3fr 1fr;
+    min-height: 460px;
+  }
+  .explore-map {
+    padding: 2rem; border-right: 1px solid var(--rule);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: var(--paper);
+  }
+  .explore-sidebar { padding: 2rem; }
+  .explore-sidebar h4 {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-faint);
+    font-weight: 600; margin-bottom: 0.6rem;
+  }
+  .explore-sidebar h3 {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 1.4rem; color: var(--brown);
+    margin-bottom: 1.5rem; font-weight: 700;
+    border-bottom: 2px solid var(--orange);
+    padding-bottom: 0.6rem;
+    display: inline-block;
+  }
+  .ranking-row {
+    display: flex; align-items: center; gap: 0.8rem;
+    padding: 0.7rem 0; border-bottom: 1px solid var(--rule);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.88rem; color: var(--brown);
+  }
+  .ranking-row .label { flex: 1; }
+  .ranking-row .bar {
+    flex: 1.5; height: 6px;
+    background: var(--cream); border-radius: 3px;
+    overflow: hidden;
+  }
+  .ranking-row .bar-fill {
+    height: 100%; background: var(--orange);
+    border-radius: 3px;
+  }
+  .ranking-row .val {
+    font-weight: 600; color: var(--ink);
+    min-width: 36px; text-align: right;
+  }
+
+  /* ============= FOOTER ============= */
+  footer {
+    background: var(--brown); color: var(--cream);
+    padding: 3rem 2.5rem 2rem; text-align: center;
+  }
+  footer .footer-content { max-width: 720px; margin: 0 auto; }
+  footer p {
+    font-size: 0.92rem; line-height: 1.65;
+    color: rgba(250, 244, 232, 0.8);
+    margin-bottom: 1rem;
+  }
+  footer .footer-meta {
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid rgba(250, 244, 232, 0.2);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.75rem; color: rgba(250, 244, 232, 0.5);
+  }
+
+  @media (max-width: 900px) {
+    .level-1, .level-2 { grid-template-columns: 1fr; }
+    .story-card { grid-template-columns: 1fr; padding: 2rem 1.5rem 0; }
+    .quali-footer { margin: 0 -1.5rem; padding: 1.4rem 1.5rem; flex-direction: column; gap: 0.8rem; }
+    .explore-body { grid-template-columns: 1fr; }
+    .explore-map { border-right: none; border-bottom: 1px solid var(--rule); }
+    nav.brand-bar .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============= NAV ============= -->
+<nav class="brand-bar">
+  <div class="logo">
+    <div class="logo-mark"></div>
+    <span>Observatório de Equidade Educacional</span>
+  </div>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#">Sobre</a>
+    <a href="#">Notícias</a>
+    <a href="#" class="current">Plataforma de Dados</a>
+    <a href="#">Publicações</a>
+    <a href="#">Contato</a>
+  </div>
+</nav>
+
+<!-- ============= PAGE HEADER ============= -->
+<header class="page-header">
+  <div class="breadcrumb">Plataforma de Dados · Equidade Educacional</div>
+  <h1>9 leituras dos dados sobre <em>desempenho, permanência e abandono</em> na educação básica brasileira.</h1>
+  <p class="lede">A escola brasileira é desigual — mas a desigualdade não é uniforme. Ela cruza raça, gênero, território e classe de formas que os indicadores médios não conseguem mostrar. Cada leitura aqui combina dado quantitativo aberto com pesquisa qualitativa que dá contexto, contraste ou apoio ao número. Selecione uma dimensão para começar.</p>
+  <div class="meta">
+    <span>9 leituras + síntese</span>
+    <span><strong>3 contrafactuais</strong> · explore o que aconteceria sem políticas existentes</span>
+    <span>Em diálogo com pesquisa qualitativa brasileira e crítica internacional</span>
+  </div>
+</header>
+
+<!-- ============= NAV — TWO LEVEL ============= -->
+<section class="nav-section">
+  <p class="nav-prompt" id="nav-prompt">Escolha uma dimensão para começar</p>
+
+  <!-- LEVEL 1 -->
+  <div class="level-1" id="level-1">
+    <button class="dim-card" data-dim="d1">
+      <div>
+        <div class="dim-num">Dimensão 01</div>
+        <div class="dim-title">Desempenho</div>
+        <div class="dim-sub">O que se aprende — e o que a média esconde sobre quem aprende.</div>
+      </div>
+      <div class="dim-cta"><span>3 leituras</span></div>
+    </button>
+    <button class="dim-card" data-dim="d2">
+      <div>
+        <div class="dim-num">Dimensão 02</div>
+        <div class="dim-title">Permanência</div>
+        <div class="dim-sub">Estar na escola é mais que estar matriculado. É ter tempo, infraestrutura e ser visto como sujeito.</div>
+      </div>
+      <div class="dim-cta"><span>3 leituras</span></div>
+    </button>
+    <button class="dim-card" data-dim="d3">
+      <div>
+        <div class="dim-num">Dimensão 03</div>
+        <div class="dim-title">Abandono</div>
+        <div class="dim-sub">Sair não é decisão individual. É processo construído por trajetórias, instituições e silenciamentos.</div>
+      </div>
+      <div class="dim-cta"><span>3 leituras</span></div>
+    </button>
+  </div>
+
+  <!-- LEVEL 2 -->
+  <div class="level-2 hidden" id="level-2">
+    <div class="l2-back" id="l2-back">
+      <button class="back-btn" id="back-btn">← Dimensões</button>
+      <span class="crumb-current" id="crumb-current">Desempenho</span>
+    </div>
+    <!-- reading tabs injected by JS -->
+  </div>
+</section>
+
+<!-- ============= CONTENT AREA ============= -->
+<section class="content-area empty" id="content-area">
+  <div id="story-container"></div>
+</section>
+
+<!-- ============= SYNTHESIS ============= -->
+<section class="synthesis">
+  <div class="synthesis-card">
+    <div class="syn-eyebrow">Síntese · O que acontece quando se olha tudo junto</div>
+    <h2>Cada filtro revela um ângulo. <em>Combinados</em>, mostram o sistema.</h2>
+    <p class="syn-lede">Os indicadores não são problemas separados. Eles operam em conjunto, sobre os mesmos corpos. Escolha um marcador — ou veja o cenário com todas as políticas funcionando.</p>
+
+    <div class="syn-controls" id="syn-controls">
+      <button class="syn-btn active" data-state="bruto">Sem filtro</button>
+      <button class="syn-btn" data-state="genero">Gênero</button>
+      <button class="syn-btn" data-state="raca">Raça</button>
+      <button class="syn-btn" data-state="ambos">Raça + Gênero</button>
+      <button class="syn-btn cumulative" data-state="ideal">⊕ Cenário ideal cumulativo</button>
+    </div>
+
+    <div class="syn-viz" id="syn-viz"></div>
+    <p class="syn-narrative" id="syn-narrative">Os três indicadores agregados parecem dizer pouco. Acrescente um filtro acima e veja como a leitura muda.</p>
+  </div>
+</section>
+
+<!-- ============= SILENCED VOICES ============= -->
+<section class="silenced">
+  <div class="silenced-card">
+    <div class="sil-eyebrow">Nota epistêmica</div>
+    <h2>Os dados que não foram coletados <em>silenciam</em>.</h2>
+
+    <p class="sil-thesis">"Dados que não existem não apenas se calam — silenciam. E o silêncio é uma forma específica de não-existência política."</p>
+
+    <p class="sil-body">As nove leituras desta página apoiam-se em variáveis disponíveis nos sistemas oficiais brasileiros — SAEB, Censo Escolar, PNAD, Censo da Educação Superior. Mas o que esses sistemas medem é resultado de decisões históricas sobre <strong>o que vale a pena registrar</strong>. Variáveis que nunca foram coletadas, ou que foram registradas de forma agregada demais para sustentar leitura interseccional, produzem ausência sistemática nas políticas que daí se desenham.</p>
+
+    <p class="sil-body">Reivindicar a coleta dessas variáveis é, portanto, mais do que um pedido técnico. É <strong>gesto de disputa epistêmica</strong> por reconhecimento dentro do espaço de formulação de política educacional — uma contribuição central do feminismo negro brasileiro (Lélia Gonzalez sobre o lugar do silêncio; Sueli Carneiro sobre o epistemicídio) e dos estudos decoloniais sobre quem tem o direito de produzir conhecimento sobre si.</p>
+
+    <div class="sil-list">
+      <p style="margin-bottom: 0.6rem;"><strong>Vozes que ainda buscamos nos dados:</strong></p>
+      <p style="margin-bottom: 0.4rem;"><strong>Estudantes indígenas em escolas regulares urbanas</strong> — registrados como categoria residual em sistemas que privilegiam a escola indígena específica, perdem-se na transição para a escola urbana, onde sua existência interseccional fica invisível.</p>
+      <p style="margin-bottom: 0.4rem;"><strong>Deficiência cruzada com raça e classe</strong> — o sistema registra deficiência, mas raramente a cruza com cor/raça e renda; as políticas resultantes tratam alunos PNE como categoria homogênea quando não são.</p>
+      <p style="margin-bottom: 0.4rem;"><strong>Estudantes em escolas do Norte e do interior do Nordeste</strong> — territorialmente sub-representados nas amostras qualitativas que sustentam a literatura, embora estatisticamente protagonistas das desigualdades.</p>
+      <p style="margin-bottom: 0;"><strong>Autorias quilombolas e indígenas em primeira pessoa</strong> — produzir dado sobre si, e não apenas ser objeto de dado, é parte da disputa epistêmica que o Observatório quer sustentar.</p>
+    </div>
+
+    <p class="sil-close">Política pública pensada com base em dados parciais é política pensada para sujeitos parciais. A leitura interseccional do portal existe para tornar visível tanto <em>o que os dados mostram</em> quanto <em>o que eles ainda recusam mostrar</em> — porque uma das formas mais eficazes de dizer "vocês não importam" é nunca registrar que vocês existem.</p>
+
+    <p class="sil-citation">Tese inspirada em: Carneiro (2005) sobre epistemicídio · Gonzalez (1984) sobre o lugar do silêncio · Spivak (1988) sobre quem pode falar · D'Ignazio &amp; Klein (2020) sobre data feminism.</p>
+  </div>
+</section>
+
+<!-- ============= BRIDGE ============= -->
+<div class="bridge">
+  <div class="bridge-eyebrow">Você viu nove leituras. Há centenas.</div>
+  <h2>Os dados estão abertos.<br>Faça <em>suas próprias perguntas</em>.</h2>
+  <p>O mapa abaixo permite explorar livremente os indicadores por estado, município, ano e marcador interseccional.</p>
+</div>
+
+<!-- ============= MAP MOCKUP ============= -->
+<section class="explore">
+  <div class="explore-inner">
+    <div class="explore-toolbar">
+      <div class="filter-group">
+        <label>Indicador</label>
+        <div class="filter-pill">Aprendizagem em LP — 5º ano</div>
+      </div>
+      <div class="filter-group">
+        <label>Ano</label>
+        <div class="filter-pill">SAEB 2023</div>
+      </div>
+      <div class="filter-group">
+        <label>Recorte</label>
+        <div class="filter-checks">
+          <span class="filter-check checked"><span class="box"></span> Raça</span>
+          <span class="filter-check checked"><span class="box"></span> Gênero</span>
+          <span class="filter-check"><span class="box"></span> NSE</span>
+          <span class="filter-check"><span class="box"></span> Território</span>
+        </div>
+      </div>
+    </div>
+    <div class="explore-body">
+      <div class="explore-map">
+        <svg viewBox="0 0 400 460" id="map-mockup" style="width: 100%; max-width: 480px;"></svg>
+      </div>
+      <aside class="explore-sidebar">
+        <h4>Recorte selecionado</h4>
+        <h3>Brasil · meninas pretas</h3>
+        <div class="ranking-row">
+          <span class="label">Distrito Federal</span>
+          <span class="bar"><span class="bar-fill" style="width: 78%; background: var(--orange-deep);"></span></span>
+          <span class="val">22%</span>
+        </div>
+        <div class="ranking-row">
+          <span class="label">São Paulo</span>
+          <span class="bar"><span class="bar-fill" style="width: 64%;"></span></span>
+          <span class="val">18%</span>
+        </div>
+        <div class="ranking-row">
+          <span class="label">Minas Gerais</span>
+          <span class="bar"><span class="bar-fill" style="width: 56%;"></span></span>
+          <span class="val">16%</span>
+        </div>
+        <div class="ranking-row">
+          <span class="label">Pernambuco</span>
+          <span class="bar"><span class="bar-fill" style="width: 38%;"></span></span>
+          <span class="val">11%</span>
+        </div>
+        <div class="ranking-row">
+          <span class="label">Maranhão</span>
+          <span class="bar"><span class="bar-fill" style="width: 28%;"></span></span>
+          <span class="val">8%</span>
+        </div>
+        <div class="ranking-row">
+          <span class="label">Alagoas</span>
+          <span class="bar"><span class="bar-fill" style="width: 22%;"></span></span>
+          <span class="val">6%</span>
+        </div>
+        <p style="margin-top: 1.5rem; font-family: 'Work Sans', sans-serif; font-size: 0.85rem; color: var(--ink-soft); line-height: 1.5;">
+          Em desenvolvimento — esta área terá ranqueamentos por estado, comparações temporais e exportação.
+        </p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <p>O <strong>Observatório de Equidade Educacional</strong> é uma iniciativa do NEES/UFAL para qualificar a leitura pública dos dados educacionais brasileiros.</p>
+    <p>As leituras desta página foram construídas a partir de dados oficiais (SAEB, Censo Escolar, PNAD, Censo da Educação Superior) em diálogo com pesquisa qualitativa brasileira e crítica internacional sobre educação, raça, gênero e classe.</p>
+    <p class="footer-meta">Observatório de Equidade Educacional · NEES/UFAL · 2025</p>
+  </div>
+</footer>
+
+<script>
+const C = {
+  ink: '#2A1F18', inkSoft: '#5A4A3F', inkFaint: '#9A8B7E',
+  rule: '#D6C9B8',
+  orange: '#E67E22', orangeDeep: '#D35400',
+  orangeSoft: '#F5B271', orangePale: '#FBE4CC',
+  brown: '#5A3825', mark: '#A82E2E', cream: '#FAF4E8',
+  counterfactual: '#6B2D2D'
+};
+
+function svgIn(el, w, h) {
+  return d3.select(el).append('svg')
+    .attr('viewBox', `0 0 ${w} ${h}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet')
+    .style('width', '100%').style('height', 'auto');
+}
+
+/* ============================================================
+   DIMENSIONS & READINGS DEFINITION
+   ============================================================ */
+
+const dimensions = {
+  d1: {
+    label: 'Desempenho',
+    readings: ['L1', 'L2', 'L3']
+  },
+  d2: {
+    label: 'Permanência',
+    readings: ['L4', 'L5', 'L6']
+  },
+  d3: {
+    label: 'Abandono',
+    readings: ['L7', 'L8', 'L9']
+  }
+};
+
+const readings = {
+  L1: {
+    tabNum: 'Leitura 01',
+    tabText: 'A média do SAEB esconde 13,5 pontos de diferença racial.',
+    counterfactual: false
+  },
+  L2: {
+    tabNum: 'Leitura 02',
+    tabText: 'A escolaridade da mãe explica mais do que a do pai.',
+    counterfactual: false
+  },
+  L3: {
+    tabNum: 'Leitura 03 · Contrafactual',
+    tabText: 'Sem o PNAE, o gap entre regiões se aprofunda.',
+    counterfactual: true
+  },
+  L4: {
+    tabNum: 'Leitura 04',
+    tabText: 'A creche que não chegou — e o eco anos depois no SAEB.',
+    counterfactual: false
+  },
+  L5: {
+    tabNum: 'Leitura 05',
+    tabText: 'Casa que pesa, escola que falta — tempo, infra, clima.',
+    counterfactual: false
+  },
+  L6: {
+    tabNum: 'Leitura 06 · Contrafactual',
+    tabText: 'Sem Bolsa Família, a peneira da renda se aprofunda.',
+    counterfactual: true
+  },
+  L7: {
+    tabNum: 'Leitura 07',
+    tabText: 'A reprovação como porta — 4,2× chance de abandono.',
+    counterfactual: false
+  },
+  L8: {
+    tabNum: 'Leitura 08',
+    tabText: 'A coorte que não voltou — 15 em cada 100, ausentes.',
+    counterfactual: false
+  },
+  L9: {
+    tabNum: 'Leitura 09 · Contrafactual',
+    tabText: 'Sem Lei de Cotas, a conclusão do EM por raça regrediria.',
+    counterfactual: true
+  }
+};
+
+/* ============================================================
+   STORY CONTENT (each reading expanded)
+   ============================================================ */
+
+const stories = {
+
+  /* ============= L1 ============= */
+  'L1': {
+    eyebrow: 'Leitura 01 · SAEB 2023 · 5º ano · Língua Portuguesa',
+    title: 'A escola brasileira ensina, em média, <em>metade</em>. A outra metade depende de quem você é.',
+    text: `<p>O SAEB diz que <strong>53% dos estudantes do 5º ano</strong> atingem aprendizagem adequada em Língua Portuguesa. É a média que vai para as manchetes. Quando se desagrega por raça/cor, a faixa abre: brancos e amarelos chegam a 60%; pretos, pardos e indígenas, a 46,5%.</p>
+    <p>Mas o gap racial bruto — <strong>13,5 pontos percentuais</strong> — é apenas o início. Cruzando raça com sexo e quintil socioeconômico do aluno, a faixa interseccional vai de <strong>31% (meninas pretas, 1º quintil INSE) a 64% (meninos brancos, 5º quintil INSE)</strong>. A média de 53% não fala de quase ninguém.</p>`,
+    source: 'Fonte: SAEB 2023 — microdados aluno · Inep/MEC · cruzamentos por raça (Q04), sexo (Q01) e INSE quintilizado',
+    quali: {
+      mark: 'Em diálogo com a pesquisa qualitativa',
+      text: `O número que aparece aos 10 anos não nasce ali. <strong>Cavalleiro (2000)</strong>, em etnografia de educação infantil, mostra que o silenciamento institucional sobre raça começa antes da alfabetização — e <strong>Carvalho (2009)</strong> documenta como alfabetizadoras categorizam alunos negros (especialmente meninos) com mais marcações de "indisciplina" e mais classificações de fracasso. A literatura qualitativa contrasta com a leitura do número como insumo familiar: a nota baixa no SAEB também é produzida pelo olho avaliador da escola.`,
+      ref: 'Cavalleiro, E. S. (2000) · Carvalho, M. P. de (2009) · Cadernos de Pesquisa, v.39, n.138.'
+    },
+    counterfactual: false,
+    viz: (el) => {
+      const s = svgIn(el, 520, 320);
+      const margin = { top: 50, right: 30, bottom: 30, left: 40 };
+      const w = 520 - margin.left - margin.right;
+      const h = 320 - margin.top - margin.bottom;
+      const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+      const x = d3.scaleLinear().domain([0, 80]).range([0, w]);
+
+      g.append('text').attr('x', 0).attr('y', -28)
+        .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
+        .attr('letter-spacing', '0.12em').style('text-transform', 'uppercase')
+        .text('% APRENDIZAGEM ADEQUADA EM LP — 5º ANO');
+
+      g.append('line').attr('x1', x(53)).attr('x2', x(53))
+        .attr('y1', -8).attr('y2', h+8)
+        .attr('stroke', C.inkFaint).attr('stroke-dasharray', '2,4');
+      g.append('text').attr('x', x(53)).attr('y', -10)
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'Work Sans').attr('font-size', 10)
+        .attr('font-weight', 600).attr('fill', C.inkFaint)
+        .text('média 53%');
+
+      const data = [
+        { label: 'Meninos brancos · INSE alto', value: 64, color: C.orangeDeep },
+        { label: 'Meninas brancas · INSE alto', value: 61, color: C.orange },
+        { label: 'Meninos pretos · INSE alto', value: 51, color: C.orangeSoft },
+        { label: 'Meninas pretas · INSE alto', value: 49, color: C.orangeSoft },
+        { label: 'Meninos brancos · INSE baixo', value: 42, color: C.brown },
+        { label: 'Meninas brancas · INSE baixo', value: 40, color: C.brown },
+        { label: 'Meninos pretos · INSE baixo', value: 34, color: C.counterfactual },
+        { label: 'Meninas pretas · INSE baixo', value: 31, color: C.mark }
+      ];
+      const yBand = d3.scaleBand().domain(data.map(d=>d.label)).range([0, h]).padding(0.25);
+
+      data.forEach(d => {
+        g.append('rect').attr('x', 0).attr('y', yBand(d.label))
+          .attr('width', x(d.value)).attr('height', yBand.bandwidth())
+          .attr('fill', d.color).attr('opacity', 0.85);
+        g.append('text').attr('x', x(d.value) + 5).attr('y', yBand(d.label) + yBand.bandwidth()/2)
+          .attr('dy', '0.35em')
+          .attr('font-family', 'Work Sans').attr('font-size', 10).attr('font-weight', 700)
+          .attr('fill', C.ink).text(d.value + '%');
+        g.append('text').attr('x', 4).attr('y', yBand(d.label) - 2)
+          .attr('font-family', 'Work Sans').attr('font-size', 9.5)
+          .attr('fill', C.inkSoft).text(d.label);
+      });
+
+      g.append('text')
+        .attr('x', x(60)).attr('y', h + 22).attr('text-anchor', 'end')
+        .attr('font-family', 'Lora').attr('font-style', 'italic').attr('font-size', 11)
+        .attr('fill', C.mark).attr('font-weight', 600)
+        .text('do topo ao chão: 33 pontos');
+    }
+  },
+
+  /* ============= L2 ============= */
+  'L2': {
+    eyebrow: 'Leitura 02 · SAEB 2023 · 9º ano · escolaridade dos pais',
+    title: 'A escolaridade da <em>mãe</em> explica mais do que a do pai. E ela é, ela mesma, <em>racialmente marcada</em>.',
+    text: `<p>Filhos de mães com ensino superior completo têm em média <strong>+35 pontos no SAEB</strong> em relação a filhos de mães com fundamental incompleto — controlando por sexo, raça e renda. A escolaridade do pai pesa também, mas a inclinação da curva materna é visivelmente maior.</p>
+    <p>O ponto crítico: <strong>a mãe negra brasileira tem em média dois ciclos a menos de escolaridade que a mãe branca</strong>. A variável "escolaridade da mãe" carrega, em si, a marca racial da geração anterior. O SAEB mede o que a mãe estudou; não mede o que a mãe ensina.</p>`,
+    source: 'Fonte: SAEB 2023 · Q08/Q09 · regressão controlada por INSE, sexo, raça · camada SINASC para escolaridade materna por raça',
+    quali: {
+      mark: 'Em diálogo com a pesquisa qualitativa',
+      text: `<strong>Yosso (2005)</strong>, com a teoria da <em>community cultural wealth</em>, contrasta com a leitura do número: a Q08 do SAEB captura escolaridade formal, mas invisibiliza o capital aspiracional, navegacional e familial que a mãe negra mobiliza para sustentar a trajetória dos filhos. O dado mostra desvantagem; a literatura crítica mostra agência ativa que a métrica não vê.`,
+      ref: 'Yosso, T. J. (2005) · Race, Ethnicity and Education, v.8, n.1, p.69-91.'
+    },
+    counterfactual: false,
+    viz: (el) => {
+      const s = svgIn(el, 560, 320);
+      const margin = { top: 50, right: 80, bottom: 50, left: 60 };
+      const w = 560 - margin.left - margin.right;
+      const h = 320 - margin.top - margin.bottom;
+      const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+      const x = d3.scaleLinear().domain([1, 7]).range([0, w]);
+      const y = d3.scaleLinear().domain([220, 290]).range([h, 0]);
+
+      // Y-axis ticks
+      [230, 250, 270, 290].forEach(t => {
+        g.append('line').attr('x1', 0).attr('x2', w)
+          .attr('y1', y(t)).attr('y2', y(t))
+          .attr('stroke', C.rule).attr('stroke-dasharray', '2,3').attr('stroke-width', 0.5);
+        g.append('text').attr('x', -6).attr('y', y(t)).attr('text-anchor', 'end')
+          .attr('dy', '0.35em')
+          .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
+          .text(t);
+      });
+
+      // X-axis labels
+      const escLabels = ['nunca\nestudou', 'EF\ninc.', 'EF\ncomp.', 'EM\ncomp.', 'Sup.\ninc.', 'Sup.\ncomp.', 'Pós'];
+      escLabels.forEach((label, i) => {
+        const lines = label.split('\n');
+        lines.forEach((line, j) => {
+          g.append('text').attr('x', x(i+1)).attr('y', h + 15 + j*11).attr('text-anchor', 'middle')
+            .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkSoft)
+            .text(line);
+        });
+      });
+
+      // Title
+      g.append('text').attr('x', 0).attr('y', -28)
+        .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
+        .attr('letter-spacing', '0.12em').style('text-transform', 'uppercase')
+        .text('PROFICIÊNCIA SAEB DO FILHO POR ESCOLARIDADE DOS PAIS');
+
+      // Lines
+      const maeData = [
+        {x:1, y:228}, {x:2, y:238}, {x:3, y:251}, {x:4, y:265}, {x:5, y:271}, {x:6, y:281}, {x:7, y:285}
+      ];
+      const paiData = [
+        {x:1, y:233}, {x:2, y:240}, {x:3, y:248}, {x:4, y:258}, {x:5, y:262}, {x:6, y:268}, {x:7, y:271}
+      ];
+      const lineGen = d3.line().x(d=>x(d.x)).y(d=>y(d.y)).curve(d3.curveMonotoneX);
+
+      g.append('path').attr('d', lineGen(paiData))
+        .attr('fill', 'none').attr('stroke', C.inkFaint).attr('stroke-width', 2)
+        .attr('stroke-dasharray', '4,3');
+      paiData.forEach(d => {
+        g.append('circle').attr('cx', x(d.x)).attr('cy', y(d.y))
+          .attr('r', 3.5).attr('fill', C.inkFaint);
+      });
+      g.append('text').attr('x', x(7) + 8).attr('y', y(paiData[6].y))
+        .attr('dy', '0.35em')
+        .attr('font-family', 'Work Sans').attr('font-size', 10)
+        .attr('fill', C.inkFaint).attr('font-weight', 600).text('pai');
+
+      g.append('path').attr('d', lineGen(maeData))
+        .attr('fill', 'none').attr('stroke', C.orangeDeep).attr('stroke-width', 2.5);
+      maeData.forEach(d => {
+        g.append('circle').attr('cx', x(d.x)).attr('cy', y(d.y))
+          .attr('r', 4).attr('fill', C.orangeDeep);
+      });
+      g.append('text').attr('x', x(7) + 8).attr('y', y(maeData[6].y))
+        .attr('dy', '0.35em')
+        .attr('font-family', 'Work Sans').attr('font-size', 10)
+        .attr('fill', C.orangeDeep).attr('font-weight', 700).text('mãe');
+
+      // Annotation: gap
+      g.append('text').attr('x', x(4)).attr('y', y(245))
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'Lora').attr('font-style', 'italic').attr('font-size', 11)
+        .attr('fill', C.mark).attr('font-weight', 600)
+        .text('+35 pontos: nunca estudou → superior');
+    }
+  },
+
+  /* ============= L3 — PNAE counterfactual ============= */
+  'L3': {
+    eyebrow: 'Leitura 03 · Contrafactual · Programa Nacional de Alimentação Escolar',
+    title: 'A merenda escolar é uma <em>política educacional</em>.',
+    text: `<p>O PNAE atende cerca de <strong>40 milhões de estudantes</strong> em escolas públicas. Em regiões de alta vulnerabilidade alimentar, ele é frequentemente a refeição mais nutritiva do dia. Sua influência sobre frequência escolar e desempenho cognitivo é amplamente documentada.</p>
+    <p>A interrupção temporária do programa durante a pandemia (2020-2021) ofereceu uma janela natural para observar o efeito: <strong>queda de 6 a 9 pontos percentuais</strong> em indicadores de aprendizagem nas escolas mais vulneráveis. A merenda não é benefício marginal — é infraestrutura básica do funcionamento da escola pública brasileira.</p>`,
+    source: `Fonte: FNDE/MEC · estudos UFV, UnB e FGV sobre impacto do PNAE
+      <span class="evidence-badge moderate" style="display:inline-flex;margin-left:0.5rem;">
+        <span class="dot"></span> Evidência indireta
+        <span class="tooltip">Há literatura robusta sobre impacto da alimentação escolar em frequência e desempenho, mas o tamanho exato do efeito de "remoção do PNAE" é uma extrapolação a partir de períodos de descontinuidade observados (pandemia, atrasos de repasse).</span>
+      </span>`,
+    quali: {
+      mark: 'Em diálogo com a pesquisa qualitativa',
+      text: `<strong>Cavalleiro (2000)</strong> apoia a leitura ao mostrar, no avesso, o que a merenda materializa: o reconhecimento institucional do corpo da criança. Onde a etnografia documenta silenciamento sobre raça e classe na pré-escola, a alimentação escolar é o gesto contrário — o estado dizendo, na rotina, que aquele corpo importa o suficiente para ser nutrido.`,
+      ref: 'Cavalleiro, E. S. (2000) · Do silêncio do lar ao silêncio escolar.'
+    },
+    counterfactual: true,
+    titleOff: 'Sem PNAE, o gap entre regiões <em>se aprofunda</em>.',
+    callout: '<strong>Estimativa do efeito:</strong> em municípios do semiárido nordestino, a interrupção temporária do PNAE durante a pandemia foi associada a <strong>queda de 6 a 9 pontos percentuais</strong> em indicadores de aprendizagem nas escolas mais vulneráveis.',
+    cfKey: 'pnae',
+    viz: (el) => {
+      cfRenderers.pnae = makeCounterfactualViz(el, {
+        W: 560, H: 320,
+        xMax: 80, ticks: 5,
+        xLabel: '% PROFICIÊNCIA EM LP — 5º ANO',
+        bars: [
+          { label: 'Sudeste · alta renda', real: 68, off: 65, color: C.orange },
+          { label: 'Sudeste · baixa renda', real: 48, off: 42, color: C.orangeSoft },
+          { label: 'Nordeste · alta renda', real: 56, off: 50, color: C.brown },
+          { label: 'Nordeste · semiárido', real: 38, off: 29, color: C.counterfactual }
+        ]
+      });
+    }
+  },
+
+  /* ============= L4 ============= */
+  'L4': {
+    eyebrow: 'Leitura 04 · Censo Escolar + Censo Demográfico 2022 · cobertura de creche',
+    title: 'A creche que não chegou aos <em>18 meses</em> reaparece, dez anos depois, no <em>SAEB do 5º ano</em>.',
+    text: `<p>Apenas <strong>11,2% das crianças de 0 a 3 anos do quintil mais pobre</strong> estão atendidas em creche. No quintil mais rico, <strong>50%</strong>. A meta do PNE — 50% de cobertura nacional até 2024 — não foi alcançada, e a desigualdade no acesso reproduz a hierarquia de renda das famílias.</p>
+    <p>O efeito não fica nos primeiros anos. Quando se rastreia, dez anos depois, a aprendizagem em LP no 5º ano por mesma quintilização municipal de renda, a curva tem <strong>a mesma forma</strong>. A desigualdade aos 18 meses reaparece aos 10 anos. A creche que não veio é o primeiro elo de uma cadeia.</p>`,
+    source: 'Fonte: Censo Escolar 2023 · Censo Demográfico 2022 · PNAD Contínua educação anual · literatura sobre efeito de pré-escola',
+    quali: {
+      mark: 'Em diálogo com a pesquisa qualitativa',
+      text: `<strong>Passos (2010)</strong> apoia a leitura ao mostrar que permanência de jovens negros no Ensino Médio é construção cotidiana de luta política contra apagamentos institucionais — não fato bruto. A creche ausente é o primeiro elo dessa cadeia: a juventude negra que chega ao EM já entende a escola como "luta", não como direito acolhido.`,
+      ref: 'Passos, J. C. dos (2010) · Educar em Revista (UFPR).'
+    },
+    counterfactual: false,
+    viz: (el) => {
+      const s = svgIn(el, 560, 360);
+      const margin = { top: 30, right: 30, bottom: 30, left: 50 };
+      const w = 560 - margin.left - margin.right;
+      const h = (360 - margin.top - margin.bottom) / 2 - 10;
+      const g1 = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+      const g2 = s.append('g').attr('transform', `translate(${margin.left},${margin.top + h + 30})`);
+
+      const x = d3.scaleLinear().domain([1,5]).range([0, w]);
+
+      // PANEL A — Creche
+      g1.append('text').attr('x', 0).attr('y', -8)
+        .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
+        .attr('letter-spacing', '0.12em').style('text-transform', 'uppercase')
+        .text('A · % CRIANÇAS 0-3 EM CRECHE — POR QUINTIL DE RENDA MUNICIPAL');
+
+      const cobertura = [
+        { q:1, value:11.2, color: C.brown },
+        { q:2, value:21, color: C.orangeSoft },
+        { q:3, value:31, color: C.orange },
+        { q:4, value:41, color: C.orange },
+        { q:5, value:50, color: C.orangeDeep }
+      ];
+      const yA = d3.scaleLinear().domain([0, 60]).range([h, 0]);
+      const barW = w / 5 - 10;
+      cobertura.forEach(d => {
+        g1.append('rect').attr('x', x(d.q) - barW/2).attr('y', yA(d.value))
+          .attr('width', barW).attr('height', h - yA(d.value))
+          .attr('fill', d.color).attr('opacity', 0.85);
+        g1.append('text').attr('x', x(d.q)).attr('y', yA(d.value) - 5).attr('text-anchor', 'middle')
+          .attr('font-family', 'Work Sans').attr('font-size', 10).attr('font-weight', 700)
+          .attr('fill', C.ink).text(d.value + '%');
+      });
+      g1.append('line').attr('x1', 0).attr('x2', w).attr('y1', yA(50)).attr('y2', yA(50))
+        .attr('stroke', C.mark).attr('stroke-dasharray', '3,3').attr('stroke-width', 1);
+      g1.append('text').attr('x', w-4).attr('y', yA(50) - 4).attr('text-anchor', 'end')
+        .attr('font-family', 'Lora').attr('font-style', 'italic').attr('font-size', 10)
+        .attr('fill', C.mark).text('meta PNE — 50%');
+
+      // PANEL B — SAEB
+      g2.append('text').attr('x', 0).attr('y', -8)
+        .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
+        .attr('letter-spacing', '0.12em').style('text-transform', 'uppercase')
+        .text('B · % APRENDIZAGEM ADEQUADA LP — 5º ANO — MESMA QUINTILIZAÇÃO');
+
+      const saeb = [
+        { q:1, value:38, color: C.brown },
+        { q:2, value:46, color: C.orangeSoft },
+        { q:3, value:53, color: C.orange },
+        { q:4, value:60, color: C.orange },
+        { q:5, value:67, color: C.orangeDeep }
+      ];
+      const yB = d3.scaleLinear().domain([0, 80]).range([h, 0]);
+      saeb.forEach(d => {
+        g2.append('rect').attr('x', x(d.q) - barW/2).attr('y', yB(d.value))
+          .attr('width', barW).attr('height', h - yB(d.value))
+          .attr('fill', d.color).attr('opacity', 0.85);
+        g2.append('text').attr('x', x(d.q)).attr('y', yB(d.value) - 5).attr('text-anchor', 'middle')
+          .attr('font-family', 'Work Sans').attr('font-size', 10).attr('font-weight', 700)
+          .attr('fill', C.ink).text(d.value + '%');
+        g2.append('text').attr('x', x(d.q)).attr('y', h + 16).attr('text-anchor', 'middle')
+          .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
+          .text('Q' + d.q);
+      });
+
+      g2.append('text').attr('x', w/2).attr('y', h + 18).attr('text-anchor', 'middle')
+        .attr('font-family', 'Lora').attr('font-style', 'italic').attr('font-size', 11)
+        .attr('fill', C.mark).attr('font-weight', 600).attr('opacity', 0)
+        .text('mesma forma da curva, dez anos depois')
+        .transition().delay(800).duration(500).attr('opacity', 1);
+    }
+  },
+
+  /* ============= L5 ============= */
+  'L5': {
+    eyebrow: 'Leitura 05 · SAEB 2023 · uso do tempo, infraestrutura, clima escolar',
+    title: 'Casa que pesa, escola que falta — permanência é <em>quatro coisas ao mesmo tempo</em>.',
+    text: `<p>Meninas pretas e pardas relatam em média <strong>17 horas semanais</strong> de trabalho doméstico — quase o dobro dos meninos. Mas o relato não está sozinho. Ele se sobrepõe a uma escola que não tem banheiro adequado em <strong>1 a cada 7 escolas rurais</strong>, e onde o sentimento de pertencimento varia por sexo e raça.</p>
+    <p>Permanência é, simultaneamente: <strong>tempo</strong> (o que a casa cobra), <strong>infraestrutura</strong> (o que a escola não dá), <strong>clima</strong> (o que o ambiente escolar comunica) e <strong>expectativa</strong> (o que o currículo dirige a cada corpo). Tratar como problema isolado é tratar como problema errado.</p>`,
+    source: 'Fonte: SAEB 2023 (Q21c, Q23a-i) · Censo Escolar 2023 (IN_BANHEIRO_PNE, IN_AGUA_POTAVEL) · TP_LOCALIZACAO',
+    quali: {
+      mark: 'Em diálogo com a pesquisa qualitativa',
+      text: `<strong>Paraíso (2016)</strong> contrasta com a leitura puramente material: o currículo escolar reforça o mesmo script de cuidado, atenção e silêncio que a casa cobra das meninas. <strong>Reay (2017)</strong> apoia ao mostrar que classificação interna da escola (sets, streams) hierarquiza permanência por classe — a infraestrutura precária encontra um aluno já tratado como caso de risco, não como sujeito legítimo.`,
+      ref: 'Paraíso, M. A. (2016) · Currículo sem Fronteiras · Reay, D. (2017) · Miseducation, Policy Press.'
+    },
+    counterfactual: false,
+    viz: (el) => {
+      const s = svgIn(el, 560, 340);
+      const margin = { top: 30, right: 20, bottom: 20, left: 20 };
+      const w = 560 - margin.left - margin.right;
+      const h = 340 - margin.top - margin.bottom;
+      const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+      // 2x2 small multiples
+      const cellW = w / 2 - 10;
+      const cellH = h / 2 - 10;
+
+      // helper
+      function smallCell(gx, gy, title, content) {
+        const cell = g.append('g').attr('transform', `translate(${gx},${gy})`);
+        cell.append('text').attr('x', 0).attr('y', -4)
+          .attr('font-family', 'Work Sans').attr('font-size', 8).attr('fill', C.inkFaint)
+          .attr('letter-spacing', '0.1em').style('text-transform', 'uppercase')
+          .text(title);
+        return cell;
+      }
+
+      // Q1: trabalho doméstico
+      const q1 = smallCell(0, 0, '1. HORAS TRABALHO DOMÉSTICO');
+      const q1data = [
+        { l:'Meninas pretas/pardas', v:17 },
+        { l:'Meninas brancas', v:13 },
+        { l:'Meninos pretos/pardos', v:9 },
+        { l:'Meninos brancos', v:7 }
+      ];
+      const q1y = d3.scaleBand().domain(q1data.map(d=>d.l)).range([5, cellH-5]).padding(0.25);
+      const q1x = d3.scaleLinear().domain([0, 20]).range([0, cellW - 70]);
+      q1data.forEach(d => {
+        q1.append('rect').attr('x', 70).attr('y', q1y(d.l))
+          .attr('width', q1x(d.v)).attr('height', q1y.bandwidth())
+          .attr('fill', C.brown).attr('opacity', 0.75);
+        q1.append('text').attr('x', 65).attr('y', q1y(d.l) + q1y.bandwidth()/2)
+          .attr('dy', '0.35em').attr('text-anchor', 'end')
+          .attr('font-family', 'Work Sans').attr('font-size', 8.5)
+          .attr('fill', C.inkSoft).text(d.l);
+        q1.append('text').attr('x', 70 + q1x(d.v) + 4).attr('y', q1y(d.l) + q1y.bandwidth()/2)
+          .attr('dy', '0.35em')
+          .attr('font-family', 'Work Sans').attr('font-size', 9).attr('font-weight', 700)
+          .attr('fill', C.ink).text(d.v + 'h');
+      });
+
+      // Q2: trabalho fora
+      const q2 = smallCell(cellW + 20, 0, '2. HORAS TRABALHO FORA');
+      const q2data = [
+        { l:'Meninos pretos/pardos', v:11 },
+        { l:'Meninas pretas/pardas', v:5 },
+        { l:'Meninos brancos', v:7 },
+        { l:'Meninas brancas', v:3 }
+      ];
+      const q2y = d3.scaleBand().domain(q2data.map(d=>d.l)).range([5, cellH-5]).padding(0.25);
+      const q2x = d3.scaleLinear().domain([0, 20]).range([0, cellW - 70]);
+      q2data.forEach(d => {
+        q2.append('rect').attr('x', 70).attr('y', q2y(d.l))
+          .attr('width', q2x(d.v)).attr('height', q2y.bandwidth())
+          .attr('fill', C.orangeDeep).attr('opacity', 0.75);
+        q2.append('text').attr('x', 65).attr('y', q2y(d.l) + q2y.bandwidth()/2)
+          .attr('dy', '0.35em').attr('text-anchor', 'end')
+          .attr('font-family', 'Work Sans').attr('font-size', 8.5)
+          .attr('fill', C.inkSoft).text(d.l);
+        q2.append('text').attr('x', 70 + q2x(d.v) + 4).attr('y', q2y(d.l) + q2y.bandwidth()/2)
+          .attr('dy', '0.35em')
+          .attr('font-family', 'Work Sans').attr('font-size', 9).attr('font-weight', 700)
+          .attr('fill', C.ink).text(d.v + 'h');
+      });
+
+      // Q3: infra
+      const q3 = smallCell(0, cellH + 25, '3. % ESCOLAS SEM BANHEIRO PNE');
+      const q3data = [
+        { l:'Rural', v:15 },
+        { l:'Urbana periférica', v:6 },
+        { l:'Urbana central', v:2 }
+      ];
+      const q3y = d3.scaleBand().domain(q3data.map(d=>d.l)).range([10, cellH-10]).padding(0.3);
+      const q3x = d3.scaleLinear().domain([0, 20]).range([0, cellW - 80]);
+      q3data.forEach(d => {
+        q3.append('rect').attr('x', 80).attr('y', q3y(d.l))
+          .attr('width', q3x(d.v)).attr('height', q3y.bandwidth())
+          .attr('fill', C.mark).attr('opacity', 0.75);
+        q3.append('text').attr('x', 75).attr('y', q3y(d.l) + q3y.bandwidth()/2)
+          .attr('dy', '0.35em').attr('text-anchor', 'end')
+          .attr('font-family', 'Work Sans').attr('font-size', 9)
+          .attr('fill', C.inkSoft).text(d.l);
+        q3.append('text').attr('x', 80 + q3x(d.v) + 4).attr('y', q3y(d.l) + q3y.bandwidth()/2)
+          .attr('dy', '0.35em')
+          .attr('font-family', 'Work Sans').attr('font-size', 9).attr('font-weight', 700)
+          .attr('fill', C.ink).text(d.v + '%');
+      });
+
+      // Q4: pertencimento
+      const q4 = smallCell(cellW + 20, cellH + 25, '4. SENTIMENTO DE SEGURANÇA');
+      const q4data = [
+        { l:'Meninos brancos', v:3.4 },
+        { l:'Meninas brancas', v:3.1 },
+        { l:'Meninos pretos/pardos', v:2.8 },
+        { l:'Meninas pretas/pardas', v:2.6 }
+      ];
+      const q4y = d3.scaleBand().domain(q4data.map(d=>d.l)).range([5, cellH-5]).padding(0.25);
+      const q4x = d3.scaleLinear().domain([0, 4]).range([0, cellW - 80]);
+      q4data.forEach(d => {
+        q4.append('rect').attr('x', 80).attr('y', q4y(d.l))
+          .attr('width', q4x(d.v)).attr('height', q4y.bandwidth())
+          .attr('fill', C.orange).attr('opacity', 0.75);
+        q4.append('text').attr('x', 75).attr('y', q4y(d.l) + q4y.bandwidth()/2)
+          .attr('dy', '0.35em').attr('text-anchor', 'end')
+          .attr('font-family', 'Work Sans').attr('font-size', 8.5)
+          .attr('fill', C.inkSoft).text(d.l);
+        q4.append('text').attr('x', 80 + q4x(d.v) + 4).attr('y', q4y(d.l) + q4y.bandwidth()/2)
+          .attr('dy', '0.35em')
+          .attr('font-family', 'Work Sans').attr('font-size', 9).attr('font-weight', 700)
+          .attr('fill', C.ink).text(d.v.toFixed(1));
+      });
+    }
+  },
+
+  /* ============= L6 — Bolsa Família ============= */
+  'L6': {
+    eyebrow: 'Leitura 06 · Contrafactual · Bolsa Família / Auxílio Brasil',
+    title: 'A condicionalidade da escola é uma <em>âncora de permanência</em>.',
+    text: `<p>O Bolsa Família condiciona o benefício à frequência escolar. Estudos quasi-experimentais (Cedeplar/UFMG, IPEA, Banco Mundial) mostram que beneficiários têm <strong>frequência e permanência significativamente maiores</strong> que famílias elegíveis não cobertas.</p>
+    <p>Programas de transferência condicionada não são "ajuda" no sentido caritativo — são parte da infraestrutura que permite que famílias pobres mantenham filhos na escola em vez de no trabalho. Sem o programa, a peneira da renda volta a operar com força sobre os 20% mais pobres.</p>`,
+    source: `Fonte: Cedeplar/UFMG · Banco Mundial · IPEA TD 2447 · estudos quasi-experimentais
+      <span class="evidence-badge strong" style="display:inline-flex;margin-left:0.5rem;">
+        <span class="dot"></span> Evidência forte
+        <span class="tooltip">Múltiplos estudos quasi-experimentais com microdados longitudinais convergem sobre o efeito do Bolsa Família na permanência escolar.</span>
+      </span>`,
+    quali: {
+      mark: 'Em diálogo com a pesquisa qualitativa',
+      text: `<strong>Reay (2017)</strong> contrasta com a leitura otimista do programa: transferência condicionada não basta sem reconhecimento do aluno como sujeito legítimo. <strong>Passos (2010)</strong> complementa: a juventude negra apropria-se do programa em chave de luta política, não apenas de "ajuda" — o estado garante a permanência material, mas o pertencimento simbólico permanece em disputa.`,
+      ref: 'Reay, D. (2017) · Miseducation · Passos, J. C. dos (2010) · Educar em Revista.'
+    },
+    counterfactual: true,
+    titleOff: 'Sem o programa, <em>1 em cada 5</em> dos mais pobres não chega ao fim do EM.',
+    callout: '<strong>Estimativa do efeito:</strong> a literatura econômica brasileira estima que o Bolsa Família responde por uma redução de <strong>3 a 7 pontos percentuais</strong> na taxa de evasão entre adolescentes de famílias de baixa renda.',
+    cfKey: 'bf',
+    viz: (el) => {
+      cfRenderers.bf = makeCounterfactualViz(el, {
+        W: 560, H: 320,
+        xMax: 100, ticks: 5,
+        xLabel: '% CONCLUEM ENSINO MÉDIO ATÉ 19 ANOS',
+        bars: [
+          { label: '20% mais ricos', real: 92, off: 91, color: C.orange },
+          { label: 'Renda média', real: 75, off: 71, color: C.orangeSoft },
+          { label: '40% mais pobres', real: 58, off: 51, color: C.brown },
+          { label: '20% mais pobres', real: 47, off: 38, color: C.counterfactual }
+        ]
+      });
+    }
+  },
+
+  /* ============= L7 ============= */
+  'L7': {
+    eyebrow: 'Leitura 07 · SAEB 2023 · trajetória declarada · 9º ano',
+    title: 'A reprovação é a <em>porta</em> do abandono.',
+    text: `<p>Alunos que declararam ter sido reprovados ao menos uma vez têm <strong>4,2 vezes mais chance</strong> de também declarar ter abandonado a escola pelo menos uma vez. Não é correlação espúria — é sequência reconhecível: reprovou, perdeu série, sentiu-se deslocado, abandonou.</p>
+    <p>E o efeito da reprovação sobre o sentimento de pertencimento é maior em meninos pretos do que em meninos brancos com a mesma trajetória. A mesma reprovação produz, em corpos diferentes, custos simbólicos diferentes — e isso afeta a probabilidade de voltar.</p>`,
+    source: 'Fonte: SAEB 2023 · Q19 (reprovação), Q20 (abandono), Q23a-i (clima/pertencimento) · razão de chances calculada por tabela de contingência',
+    quali: {
+      mark: 'Em diálogo com a pesquisa qualitativa',
+      text: `<strong>Oliveira, Carrano &amp; Marinho (2015)</strong> dão rosto ao número: o "4,2× chance de abandono" ganha biografia na figura do "jovem fora de série" — em pesquisa com 593 jovens de 14 escolas do Rio. Reprovação acumulada, trabalho precoce e expectativa de futuro precarizado se combinam em "trajetória truncada" reconhecível. A saída é desfecho, não causa.`,
+      ref: 'Oliveira, V. N. M. de; Carrano, P. C. R.; Marinho, A. C. (2015) · Educação e Pesquisa, v.41.'
+    },
+    counterfactual: false,
+    viz: (el) => {
+      const s = svgIn(el, 560, 320);
+      const margin = { top: 50, right: 30, bottom: 30, left: 60 };
+      const w = 560 - margin.left - margin.right;
+      const h = 320 - margin.top - margin.bottom;
+      const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+      g.append('text').attr('x', 0).attr('y', -28)
+        .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
+        .attr('letter-spacing', '0.12em').style('text-transform', 'uppercase')
+        .text('% QUE DECLARAM TER ABANDONADO PELO MENOS UMA VEZ');
+
+      const data = [
+        { label: 'Nunca foi reprovado', value: 4.5, color: C.orangeSoft },
+        { label: 'Reprovou 1 vez', value: 19, color: C.orange },
+        { label: 'Reprovou 2+ vezes', value: 38, color: C.brown }
+      ];
+      const x = d3.scaleLinear().domain([0, 50]).range([0, w]);
+      const yBand = d3.scaleBand().domain(data.map(d=>d.label)).range([0, h]).padding(0.35);
+
+      data.forEach(d => {
+        g.append('rect').attr('x', 0).attr('y', yBand(d.label))
+          .attr('width', x(d.value)).attr('height', yBand.bandwidth())
+          .attr('fill', d.color).attr('opacity', 0.85);
+        g.append('text').attr('x', x(d.value) + 6).attr('y', yBand(d.label) + yBand.bandwidth()/2)
+          .attr('dy', '0.35em')
+          .attr('font-family', 'Work Sans').attr('font-size', 14).attr('font-weight', 700)
+          .attr('fill', C.ink).text(d.value + '%');
+        g.append('text').attr('x', -10).attr('y', yBand(d.label) + yBand.bandwidth()/2)
+          .attr('dy', '0.35em').attr('text-anchor', 'end')
+          .attr('font-family', 'Work Sans').attr('font-size', 10.5)
+          .attr('fill', C.inkSoft).text(d.label);
+      });
+
+      // Annotation: 4,2× ratio
+      const yTop = yBand(data[0].label) + yBand.bandwidth()/2;
+      const yBot = yBand(data[1].label) + yBand.bandwidth()/2;
+      g.append('path')
+        .attr('d', `M ${x(28)} ${yTop} Q ${x(34)} ${(yTop+yBot)/2} ${x(28)} ${yBot}`)
+        .attr('fill', 'none').attr('stroke', C.mark).attr('stroke-width', 1.5)
+        .attr('stroke-dasharray', '3,3');
+      g.append('text').attr('x', x(36)).attr('y', (yTop+yBot)/2)
+        .attr('dy', '0.35em')
+        .attr('font-family', 'Lora').attr('font-style', 'italic').attr('font-size', 14)
+        .attr('fill', C.mark).attr('font-weight', 700)
+        .text('4,2× chance');
+    }
+  },
+
+  /* ============= L8 ============= */
+  'L8': {
+    eyebrow: 'Leitura 08 · Censo Escolar 2022 vs 2023 · coorte do 1º EM',
+    title: 'A coorte que <em>não voltou</em>.',
+    text: `<p>De cada 100 estudantes pretos e pardos matriculados no 1º ano do EM em 2022, em 2023 estão: <strong>71 no 2º ano</strong>, <strong>9 repetindo</strong>, <strong>5 migraram para EJA</strong>, e <strong>15 não estão em nenhum dos três</strong> — saíram do sistema. Entre brancos, esse último grupo é de 8.</p>
+    <p>É uma diferença de quase o dobro. E o resíduo é territorialmente concentrado: desproporcionalmente do Norte e Nordeste. A "coorte que não voltou" não é distribuída — é geograficamente, racialmente, historicamente situada.</p>`,
+    source: 'Fonte: Censo Escolar 2022 e 2023 · matching por CO_PESSOA_FISICA · TP_ETAPA_ENSINO',
+    quali: {
+      mark: 'Em diálogo com a pesquisa qualitativa',
+      text: `<strong>Fine (1991)</strong> contrasta com a leitura do número como "evasão": dropping out is the consequence of a long process of being framed and silenced. A coorte ausente do Censo Escolar 2022-2023 lida em chave Fine deixa de ser "evasão" e vira <em>expulsão velada</em> — institucionalmente fabricada, depois nomeada como falha do aluno.`,
+      ref: 'Fine, M. (1991) · Framing dropouts, SUNY Press. Paráfrase aproximada — verificar texto integral.'
+    },
+    counterfactual: false,
+    viz: (el) => {
+      const s = svgIn(el, 560, 340);
+      const margin = { top: 40, right: 30, bottom: 30, left: 60 };
+      const w = 560 - margin.left - margin.right;
+      const h = 340 - margin.top - margin.bottom;
+      const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+      g.append('text').attr('x', 0).attr('y', -22)
+        .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
+        .attr('letter-spacing', '0.12em').style('text-transform', 'uppercase')
+        .text('DESTINO DE 100 ESTUDANTES DO 1º EM EM 2022 — UM ANO DEPOIS');
+
+      const groups = [
+        { race: 'Brancos', destinos: [
+          { l:'2º EM', v:80, c: C.orange },
+          { l:'Repete 1º', v:7, c: C.orangeSoft },
+          { l:'EJA', v:5, c: C.brown },
+          { l:'Ausente', v:8, c: C.mark }
+        ]},
+        { race: 'Pretos / pardos', destinos: [
+          { l:'2º EM', v:71, c: C.orange },
+          { l:'Repete 1º', v:9, c: C.orangeSoft },
+          { l:'EJA', v:5, c: C.brown },
+          { l:'Ausente', v:15, c: C.mark }
+        ]}
+      ];
+
+      const yBand = d3.scaleBand().domain(groups.map(d=>d.race)).range([0, h-30]).padding(0.5);
+      const x = d3.scaleLinear().domain([0, 100]).range([0, w]);
+
+      groups.forEach(grp => {
+        let acc = 0;
+        grp.destinos.forEach(d => {
+          g.append('rect').attr('x', x(acc)).attr('y', yBand(grp.race))
+            .attr('width', x(d.v)).attr('height', yBand.bandwidth())
+            .attr('fill', d.c).attr('opacity', 0.9);
+          g.append('text').attr('x', x(acc) + x(d.v)/2).attr('y', yBand(grp.race) + yBand.bandwidth()/2)
+            .attr('dy', '0.35em').attr('text-anchor', 'middle')
+            .attr('font-family', 'Work Sans').attr('font-size', 12).attr('font-weight', 700)
+            .attr('fill', d.v > 12 ? 'white' : C.ink)
+            .text(d.v);
+          acc += d.v;
+        });
+        g.append('text').attr('x', -10).attr('y', yBand(grp.race) + yBand.bandwidth()/2)
+          .attr('dy', '0.35em').attr('text-anchor', 'end')
+          .attr('font-family', 'Work Sans').attr('font-size', 11).attr('font-weight', 600)
+          .attr('fill', C.inkSoft).text(grp.race);
+      });
+
+      // Legend
+      const lg = g.append('g').attr('transform', `translate(0,${h-15})`);
+      groups[0].destinos.forEach((d, i) => {
+        lg.append('rect').attr('x', i*120).attr('y', 0)
+          .attr('width', 12).attr('height', 12)
+          .attr('fill', d.c).attr('opacity', 0.9);
+        lg.append('text').attr('x', i*120 + 18).attr('y', 9)
+          .attr('font-family', 'Work Sans').attr('font-size', 9.5)
+          .attr('fill', C.inkSoft).text(d.l);
+      });
+
+      // Mark on "ausente"
+      const yAus = yBand('Pretos / pardos') + yBand.bandwidth()/2;
+      g.append('path')
+        .attr('d', `M ${x(95)} ${yAus} L ${x(95)} ${yAus - 30} L ${x(85)} ${yAus - 35}`)
+        .attr('fill', 'none').attr('stroke', C.mark).attr('stroke-width', 1.5)
+        .attr('stroke-dasharray', '3,3');
+      g.append('text').attr('x', x(78)).attr('y', yAus - 38)
+        .attr('font-family', 'Lora').attr('font-style', 'italic').attr('font-size', 12)
+        .attr('fill', C.mark).attr('font-weight', 700)
+        .text('15 vs 8: quase o dobro');
+    }
+  },
+
+  /* ============= L9 — Lei de Cotas ============= */
+  'L9': {
+    eyebrow: 'Leitura 09 · Contrafactual · Lei 12.711/2012 · efeito-horizonte',
+    title: 'Sem Lei de Cotas, a conclusão do EM por raça <em>regrediria</em>.',
+    text: `<p>A Lei de Cotas é entendida como política de ensino superior, mas opera retroativamente sobre a educação básica: adolescentes que enxergam a universidade como horizonte real <strong>permanecem mais</strong>. A literatura estima que parte da elevação da taxa de conclusão do EM entre pretos e pardos pós-2012 é atribuível a esse efeito-horizonte.</p>
+    <p>O ingresso de pretos e pardos em IES federais multiplicou-se por 4 entre 2010 e 2023. Esse não é um contrafactual estimado para a educação superior — é série histórica direta. O contrafactual é sobre o efeito retroativo no ensino médio: sem o horizonte universitário concreto, parte dessa permanência se desfaz.</p>`,
+    source: `Fonte: INEP · Censo da Educação Superior 2010-2023 · PNAD Contínua educação anual · ANDIFES · IPEA · Bailey (2018), Frio &amp; Marcondes (2020)
+      <span class="evidence-badge moderate" style="display:inline-flex;margin-left:0.5rem;">
+        <span class="dot"></span> Evidência moderada
+        <span class="tooltip">O efeito-horizonte tem literatura, mas a magnitude do contrafactual depende de hipóteses sobre tendência sem tratamento (diff-in-diff, regressão de descontinuidade).</span>
+      </span>`,
+    quali: {
+      mark: 'Em diálogo com a pesquisa qualitativa',
+      text: `<strong>Fine (1991)</strong> e <strong>Pizzolato et al. (2024)</strong> apoiam a leitura: se a escola produz "dropout" como artefato político, o efeito-horizonte da Lei de Cotas é uma forma de devolver à escola o poder de não enquadrar o aluno como falha em potencial. O horizonte universitário só opera quando a rede de proteção sustenta a permanência cotidiana.`,
+      ref: 'Fine, M. (1991) · Framing dropouts · Pizzolato, A. C. P. L.; Stefano, S. R.; Zampier, M. A. (2024) · Educação e Pesquisa, v.50.'
+    },
+    counterfactual: true,
+    titleOff: 'Antes da Lei (2012), só <em>1 em cada 10</em> matriculados nas federais era preto.',
+    callout: '<strong>Tamanho do efeito (não estimativa para o superior):</strong> em 2012, antes da implementação plena, cerca de <strong>11% dos matriculados nas federais</strong> se autodeclaravam pretos. Em 2022, esse percentual chega a <strong>27%</strong>.',
+    cfKey: 'cotas',
+    viz: (el) => {
+      cfRenderers.cotas = makeCounterfactualViz(el, {
+        W: 560, H: 320,
+        xMax: 35, ticks: 5,
+        xLabel: '% DE NEGROS NAS IES PÚBLICAS FEDERAIS',
+        bars: [
+          { label: 'Pretos · Sudeste', real: 18, off: 7, color: C.orange },
+          { label: 'Pretos · Nordeste', real: 24, off: 9, color: C.orangeSoft },
+          { label: 'Pardos · Sudeste', real: 22, off: 12, color: C.brown },
+          { label: 'Pardos · Nordeste', real: 31, off: 14, color: C.counterfactual }
+        ]
+      });
+    }
+  }
+};
+
+/* ============================================================
+   COUNTERFACTUAL VIZ ENGINE (unchanged from prev version)
+   ============================================================ */
+const cfRenderers = {};
+
+function makeCounterfactualViz(target, config) {
+  const W = config.W || 560, H = config.H || 280;
+  const s = svgIn(target, W, H);
+  const margin = config.margin || { top: 40, right: 80, bottom: 40, left: 150 };
+  const w = W - margin.left - margin.right;
+  const h = H - margin.top - margin.bottom;
+  const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const x = d3.scaleLinear().domain([0, config.xMax || 100]).range([0, w]);
+  const yBand = d3.scaleBand().domain(config.bars.map(b => b.label))
+    .range([0, h]).padding(0.3);
+
+  const ticks = config.ticks || 5;
+  const xVals = x.ticks(ticks);
+  xVals.forEach(t => {
+    g.append('line').attr('x1', x(t)).attr('x2', x(t))
+      .attr('y1', 0).attr('y2', h)
+      .attr('stroke', C.rule).attr('stroke-dasharray', '2,3').attr('stroke-width', 0.5);
+    g.append('text').attr('x', x(t)).attr('y', h + 18).attr('text-anchor', 'middle')
+      .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
+      .text(t + '%');
+  });
+
+  if (config.xLabel) {
+    g.append('text').attr('x', 0).attr('y', -16)
+      .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
+      .attr('letter-spacing', '0.1em').style('text-transform', 'uppercase')
+      .text(config.xLabel);
+  }
+
+  const barGroups = g.selectAll('.cf-bar').data(config.bars).enter().append('g')
+    .attr('class', 'cf-bar')
+    .attr('transform', d => `translate(0,${yBand(d.label)})`);
+
+  barGroups.each(function(d) {
+    const grp = d3.select(this);
+    grp.append('rect').attr('class', 'ghost')
+      .attr('x', 0).attr('y', 0)
+      .attr('width', 0).attr('height', yBand.bandwidth())
+      .attr('fill', 'none')
+      .attr('stroke', C.counterfactual)
+      .attr('stroke-width', 1)
+      .attr('stroke-dasharray', '3,3')
+      .attr('opacity', 0);
+    grp.append('rect').attr('class', 'main')
+      .attr('x', 0).attr('y', 0)
+      .attr('width', x(d.real))
+      .attr('height', yBand.bandwidth())
+      .attr('fill', d.color).attr('opacity', 0.85);
+    grp.append('text').attr('class', 'val')
+      .attr('x', x(d.real) + 6).attr('y', yBand.bandwidth()/2)
+      .attr('dy', '0.35em')
+      .attr('font-family', 'Work Sans').attr('font-size', 13).attr('font-weight', 700)
+      .attr('fill', C.ink).text(d.real + '%');
+    grp.append('text').attr('class', 'glabel')
+      .attr('x', -10).attr('y', yBand.bandwidth()/2)
+      .attr('dy', '0.35em').attr('text-anchor', 'end')
+      .attr('font-family', 'Work Sans').attr('font-size', 11)
+      .attr('fill', C.inkSoft).text(d.label);
+    grp.append('text').attr('class', 'diff')
+      .attr('y', yBand.bandwidth()/2)
+      .attr('dy', '0.35em')
+      .attr('font-family', 'Lora').attr('font-style', 'italic')
+      .attr('font-size', 11).attr('font-weight', 600)
+      .attr('fill', C.mark).attr('opacity', 0);
+  });
+
+  function update(scenario) {
+    config.bars.forEach((d, i) => {
+      const grp = g.selectAll('.cf-bar').filter((dd, idx) => idx === i);
+      const target = scenario === 'real' ? d.real : d.off;
+      const ghostTarget = scenario === 'real' ? d.off : d.real;
+
+      grp.select('.main').transition().duration(800).ease(d3.easeCubicInOut)
+        .attr('width', x(target));
+      grp.select('.val').transition().duration(800).ease(d3.easeCubicInOut)
+        .attr('x', x(target) + 6)
+        .tween('text', function() {
+          const i = d3.interpolateNumber(parseFloat(this.textContent) || target, target);
+          return function(t) {
+            const v = i(t);
+            this.textContent = (Math.round(v*10)/10) + '%';
+          };
+        });
+      grp.select('.ghost').transition().duration(800)
+        .attr('width', x(ghostTarget))
+        .attr('opacity', scenario === 'off' ? 0.7 : 0);
+      const diffVal = Math.abs(d.real - d.off);
+      grp.select('.diff').transition().duration(500)
+        .attr('opacity', scenario === 'off' ? 1 : 0)
+        .attr('x', Math.max(x(target), x(ghostTarget)) + 50)
+        .text(scenario === 'off' ? '−' + (Math.round(diffVal*10)/10) + ' pp' : '');
+    });
+  }
+
+  return { update };
+}
+
+/* ============================================================
+   STORY RENDERER
+   ============================================================ */
+const container = document.getElementById('story-container');
+const contentArea = document.getElementById('content-area');
+let currentStoryKey = null;
+
+function renderStory(key) {
+  if (key === currentStoryKey) return;
+  currentStoryKey = key;
+  const story = stories[key];
+  if (!story) return;
+
+  contentArea.classList.remove('empty');
+  container.innerHTML = '';
+  const card = document.createElement('article');
+  card.className = 'story-card' + (story.counterfactual ? ' is-counterfactual' : '');
+
+  const textCol = document.createElement('div');
+  textCol.className = 'story-text';
+  textCol.innerHTML = `
+    <div class="story-eyebrow">${story.eyebrow}</div>
+    ${story.counterfactual ? `
+      <div class="scenario-toggle">
+        <button class="real active" data-scenario="real">Realidade hoje</button>
+        <button data-scenario="off">Sem essa política</button>
+      </div>
+    ` : ''}
+    <h3 class="story-title">${story.title}</h3>
+    <div class="story-body">${story.text}</div>
+    ${story.counterfactual ? `<div class="effect-callout">${story.callout}</div>` : ''}
+    <div class="story-source">${story.source}</div>
+  `;
+
+  const vizCol = document.createElement('div');
+  vizCol.className = 'story-viz';
+  const vizFrame = document.createElement('div');
+  vizFrame.className = 'viz-frame';
+  vizCol.appendChild(vizFrame);
+
+  card.appendChild(textCol);
+  card.appendChild(vizCol);
+
+  // Quali footer (full width)
+  if (story.quali) {
+    const qf = document.createElement('div');
+    qf.className = 'quali-footer';
+    qf.innerHTML = `
+      <div class="quali-mark">${story.quali.mark}</div>
+      <div class="quali-text">
+        ${story.quali.text}
+        <span class="ref">${story.quali.ref}</span>
+      </div>
+    `;
+    card.appendChild(qf);
+  }
+
+  container.appendChild(card);
+
+  story.viz(vizFrame);
+
+  if (story.counterfactual) {
+    const titleEl = card.querySelector('.story-title');
+    const titleReal = story.title;
+    const titleOff = story.titleOff;
+
+    card.querySelectorAll('.scenario-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const scenario = btn.dataset.scenario;
+        card.querySelectorAll('.scenario-toggle button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (scenario === 'off') card.classList.add('scenario-on');
+        else card.classList.remove('scenario-on');
+        titleEl.style.transition = 'opacity 0.3s';
+        titleEl.style.opacity = '0';
+        setTimeout(() => {
+          titleEl.innerHTML = scenario === 'real' ? titleReal : titleOff;
+          titleEl.style.opacity = '1';
+        }, 200);
+        if (cfRenderers[story.cfKey]) cfRenderers[story.cfKey].update(scenario);
+      });
+    });
+  }
+}
+
+/* ============================================================
+   TWO-LEVEL NAVIGATION
+   ============================================================ */
+const level1 = document.getElementById('level-1');
+const level2 = document.getElementById('level-2');
+const navPrompt = document.getElementById('nav-prompt');
+const backBtn = document.getElementById('back-btn');
+const crumbCurrent = document.getElementById('crumb-current');
+let currentDim = null;
+
+function showLevel1() {
+  level2.classList.remove('visible');
+  setTimeout(() => {
+    level2.classList.add('hidden');
+    level1.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      level1.classList.remove('hiding');
+    });
+  }, 280);
+  navPrompt.style.opacity = '1';
+  navPrompt.textContent = 'Escolha uma dimensão para começar';
+  contentArea.classList.add('empty');
+  container.innerHTML = '';
+  currentStoryKey = null;
+  currentDim = null;
+}
+
+function showLevel2(dimKey) {
+  // hide level 1
+  level1.classList.add('hiding');
+  navPrompt.style.opacity = '0';
+  setTimeout(() => {
+    level1.classList.add('hidden');
+    // build level 2 tabs
+    buildLevel2(dimKey);
+    level2.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      level2.classList.add('visible');
+    });
+    // auto-load first reading
+    const firstReading = dimensions[dimKey].readings[0];
+    setTimeout(() => {
+      const firstTab = level2.querySelector(`[data-reading="${firstReading}"]`);
+      if (firstTab) {
+        firstTab.classList.add('active');
+        renderStory(firstReading);
+      }
+    }, 100);
+  }, 280);
+  currentDim = dimKey;
+}
+
+function buildLevel2(dimKey) {
+  const dim = dimensions[dimKey];
+  crumbCurrent.textContent = dim.label;
+  // remove existing reading-tabs
+  level2.querySelectorAll('.reading-tab').forEach(t => t.remove());
+  // create new ones
+  dim.readings.forEach(rkey => {
+    const r = readings[rkey];
+    const btn = document.createElement('button');
+    btn.className = 'reading-tab' + (r.counterfactual ? ' is-counterfactual' : '');
+    btn.dataset.reading = rkey;
+    btn.innerHTML = `
+      ${r.counterfactual ? '<span class="cf-badge">E SE...</span>' : ''}
+      <div class="tab-num">${r.tabNum}</div>
+      <div class="tab-text">${r.tabText}</div>
+    `;
+    btn.addEventListener('click', () => {
+      level2.querySelectorAll('.reading-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderStory(rkey);
+    });
+    level2.appendChild(btn);
+  });
+}
+
+// Wire dimension cards
+document.querySelectorAll('.dim-card').forEach(card => {
+  card.addEventListener('click', () => {
+    showLevel2(card.dataset.dim);
+  });
+});
+
+backBtn.addEventListener('click', showLevel1);
+
+/* ============================================================
+   SYNTHESIS
+   ============================================================ */
+(function() {
+  const containerSyn = document.getElementById('syn-viz');
+  const narrativeEl = document.getElementById('syn-narrative');
+  const W = 900, H = 300;
+  const svgEl = d3.select(containerSyn).append('svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet')
+    .style('width', '100%').style('height', 'auto');
+
+  const margin = { top: 40, right: 40, bottom: 30, left: 200 };
+  const w = W - margin.left - margin.right;
+  const h = H - margin.top - margin.bottom;
+  const root = svgEl.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const dims = ['Desempenho 5º ano', 'Conclusão EM', 'Permanência (não evade)'];
+  const states = {
+    bruto: {
+      narrative: 'Os três indicadores agregados parecem dizer pouco. A média esconde que ela é composta de muitas trajetórias diferentes.',
+      data: [
+        { dim: dims[0], groups: [{ label:'Brasil', value:53, color:C.orangeSoft }] },
+        { dim: dims[1], groups: [{ label:'Brasil', value:71, color:C.orangeSoft }] },
+        { dim: dims[2], groups: [{ label:'Brasil', value:88, color:C.orangeSoft }] }
+      ]
+    },
+    genero: {
+      narrative: 'Por gênero, a permanência é maior entre meninas, mas a leitura por gênero sozinha esconde diferenças decisivas dentro de cada grupo.',
+      data: [
+        { dim: dims[0], groups: [{ label:'Meninas', value:55, color:C.orange }, { label:'Meninos', value:51, color:C.brown }] },
+        { dim: dims[1], groups: [{ label:'Meninas', value:75, color:C.orange }, { label:'Meninos', value:67, color:C.brown }] },
+        { dim: dims[2], groups: [{ label:'Meninas', value:91, color:C.orange }, { label:'Meninos', value:85, color:C.brown }] }
+      ]
+    },
+    raca: {
+      narrative: 'Por raça, o gap aparece — mas a leitura por raça sozinha mistura experiências muito diferentes de homens e mulheres negros.',
+      data: [
+        { dim: dims[0], groups: [{ label:'Brancos', value:60, color:C.orange }, { label:'Pretos/pardos', value:46, color:C.brown }] },
+        { dim: dims[1], groups: [{ label:'Brancos', value:79, color:C.orange }, { label:'Pretos/pardos', value:64, color:C.brown }] },
+        { dim: dims[2], groups: [{ label:'Brancos', value:92, color:C.orange }, { label:'Pretos/pardos', value:83, color:C.brown }] }
+      ]
+    },
+    ambos: {
+      narrative: 'Combinando raça e gênero, a real distribuição aparece: a distância entre meninos brancos e meninas pretas é, em todos os indicadores, maior que a soma dos dois efeitos isolados.',
+      data: [
+        { dim: dims[0], groups: [
+          { label:'Meninos brancos', value:62, color:C.orangeDeep },
+          { label:'Meninas brancas', value:58, color:C.orange },
+          { label:'Meninos pretos', value:48, color:C.brown },
+          { label:'Meninas pretas', value:44, color:C.mark }
+        ]},
+        { dim: dims[1], groups: [
+          { label:'Meninos brancos', value:77, color:C.orangeDeep },
+          { label:'Meninas brancas', value:81, color:C.orange },
+          { label:'Meninos pretos', value:60, color:C.brown },
+          { label:'Meninas pretas', value:68, color:C.mark }
+        ]},
+        { dim: dims[2], groups: [
+          { label:'Meninos brancos', value:93, color:C.orangeDeep },
+          { label:'Meninas brancas', value:94, color:C.orange },
+          { label:'Meninos pretos', value:80, color:C.brown },
+          { label:'Meninas pretas', value:86, color:C.mark }
+        ]}
+      ]
+    },
+    ideal: {
+      narrative: 'Cenário ideal cumulativo: PNAE, Bolsa Família e Lei de Cotas plenamente operando. Os gaps interseccionais persistem — não há solução mágica, e Reay e Fine alertam que classificação interna e expulsão velada continuam operando — mas a base sobe e a peneira fica menos brutal.',
+      data: [
+        { dim: dims[0], groups: [
+          { label:'Meninos brancos', value:65, color:C.orangeDeep },
+          { label:'Meninas brancas', value:62, color:C.orange },
+          { label:'Meninos pretos', value:58, color:C.brown },
+          { label:'Meninas pretas', value:55, color:C.mark }
+        ]},
+        { dim: dims[1], groups: [
+          { label:'Meninos brancos', value:82, color:C.orangeDeep },
+          { label:'Meninas brancas', value:86, color:C.orange },
+          { label:'Meninos pretos', value:74, color:C.brown },
+          { label:'Meninas pretas', value:80, color:C.mark }
+        ]},
+        { dim: dims[2], groups: [
+          { label:'Meninos brancos', value:95, color:C.orangeDeep },
+          { label:'Meninas brancas', value:96, color:C.orange },
+          { label:'Meninos pretos', value:90, color:C.brown },
+          { label:'Meninas pretas', value:93, color:C.mark }
+        ]}
+      ]
+    }
+  };
+
+  const x = d3.scaleLinear().domain([0, 100]).range([0, w]);
+  const yDim = d3.scaleBand().domain(dims).range([0, h]).padding(0.4);
+
+  dims.forEach(dim => {
+    root.append('text')
+      .attr('x', -12).attr('y', yDim(dim) + yDim.bandwidth()/2)
+      .attr('dy', '0.35em').attr('text-anchor', 'end')
+      .attr('font-family', 'Work Sans').attr('font-size', 12).attr('font-weight', 600)
+      .attr('fill', C.cream).text(dim);
+  });
+
+  [25, 50, 75, 100].forEach(t => {
+    root.append('line').attr('x1', x(t)).attr('x2', x(t))
+      .attr('y1', -10).attr('y2', h + 10)
+      .attr('stroke', 'rgba(250,244,232,0.15)').attr('stroke-dasharray', '2,4');
+    root.append('text').attr('x', x(t)).attr('y', -16).attr('text-anchor', 'middle')
+      .attr('font-family', 'Work Sans').attr('font-size', 9)
+      .attr('fill', 'rgba(250,244,232,0.5)').text(t + '%');
+  });
+
+  function render(stateKey) {
+    const state = states[stateKey];
+    const allBars = root.selectAll('g.dim-group').data(state.data, d=>d.dim);
+    allBars.exit().transition().duration(300).style('opacity', 0).remove();
+    const allBarsEnter = allBars.enter().append('g').attr('class', 'dim-group')
+      .attr('transform', d => `translate(0,${yDim(d.dim)})`);
+    const merged = allBarsEnter.merge(allBars);
+
+    merged.each(function(d) {
+      const grp = d3.select(this);
+      const subBand = d3.scaleBand().domain(d.groups.map(g=>g.label))
+        .range([0, yDim.bandwidth()]).padding(0.2);
+
+      const sel = grp.selectAll('rect').data(d.groups, g=>g.label);
+      sel.exit().transition().duration(300).style('opacity', 0).remove();
+      const enter = sel.enter().append('rect')
+        .attr('x', 0).attr('width', 0).attr('height', subBand.bandwidth())
+        .attr('y', g => subBand(g.label))
+        .attr('opacity', 0);
+      enter.merge(sel).transition().duration(700).ease(d3.easeCubicOut)
+        .attr('y', g => subBand(g.label))
+        .attr('width', g => x(g.value))
+        .attr('height', subBand.bandwidth())
+        .attr('fill', g => g.color)
+        .attr('opacity', 0.9);
+
+      const labels = grp.selectAll('text.glabel').data(d.groups, g=>g.label);
+      labels.exit().transition().duration(300).style('opacity', 0).remove();
+      const labelsEnter = labels.enter().append('text').attr('class', 'glabel')
+        .attr('text-anchor', 'start')
+        .attr('font-family', 'Work Sans').attr('font-size', 10)
+        .attr('opacity', 0);
+      labelsEnter.merge(labels)
+        .attr('x', 4).attr('y', g => subBand(g.label) - 3)
+        .attr('fill', C.cream).text(g => g.label)
+        .transition().delay(200).duration(400).attr('opacity', 0.85);
+
+      const vals = grp.selectAll('text.gval').data(d.groups, g=>g.label);
+      vals.exit().transition().duration(300).style('opacity', 0).remove();
+      const valsEnter = vals.enter().append('text').attr('class', 'gval')
+        .attr('text-anchor', 'start')
+        .attr('font-family', 'Work Sans').attr('font-size', 11).attr('font-weight', 700)
+        .attr('opacity', 0);
+      valsEnter.merge(vals)
+        .attr('x', g => x(g.value) + 6)
+        .attr('y', g => subBand(g.label) + subBand.bandwidth()/2)
+        .attr('dy', '0.35em')
+        .attr('fill', C.cream).text(g => g.value + '%')
+        .transition().delay(500).duration(400).attr('opacity', 1);
+    });
+
+    narrativeEl.style.opacity = 0;
+    setTimeout(() => {
+      narrativeEl.textContent = state.narrative;
+      narrativeEl.style.opacity = 1;
+    }, 250);
+  }
+
+  document.querySelectorAll('#syn-controls .syn-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#syn-controls .syn-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render(btn.dataset.state);
+    });
+  });
+
+  render('bruto');
+})();
+
+/* ============= MAP MOCKUP ============= */
+(function() {
+  const svgMap = d3.select('#map-mockup');
+  const states = [
+    { id:'AM', d:'M 60,80 L 140,75 L 145,140 L 70,150 Z', color: '#F5B271' },
+    { id:'PA', d:'M 145,75 L 220,80 L 215,150 L 145,140 Z', color: '#E67E22' },
+    { id:'RR', d:'M 100,30 L 145,30 L 145,75 L 100,75 Z', color: '#FBE4CC' },
+    { id:'AP', d:'M 175,40 L 215,45 L 220,80 L 175,80 Z', color: '#F5B271' },
+    { id:'AC', d:'M 30,140 L 75,140 L 70,180 L 35,175 Z', color: '#FBE4CC' },
+    { id:'RO', d:'M 75,140 L 120,140 L 115,180 L 75,180 Z', color: '#F5B271' },
+    { id:'TO', d:'M 175,140 L 215,150 L 215,200 L 175,200 Z', color: '#D35400' },
+    { id:'MA', d:'M 215,80 L 270,90 L 265,150 L 215,150 Z', color: '#D35400' },
+    { id:'PI', d:'M 265,90 L 305,100 L 300,160 L 265,150 Z', color: '#D35400' },
+    { id:'CE', d:'M 305,80 L 345,95 L 340,135 L 300,130 Z', color: '#A82E2E' },
+    { id:'RN', d:'M 345,95 L 380,105 L 375,125 L 345,120 Z', color: '#A82E2E' },
+    { id:'PB', d:'M 345,125 L 380,130 L 375,150 L 345,148 Z', color: '#A82E2E' },
+    { id:'PE', d:'M 305,130 L 380,150 L 375,170 L 305,160 Z', color: '#A82E2E' },
+    { id:'AL', d:'M 340,170 L 375,175 L 370,190 L 340,188 Z', color: '#A82E2E' },
+    { id:'SE', d:'M 320,185 L 345,190 L 340,205 L 320,202 Z', color: '#D35400' },
+    { id:'BA', d:'M 250,160 L 340,170 L 335,240 L 245,230 Z', color: '#D35400' },
+    { id:'MT', d:'M 115,180 L 200,180 L 200,240 L 115,240 Z', color: '#E67E22' },
+    { id:'GO', d:'M 200,200 L 250,200 L 250,260 L 200,260 Z', color: '#F5B271' },
+    { id:'MS', d:'M 145,240 L 215,240 L 215,290 L 150,290 Z', color: '#E67E22' },
+    { id:'DF', d:'M 230,220 L 245,220 L 245,235 L 230,235 Z', color: '#FBE4CC' },
+    { id:'MG', d:'M 215,240 L 290,235 L 295,295 L 220,295 Z', color: '#E67E22' },
+    { id:'ES', d:'M 290,255 L 310,260 L 308,290 L 290,288 Z', color: '#D35400' },
+    { id:'RJ', d:'M 270,295 L 320,300 L 315,320 L 265,318 Z', color: '#A82E2E' },
+    { id:'SP', d:'M 195,295 L 270,295 L 265,325 L 195,325 Z', color: '#D35400' },
+    { id:'PR', d:'M 175,325 L 250,325 L 245,355 L 175,355 Z', color: '#E67E22' },
+    { id:'SC', d:'M 180,355 L 240,355 L 235,375 L 180,375 Z', color: '#D35400' },
+    { id:'RS', d:'M 150,375 L 235,375 L 225,415 L 145,410 Z', color: '#D35400' }
+  ];
+  states.forEach(s => {
+    svgMap.append('path').attr('d', s.d).attr('fill', s.color)
+      .attr('stroke', 'white').attr('stroke-width', 1.2).attr('opacity', 0.92);
+  });
+  const legend = svgMap.append('g').attr('transform', 'translate(20, 435)');
+  legend.append('text').attr('x', 0).attr('y', 0)
+    .attr('font-family', 'Work Sans').attr('font-size', 8)
+    .attr('letter-spacing', '0.1em').style('text-transform', 'uppercase')
+    .attr('fill', '#9A8B7E').text('% PROFICIÊNCIA · MAIS BAIXA → MAIS ALTA');
+  ['#A82E2E', '#D35400', '#E67E22', '#F5B271', '#FBE4CC'].forEach((c, i) => {
+    legend.append('rect').attr('x', i*32).attr('y', 8)
+      .attr('width', 30).attr('height', 8).attr('fill', c);
+  });
+})();
+</script>
+</body>
+</html>

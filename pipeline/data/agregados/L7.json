@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "leitura": "L7",
+    "titulo_curto": "Reprovação como porta do abandono",
+    "eyebrow": "Leitura 07 · SAEB 2023 · 9º ano · Q19 (reprovação) × Q20 (abandono)",
+    "fonte": "SAEB 2023 — TX_RESP_Q19 × TX_RESP_Q20 · escolas públicas · razão de chances por tabela de contingência",
+    "n_total": 1941859,
+    "gerado_em": "2026-05-11 00:42:38"
+  },
+  "narrativa": {
+    "razao_chance_1x": 4.63,
+    "razao_chance_2x": 8.37,
+    "pct_abandono_nunca_reprov": 3,
+    "pct_abandono_1x": 13.9,
+    "pct_abandono_2x": 25.1
+  },
+  "viz": {
+    "indicador": "% que declaram ter abandonado pelo menos uma vez",
+    "bars": [
+      {
+        "label": "Nunca foi reprovado",
+        "value": 3,
+        "n": 1547781
+      },
+      {
+        "label": "Reprovou 1 vez",
+        "value": 13.9,
+        "n": 301104
+      },
+      {
+        "label": "Reprovou 2+ vezes",
+        "value": 25.1,
+        "n": 92974
+      }
+    ],
+    "anotacao": "4.6× chance"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "leitura": "L4",
+    "titulo_curto": "Creche que não chegou ressoa no SAEB",
+    "eyebrow": "Leitura 04 · Censo Escolar 2025 + Censo Demográfico 2022 · cobertura de creche por UF",
+    "fonte": "QT_MAT_INF_CRE (Censo Escolar 2025) / pop 0-3 anos (SIDRA t9514) × SAEB 2023 5º EF — agregado por UF (quintis das 27 unidades)",
+    "n_ufs": 27,
+    "gerado_em": "2026-05-11 00:55:57"
+  },
+  "narrativa": {
+    "cobertura_q1": 19,
+    "cobertura_q5": 53,
+    "cobertura_nacional": 41.9,
+    "meta_pne": 50,
+    "saeb_q1": 47.2,
+    "saeb_q5": 64.2,
+    "saeb_nacional": 55.4,
+    "gap_pp": 17
+  },
+  "viz": {
+    "panel_a_titulo": "A · % CRIANÇAS 0-3 EM CRECHE — POR QUINTIL DE UFS",
+    "panel_a_dados": [
+      {
+        "q": 1,
+        "value": 19,
+        "n": 5
+      },
+      {
+        "q": 2,
+        "value": 28.6,
+        "n": 5
+      },
+      {
+        "q": 3,
+        "value": 37,
+        "n": 6
+      },
+      {
+        "q": 4,
+        "value": 40.8,
+        "n": 5
+      },
+      {
+        "q": 5,
+        "value": 53,
+        "n": 6
+      }
+    ],
+    "meta_pne": 50,
+    "panel_b_titulo": "B · % APRENDIZAGEM ADEQUADA LP — 5º ANO — MESMA QUINTILIZAÇÃO",
+    "panel_b_dados": [
+      {
+        "q": 1,
+        "value": 47.2,
+        "n": 5
+      },
+      {
+        "q": 2,
+        "value": 47.4,
+        "n": 5
+      },
+      {
+        "q": 3,
+        "value": 43.5,
+        "n": 6
+      },
+      {
+        "q": 4,
+        "value": 54.7,
+        "n": 5
+      },
+      {
+        "q": 5,
+        "value": 64.2,
+        "n": 6
+      }
+    ],
+    "anotacao": "mesma forma da curva, dez anos depois"
+  }
+}

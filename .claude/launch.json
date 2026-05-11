@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "oee-static",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m", "http.server", "8731",
+        "--directory", "/Users/gabrielfortes/Documents/Claude/Projects/Observatorio_Equidade_Educacional"
+      ],
+      "port": 8731,
+      "startPath": "/prototipo/insights3_dinamico.html"
+    }
+  ]
+}

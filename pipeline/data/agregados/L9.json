@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "leitura": "L9",
+    "titulo_curto": "Sem Lei de Cotas, conclusão por raça regrediria",
+    "eyebrow": "Leitura 09 · Contrafactual · Lei 12.711/2012 · efeito-horizonte",
+    "fonte": "Censo da Educação Superior 2024 (INEP) — QT_ING_* × TP_CATEGORIA_ADMINISTRATIVA · contrafactual ancorado em Censo Sup. 2010-2012 e ANDIFES",
+    "contrafactual": true,
+    "cf_key": "cotas",
+    "gerado_em": "2026-05-11 00:42:42"
+  },
+  "narrativa": {
+    "fed_pct_pretos_2024": 11.9,
+    "fed_pct_pardos_2024": 39.9,
+    "fed_pct_negros_2024": 51.8,
+    "pre_pct_pretos": 4.6,
+    "pre_pct_negros": 28.1,
+    "delta_negros_pp": 23.7,
+    "ing_negros_2024": 168688
+  },
+  "viz": {
+    "indicador": "% de ingressantes em IES Públicas Federais — Censo Educação Superior 2024",
+    "titulo_real": "2024 · com Lei de Cotas em vigor",
+    "titulo_off": "2012 · antes da implementação plena",
+    "bars": [
+      {
+        "label": "Pretos",
+        "real": 11.9,
+        "off": 4.6,
+        "color_key": "orange"
+      },
+      {
+        "label": "Pardos",
+        "real": 39.9,
+        "off": 23.5,
+        "color_key": "orangeSoft"
+      },
+      {
+        "label": "Brancos",
+        "real": 45.7,
+        "off": 65.8,
+        "color_key": "brown"
+      },
+      {
+        "label": "Indígenas",
+        "real": 1.4,
+        "off": 0.4,
+        "color_key": "counterfactual"
+      }
+    ],
+    "callout": "Em 2024, 51.8% dos ingressantes em IES Públicas Federais se autodeclararam pretos ou pardos — em 2012, antes da implementação plena da Lei de Cotas, essa proporção era de 28.1%. Diferença: +23.7 pp."
+  }
+}

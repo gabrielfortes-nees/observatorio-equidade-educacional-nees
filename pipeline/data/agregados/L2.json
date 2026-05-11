@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "leitura": "L2",
+    "titulo_curto": "Escolaridade da mãe explica mais",
+    "eyebrow": "Leitura 02 · SAEB 2023 · 9º ano · escolaridade dos pais (5 níveis)",
+    "fonte": "SAEB 2023 9º EF — TX_RESP_Q08 (mãe) / Q09 (pai) × PROFICIENCIA_LP_SAEB · escolas públicas · A-E úteis · F (não sei) descartado",
+    "n_total": 1418205,
+    "gerado_em": "2026-05-11 01:15:58"
+  },
+  "narrativa": {
+    "gap_mae_pontos": 38.3,
+    "gap_pai_pontos": 32.3,
+    "gap_diff": 6,
+    "prof_mae_nao_ef": 232.5,
+    "prof_mae_sup": 270.7,
+    "prof_pai_nao_ef": 238.6,
+    "prof_pai_sup": 270.9
+  },
+  "viz": {
+    "indicador": "Proficiência SAEB do filho (LP, 9º EF) por escolaridade dos pais",
+    "eixo_x": ["não compl.\nfund.", "EF até\n5º ano", "EF\ncompl.", "EM\ncompl.", "Superior\ncompl."],
+    "eixo_y_min": 227,
+    "eixo_y_max": 276,
+    "serie_mae": [
+      {
+        "x": 1,
+        "x_label": "não compl.\nfund.",
+        "y": 232.5,
+        "n": 117743
+      },
+      {
+        "x": 2,
+        "x_label": "EF até\n5º ano",
+        "y": 249.5,
+        "n": 191625
+      },
+      {
+        "x": 3,
+        "x_label": "EF\ncompl.",
+        "y": 252.7,
+        "n": 251544
+      },
+      {
+        "x": 4,
+        "x_label": "EM\ncompl.",
+        "y": 264,
+        "n": 581583
+      },
+      {
+        "x": 5,
+        "x_label": "Superior\ncompl.",
+        "y": 270.7,
+        "n": 275710
+      }
+    ],
+    "serie_pai": [
+      {
+        "x": 1,
+        "x_label": "não compl.\nfund.",
+        "y": 238.6,
+        "n": 140755
+      },
+      {
+        "x": 2,
+        "x_label": "EF até\n5º ano",
+        "y": 252.6,
+        "n": 203249
+      },
+      {
+        "x": 3,
+        "x_label": "EF\ncompl.",
+        "y": 254.4,
+        "n": 208478
+      },
+      {
+        "x": 4,
+        "x_label": "EM\ncompl.",
+        "y": 264.9,
+        "n": 428401
+      },
+      {
+        "x": 5,
+        "x_label": "Superior\ncompl.",
+        "y": 270.9,
+        "n": 174414
+      }
+    ],
+    "anotacao": "mãe: +38 pontos · pai: +32 pontos"
+  }
+}

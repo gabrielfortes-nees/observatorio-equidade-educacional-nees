@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "leitura": "L6",
+    "titulo_curto": "Bolsa Família como âncora de permanência",
+    "eyebrow": "Leitura 06 · Contrafactual · Bolsa Família / Auxílio Brasil",
+    "fonte": "Folha do Novo Bolsa Família · abr/2025 (Portal da Transparência) — 20.363.840 benefícios em 5.570 municípios · R$ 13.6 bilhões repassados",
+    "contrafactual": true,
+    "cf_key": "bf",
+    "evidencia": "Bars de conclusão de EM mostradas são estimativas convergentes da literatura (IPEA TD 2447, Cedeplar/UFMG, Banco Mundial). Dados reais da folha BF abr/2025 alimentam o callout.",
+    "gerado_em": "2026-05-11 00:42:35"
+  },
+  "narrativa": {
+    "bf_total_beneficios": 20363840,
+    "bf_total_brl_bilhoes": 13.6,
+    "bf_valor_medio": 666.56,
+    "bf_n_municipios": 5570,
+    "reducao_evasao_pp_lo": 3,
+    "reducao_evasao_pp_hi": 7
+  },
+  "viz": {
+    "indicador": "% concluem ensino médio até 19 anos",
+    "titulo_real": "Real (com programa)",
+    "titulo_off": "Sem o programa (estimativa contrafactual da literatura)",
+    "bars": [
+      {
+        "label": "20% mais ricos",
+        "real": 92,
+        "off": 91,
+        "color_key": "orange"
+      },
+      {
+        "label": "Renda média",
+        "real": 75,
+        "off": 71,
+        "color_key": "orangeSoft"
+      },
+      {
+        "label": "40% mais pobres",
+        "real": 58,
+        "off": 51,
+        "color_key": "brown"
+      },
+      {
+        "label": "20% mais pobres",
+        "real": 47,
+        "off": 38,
+        "color_key": "counterfactual"
+      }
+    ],
+    "callout": "Em abril/2025, o Novo Bolsa Família repassou R$ 13.6 bilhões a 20.363.840 benefícios em 5.570 municípios. A literatura econômica brasileira estima que o programa responde por uma redução de 3 a 7 pontos percentuais na taxa de evasão entre adolescentes de famílias de baixa renda."
+  }
+}

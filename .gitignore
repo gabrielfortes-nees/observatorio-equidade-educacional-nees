@@ -1,0 +1,51 @@
+# ===== Microdados originais — NÃO subir =====
+# Têm dados pessoais (CPFs, NIS no Bolsa Família) e são pesados (~4GB)
+# O time baixa direto do INEP/CGU/IBGE seguindo handoff/06_como_rodar.md
+pipeline/data/raw/
+
+# ===== Parquets intermediários — NÃO subir =====
+# São gerados rodando o pipeline; pesam ~300MB
+pipeline/data/processed/
+
+# ===== Logs e arquivos de execução =====
+*.log
+pipeline_run.log
+setup_run.log
+
+# ===== macOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# ===== R =====
+.Rhistory
+.RData
+.Rapp.history
+.Rproj.user/
+*.Rproj
+
+# ===== Python (caso o time use para back) =====
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# ===== Editor =====
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== Bloqueios temporários de Excel/LibreOffice =====
+~$*
+.~lock.*
+
+# ===== Node (caso o time use no front) =====
+node_modules/
+dist/
+build/
+.env
+.env.local
