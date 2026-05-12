@@ -101,8 +101,8 @@
   /* ============= CARDS ============= */
   .entry-cards {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.6rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.4rem;
     margin-bottom: 4rem;
   }
   .entry {
@@ -205,6 +205,9 @@
     letter-spacing: 0.06em;
   }
 
+  @media (max-width: 1080px) {
+    .entry-cards { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 760px) {
     .entry-cards { grid-template-columns: 1fr; }
     .hero { padding-top: 3rem; }
@@ -240,6 +243,13 @@
       <h2>Nove leituras + mapa <em>navegável</em>.</h2>
       <p>Três dimensões — desempenho, permanência e abandono — em nove leituras com contrafactuais explícitos. Mapa do Brasil com seis recortes interseccionais por UF. Dados oficiais SAEB 2023, Censo Escolar 2025, Censo da Educação Superior 2024.</p>
       <div class="cta">Explorar painel</div>
+    </a>
+
+    <a class="entry" href="./prototipo/matriz_documentos/index.html">
+      <div class="eyebrow">Investigue aqui · matriz documental</div>
+      <h2>Quarenta e cinco instrumentos, <em>seis dimensões</em>.</h2>
+      <p>Marcos legais, programas federais e instrumentos de avaliação examinados em seis dimensões estruturantes — atendimento, aprendizagem, infraestrutura, pessoal e formação, territorialidade e inclusão. Mostra o que cada documento mede e o que ainda deixa de ver.</p>
+      <div class="cta">Explorar matriz</div>
     </a>
 
   </div>
