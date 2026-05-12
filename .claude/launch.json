@@ -10,6 +10,16 @@
       ],
       "port": 8731,
       "startPath": "/prototipo/insights3_dinamico.html"
+    },
+    {
+      "name": "matriz-documentos",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m", "http.server", "8732",
+        "--directory", "/Users/gabrielfortes/Documents/Claude/Projects/Observatorio_Equidade_Educacional/prototipo/matriz_documentos"
+      ],
+      "port": 8732,
+      "startPath": "/index.html"
     }
   ]
 }

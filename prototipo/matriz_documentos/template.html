@@ -1,0 +1,2140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Matriz Documental · Observatório da Equidade Educacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #E67E22;
+    --orange-deep: #D35400;
+    --orange-soft: #F5B271;
+    --orange-pale: #FBE4CC;
+    --brown: #5A3825;
+    --brown-soft: #8B5A3C;
+    --cream: #FAF4E8;
+    --cream-warm: #F5EBD7;
+    --paper: #FCF8F0;
+    --ink: #2A1F18;
+    --ink-soft: #5A4A3F;
+    --ink-faint: #9A8B7E;
+    --rule: #D6C9B8;
+    --mark: #A82E2E;
+    --mark-soft: #F2D5D0;
+    --highlight: #FFF3D9;
+    --quali-bg: #F2EAD8;
+    --quali-border: #C4B596;
+
+    /* Niveis de intensidade (mantem semantica visual da matriz original
+       traduzida para a paleta editorial OEE) */
+    --n0-fill: #FCF8F0;
+    --n0-bord: #C5B8A3;
+    --n1-fill: #FFF3D9;
+    --n1-bord: #E0AC15;
+    --n2-fill: #F5B271;
+    --n2-bord: #D35400;
+    --n3-fill: #A82E2E;
+    --n3-bord: #6B1F1F;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .sans { font-family: 'Work Sans', sans-serif; }
+  a { color: var(--orange-deep); }
+
+  /* ===================== NAV ===================== */
+  nav.brand-bar {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.9rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(8px);
+    background: rgba(250, 244, 232, 0.94);
+  }
+  nav.brand-bar .logo {
+    display: flex; align-items: center; gap: 0.7rem;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 700; color: var(--orange-deep);
+    font-size: 0.95rem; letter-spacing: -0.01em;
+  }
+  nav.brand-bar .logo-mark {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--orange); position: relative; overflow: hidden;
+  }
+  nav.brand-bar .logo-mark::before {
+    content: ''; position: absolute;
+    top: 50%; left: 0; width: 100%; height: 50%;
+    background: var(--orange-deep);
+  }
+  nav.brand-bar .nav-links {
+    display: flex; gap: 2rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem; color: var(--brown);
+  }
+  nav.brand-bar .nav-links a {
+    color: inherit; text-decoration: none; transition: color 0.2s;
+  }
+  nav.brand-bar .nav-links a:hover { color: var(--orange-deep); }
+  nav.brand-bar .nav-links a.current {
+    color: var(--orange-deep); font-weight: 600;
+  }
+
+  /* ===================== HEADER ===================== */
+  .page-header {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 3.5rem 2.5rem 2rem;
+  }
+  .page-header .breadcrumb {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+  }
+  .page-header h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(2rem, 4.2vw, 3.4rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+    max-width: 880px;
+  }
+  .page-header h1 em {
+    font-style: italic;
+    color: var(--orange-deep);
+    font-weight: 500;
+  }
+  .page-header h1 u {
+    text-decoration: none;
+    background-image: linear-gradient(transparent 65%, var(--highlight) 65%);
+  }
+  .page-header .lede {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 760px;
+    margin-bottom: 1.5rem;
+  }
+  .page-header .meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+    padding-top: 1.2rem;
+    margin-top: 0.5rem;
+  }
+  .page-header .meta strong { color: var(--brown); font-weight: 600; }
+
+  /* ===================== SECAO ===================== */
+  section.bloco {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 2.5rem 0;
+  }
+  .secao-titulo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.6rem;
+    flex-wrap: wrap;
+  }
+  .secao-titulo h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.55rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+  }
+  .secao-titulo h2 em { font-style: italic; color: var(--orange-deep); font-weight: 500; }
+  .secao-numero {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    font-weight: 700;
+    background: var(--orange-pale);
+    padding: 0.25rem 0.55rem;
+    border-radius: 2px;
+    align-self: center;
+  }
+  .secao-legenda {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: var(--ink-faint);
+    font-size: 0.95rem;
+  }
+
+  /* ===================== STATS ===================== */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.9rem;
+  }
+  .stat-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 1.1rem 1.2rem 1.3rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(90, 56, 37, 0.08);
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: var(--orange);
+  }
+  .stat-label {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--orange-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    margin-bottom: 0.7rem;
+    margin-top: 0.25rem;
+  }
+  .stat-valor {
+    font-family: 'Lora', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .stat-valor .total {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--ink-faint);
+    margin-left: 3px;
+  }
+  .stat-barra {
+    margin-top: 0.9rem;
+    height: 5px;
+    background: var(--cream-warm);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .stat-barra-fill {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 100px;
+    transition: width 0.4s;
+  }
+  .stat-card.is-active { background: var(--cream); border-color: var(--orange-deep); }
+  .stat-card.is-clickable { cursor: pointer; }
+  .stat-card.is-clickable:active { transform: translateY(0); }
+
+  /* ===================== INDICADORES ===================== */
+  .ind-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    align-items: start;
+  }
+  .ind-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 1.4rem 1.4rem 1.2rem;
+    position: relative;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .ind-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: var(--orange);
+    border-radius: 5px 5px 0 0;
+  }
+  .ind-card { cursor: pointer; }
+  .ind-card:hover { border-color: var(--orange-soft); box-shadow: 0 6px 18px rgba(90,56,37,0.06); }
+  .ind-card.is-selected {
+    border-color: var(--orange-deep);
+    border-width: 1.5px;
+    background: var(--cream);
+  }
+  .ind-card.is-selected::before { height: 6px; background: var(--orange-deep); }
+  .ind-card.is-expanded { box-shadow: 0 8px 24px rgba(90,56,37,0.08); }
+
+  .ind-cabec {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+  .ind-checkbox {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border: 1.5px solid var(--rule);
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.1rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .ind-checkbox:hover { border-color: var(--orange-deep); }
+  .ind-card.is-selected .ind-checkbox {
+    background: var(--orange-deep);
+    border-color: var(--orange-deep);
+  }
+  .ind-checkbox::after {
+    content: '';
+    width: 10px; height: 6px;
+    border: 2px solid white;
+    border-top: none; border-right: none;
+    transform: rotate(-45deg) translate(1px, -1px);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .ind-card.is-selected .ind-checkbox::after { opacity: 1; }
+  .ind-cabec-text { flex: 1; min-width: 0; }
+  .ind-numero {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .ind-titulo {
+    font-family: 'Lora', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .ind-meta-resumida {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .ind-meta-resumida strong { color: var(--brown); font-weight: 600; }
+  .ind-meta-resumida .sep { color: var(--rule); }
+  .ind-chevron {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    color: var(--ink-faint);
+    transition: transform 0.25s, color 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    border-radius: 50%;
+  }
+  .ind-card:hover .ind-chevron { color: var(--orange-deep); }
+  .ind-card.is-expanded .ind-chevron { transform: rotate(180deg); color: var(--orange-deep); }
+
+  /* Conteúdo expansível */
+  .ind-corpo {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease;
+  }
+  .ind-card.is-expanded .ind-corpo {
+    max-height: 1200px;
+    opacity: 1;
+    margin-top: 1rem;
+  }
+  .ind-descricao {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 0.9rem;
+    font-style: italic;
+  }
+  .ind-lista {
+    list-style: none;
+    border-top: 1px solid var(--rule);
+    padding-top: 0.8rem;
+  }
+  .ind-lista li {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    padding: 0.45rem 0 0.45rem 1.1rem;
+    position: relative;
+    color: var(--ink-soft);
+    border-bottom: 1px dotted var(--rule);
+  }
+  .ind-lista li:last-child { border-bottom: none; }
+  .ind-lista li::before {
+    content: '●';
+    color: var(--orange);
+    position: absolute;
+    left: 0; top: 0.45rem;
+    font-size: 0.7rem;
+  }
+  .ind-lista li strong {
+    color: var(--ink); font-weight: 600;
+    display: block;
+  }
+  .ind-lista li .fonte {
+    color: var(--ink-faint); font-size: 0.78rem;
+    margin-top: 0.15rem; display: inline-block;
+  }
+  .ind-lista li .fonte a { color: var(--orange-deep); text-decoration: none; }
+  .ind-lista li .fonte a:hover { text-decoration: underline; }
+
+  .ind-card .ind-action {
+    margin-top: 0.9rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: flex-end;
+  }
+  .ind-action button {
+    background: transparent;
+    border: none;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+  }
+  .ind-action button:hover { color: var(--brown); }
+  .ind-action button::after { content: ' →'; transition: transform 0.2s; display: inline-block; }
+  .ind-action button:hover::after { transform: translateX(3px); }
+
+  /* Barra de seleção do dossiê */
+  .ind-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--cream-warm);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 0.7rem 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .ind-toolbar-info {
+    flex: 1;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--brown);
+    min-width: 200px;
+  }
+  .ind-toolbar-info strong { color: var(--orange-deep); font-weight: 700; }
+  .ind-toolbar-acoes { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .ind-toolbar-btn {
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--brown);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .ind-toolbar-btn:hover {
+    border-color: var(--orange-deep);
+    color: var(--orange-deep);
+  }
+  .ind-toolbar-btn.primario {
+    background: var(--brown);
+    border-color: var(--brown);
+    color: var(--cream);
+  }
+  .ind-toolbar-btn.primario:hover {
+    background: var(--orange-deep);
+    border-color: var(--orange-deep);
+    color: white;
+  }
+  .ind-toolbar-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .ind-toolbar-btn:disabled:hover {
+    border-color: var(--rule);
+    color: var(--brown);
+  }
+
+  /* ===================== FILTROS ===================== */
+  .filtros-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 1.1rem 1.2rem;
+    margin-bottom: 1.1rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+  .filtro { display: flex; flex-direction: column; gap: 0.3rem; }
+  .filtro-label {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .filtro select, .filtro input {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.88rem;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--paper);
+    color: var(--ink);
+    min-width: 170px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .filtro select:hover, .filtro input:focus {
+    border-color: var(--orange-deep);
+  }
+  .filtro-busca { flex: 1; min-width: 240px; }
+  .filtro-busca input { width: 100%; cursor: text; background: white; }
+  .reset-btn {
+    background: var(--brown);
+    color: var(--cream);
+    border: none;
+    padding: 0.6rem 1.1rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .reset-btn:hover { background: var(--orange-deep); }
+
+  /* ===================== LEGENDA (no topo) ===================== */
+  .legenda {
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    gap: 1.8rem;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .legenda-titulo {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brown);
+    font-weight: 700;
+    border-right: 1px solid var(--rule);
+    padding-right: 1.4rem;
+  }
+  .legenda-item {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+  .legenda-circ {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legenda-circ.n0 { background: var(--n0-fill); border: 1px dashed var(--n0-bord); }
+  .legenda-circ.n1 { background: var(--n1-fill); border: 1.5px solid var(--n1-bord); }
+  .legenda-circ.n2 { background: var(--n2-fill); border: 1.5px solid var(--n2-bord); }
+  .legenda-circ.n3 { background: var(--n3-fill); border: 1.5px solid var(--n3-bord); box-shadow: 0 0 0 3px rgba(168,46,46,0.18); }
+
+  /* ===================== MATRIZ ===================== */
+  .matriz-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(90, 56, 37, 0.04);
+  }
+  .matriz-container {
+    overflow-x: auto;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  table.matriz {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.92rem;
+  }
+  table.matriz thead {
+    background: var(--brown);
+    position: sticky;
+    top: 0;
+    z-index: 3;
+  }
+  table.matriz th {
+    color: var(--cream);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 1rem 0.7rem;
+    text-align: left;
+    user-select: none;
+  }
+  table.matriz th.dim-head {
+    text-align: center;
+    padding: 1.1rem 0.4rem;
+    min-width: 56px;
+    width: 56px;
+    letter-spacing: 0.06em;
+    border-left: 1px solid rgba(250, 244, 232, 0.14);
+    cursor: pointer;
+    writing-mode: sideways-lr;
+    transition: background 0.15s;
+  }
+  table.matriz th.dim-head:hover { background: var(--orange-deep); }
+  table.matriz th.dim-head .sort-icon {
+    writing-mode: horizontal-tb;
+    display: block;
+    margin: 0.3rem auto 0;
+    font-size: 0.7rem;
+    opacity: 0.6;
+  }
+  table.matriz th.dim-head.is-sorted .sort-icon { opacity: 1; color: var(--orange-soft); }
+  table.matriz th.doc-head {
+    min-width: 420px;
+    padding-left: 1.2rem;
+    cursor: pointer;
+  }
+  table.matriz th.doc-head:hover { background: var(--orange-deep); }
+  table.matriz th.doc-head .sort-icon {
+    margin-left: 0.4rem;
+    font-size: 0.7rem;
+    opacity: 0.6;
+  }
+  table.matriz th.doc-head.is-sorted .sort-icon { opacity: 1; color: var(--orange-soft); }
+  table.matriz tbody tr {
+    border-top: 1px solid var(--rule);
+    transition: background 0.12s;
+    cursor: pointer;
+  }
+  table.matriz tbody tr:hover { background: var(--cream); }
+  table.matriz tbody tr.selected { background: var(--orange-pale); }
+  table.matriz tbody tr.selected td.doc-cell {
+    box-shadow: inset 4px 0 0 var(--orange-deep);
+  }
+  table.matriz td.doc-cell {
+    padding: 0.9rem 0.9rem 0.9rem 1.2rem;
+    vertical-align: middle;
+    border-right: 1px solid var(--rule);
+    line-height: 1.35;
+  }
+  .doc-cabec {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+  .doc-cabec-left { flex: 1; }
+  .doc-id {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+  .doc-nome {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .doc-tag {
+    display: inline-block;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.18rem 0.5rem;
+    margin-top: 0.4rem;
+    border-radius: 2px;
+    background: var(--cream-warm);
+    color: var(--brown);
+  }
+  .doc-tag.lei_federal,
+  .doc-tag.decreto_federal,
+  .doc-tag.marco_constitucional { background: var(--orange-pale); color: var(--orange-deep); }
+  .doc-tag.portaria_mec,
+  .doc-tag.portaria_inep,
+  .doc-tag.resolucao_cne { background: var(--cream-warm); color: var(--brown); }
+  .doc-tag.programa_federal { background: #F2E2D6; color: var(--mark); }
+  .doc-tag.instrumento_avaliacao,
+  .doc-tag.indicador_educacional,
+  .doc-tag.sistema_informacao,
+  .doc-tag.instrumento_monitoramento { background: var(--quali-bg); color: var(--brown); border: 1px solid var(--quali-border); }
+  .doc-tag.governanca { background: var(--highlight); color: var(--brown); }
+  .doc-tag.marco_internacional { background: var(--ink); color: var(--cream); }
+
+  /* Mini-perfil: 6 segmentos do perfil do doc */
+  .mini-perfil {
+    display: flex;
+    gap: 2px;
+    margin-top: 0.5rem;
+    align-items: center;
+  }
+  .mini-perfil-label {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.62rem;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-right: 0.45rem;
+  }
+  .mini-seg {
+    width: 14px;
+    height: 8px;
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+  .mini-seg.n0 { background: var(--n0-fill); border: 1px dashed var(--n0-bord); }
+  .mini-seg.n1 { background: var(--n1-fill); border: 1px solid var(--n1-bord); }
+  .mini-seg.n2 { background: var(--n2-fill); border: 1px solid var(--n2-bord); }
+  .mini-seg.n3 { background: var(--n3-fill); border: 1px solid var(--n3-bord); }
+
+  /* Celula da matriz */
+  td.dim-cell {
+    padding: 0;
+    text-align: center;
+    height: 56px;
+    width: 56px;
+    cursor: pointer;
+    position: relative;
+    border-left: 1px solid var(--rule);
+  }
+  .cell-indicador {
+    width: 22px; height: 22px;
+    margin: 0 auto;
+    border-radius: 50%;
+    position: relative;
+    transition: transform 0.15s;
+  }
+  .cell-indicador.nivel-0 { background: var(--n0-fill); border: 1px dashed var(--n0-bord); }
+  .cell-indicador.nivel-1 { background: var(--n1-fill); border: 1.5px solid var(--n1-bord); }
+  .cell-indicador.nivel-2 { background: var(--n2-fill); border: 1.5px solid var(--n2-bord); }
+  .cell-indicador.nivel-3 { background: var(--n3-fill); border: 1.5px solid var(--n3-bord); box-shadow: 0 0 0 3px rgba(168,46,46,0.18); }
+  td.dim-cell:hover .cell-indicador { transform: scale(1.18); }
+
+  /* Hover preview (tooltip da celula) */
+  .cell-preview {
+    position: fixed;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 0.7rem 0.9rem;
+    border-radius: 4px;
+    font-family: 'Lora', serif;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    max-width: 320px;
+    z-index: 80;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .cell-preview.visible { opacity: 0.97; }
+  .cell-preview .cp-eyebrow {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange-soft);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    display: block;
+  }
+  .cell-preview .cp-titulo {
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: white;
+    font-size: 0.85rem;
+  }
+  .cell-preview .cp-cta {
+    margin-top: 0.5rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.68rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(250,244,232,0.15);
+    padding-top: 0.4rem;
+  }
+
+  .sem-resultado {
+    padding: 4rem 1.5rem;
+    text-align: center;
+    color: var(--ink-faint);
+    font-style: italic;
+    font-family: 'Lora', serif;
+  }
+
+  /* ===================== PAINEL LATERAL ===================== */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(42, 31, 24, 0.42);
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    backdrop-filter: blur(3px);
+  }
+  .overlay.active { opacity: 1; pointer-events: auto; }
+  .painel {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: min(760px, 94vw);
+    background: var(--paper);
+    z-index: 60;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -20px 0 60px rgba(42, 31, 24, 0.18);
+  }
+  .painel.active { transform: translateX(0); }
+  .painel-header {
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: 1.6rem 2rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.2rem;
+    z-index: 2;
+  }
+  .painel-header-main { flex: 1; }
+  .painel-id {
+    display: inline-block;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem;
+    background: var(--cream-warm);
+    color: var(--orange-deep);
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+  .painel-titulo {
+    font-family: 'Lora', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+  }
+  .painel-titulo em { font-style: italic; color: var(--orange-deep); font-weight: 500; }
+  .painel-subtitulo {
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+    font-family: 'Work Sans', sans-serif;
+  }
+  .painel-acoes {
+    display: flex;
+    gap: 0.4rem;
+    align-items: flex-start;
+  }
+  .acao-btn {
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    width: 36px; height: 36px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--brown);
+    font-size: 1rem;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .acao-btn:hover { background: var(--orange-pale); color: var(--orange-deep); }
+  .acao-btn.fechar:hover { background: var(--brown); color: var(--cream); }
+
+  .painel-meta {
+    padding: 1rem 2rem 1.4rem;
+    background: linear-gradient(180deg, var(--cream-warm) 0%, var(--paper) 100%);
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem 1.5rem;
+  }
+  .painel-meta-item dt {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    color: var(--ink-faint);
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+  .painel-meta-item dd {
+    font-size: 0.92rem;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .painel-meta-item dd a {
+    color: var(--orange-deep);
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+    word-break: break-all;
+  }
+  .painel-meta-item dd a::after { content: ' ↗'; font-size: 0.85em; }
+
+  .dim-bloco {
+    padding: 1.6rem 2rem 1.1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .dim-bloco:last-child { border-bottom: none; }
+  .dim-header {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 0.9rem;
+  }
+  .dim-numero {
+    width: 28px; height: 28px;
+    border-radius: 4px;
+    background: var(--cream-warm);
+    color: var(--orange-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .dim-nome {
+    font-family: 'Lora', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ink);
+    flex: 1;
+  }
+  .dim-bolinha {
+    width: 14px; height: 14px; border-radius: 50%;
+  }
+  .dim-sem-dados {
+    font-style: italic;
+    color: var(--ink-faint);
+    font-size: 0.92rem;
+    padding: 0.5rem 0 1rem;
+  }
+  .atrib {
+    padding: 0.8rem 0;
+    border-top: 1px solid var(--cream-warm);
+  }
+  .atrib:first-child { border-top: none; padding-top: 0.2rem; }
+  .atrib-label {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .atrib-label::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--rule);
+  }
+  .atrib-valor {
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .atrib-valor.ne {
+    font-style: italic;
+    color: var(--ink-faint);
+    font-size: 0.88rem;
+  }
+  .atrib-label.destaque { color: var(--orange-deep); }
+  .atrib-label.destaque::before { background: var(--orange-deep); }
+  .atrib-valor.destaque {
+    border-left: 3px solid var(--orange-deep);
+    padding-left: 1rem;
+    background: var(--orange-pale);
+    padding: 0.6rem 1rem;
+    border-radius: 0 4px 4px 0;
+    font-weight: 500;
+  }
+
+  /* ===================== FOOTER ===================== */
+  .rodape {
+    background: var(--brown);
+    color: var(--cream);
+    padding: 3rem 2.5rem 1.5rem;
+    margin-top: 5rem;
+  }
+  .rodape-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .rodape-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 2.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(250, 244, 232, 0.14);
+  }
+  .rodape-col h4 {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    color: var(--orange-soft);
+  }
+  .rodape-col p, .rodape-col li {
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: rgba(250, 244, 232, 0.78);
+    list-style: none;
+  }
+  .rodape-col li { margin-bottom: 0.25rem; }
+  .rodape-meta {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(250, 244, 232, 0.5);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  /* ===================== RESPONSIVO ===================== */
+  @media (max-width: 1100px) {
+    .stats { grid-template-columns: repeat(3, 1fr); }
+    .ind-grid { grid-template-columns: repeat(2, 1fr); }
+    .rodape-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 720px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .ind-grid { grid-template-columns: 1fr; }
+    .rodape-grid { grid-template-columns: 1fr; gap: 2rem; }
+    nav.brand-bar { padding: 0.8rem 1.2rem; flex-wrap: wrap; gap: 0.6rem; }
+    .page-header { padding: 2.5rem 1.2rem 1.5rem; }
+    section.bloco { padding: 1rem 1.2rem 0; }
+    table.matriz th.doc-head { min-width: 280px; }
+    .painel-meta { grid-template-columns: 1fr; }
+    .mini-perfil { display: none; }
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--orange-soft); border-radius: 100px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--orange-deep); }
+
+  /* ===================== PRINT (PDFs) ===================== */
+  @media print {
+    @page { size: A4; margin: 18mm 16mm; }
+    body { background: white; font-size: 11pt; line-height: 1.4; }
+    nav.brand-bar, .filtros-card, .overlay, .painel-acoes,
+    .reset-btn, .rodape, .legenda, .ind-action,
+    .stats, .secao-legenda { display: none !important; }
+
+    /* Modo "ficha do documento": apenas o painel impresso */
+    body.print-mode-ficha .page-header,
+    body.print-mode-ficha section.bloco,
+    body.print-mode-ficha .rodape { display: none !important; }
+    body.print-mode-ficha .painel {
+      position: static !important;
+      width: 100% !important;
+      transform: none !important;
+      box-shadow: none !important;
+      overflow: visible !important;
+      background: white !important;
+    }
+    body.print-mode-ficha .painel-header { position: static !important; }
+    body.print-mode-ficha .overlay { display: none !important; }
+
+    /* Modo "dossie de indicadores": apenas a secao de indicadores selecionadas */
+    body.print-mode-indicadores .page-header,
+    body.print-mode-indicadores #secao-panorama,
+    body.print-mode-indicadores #secao-matriz,
+    body.print-mode-indicadores .rodape,
+    body.print-mode-indicadores .painel,
+    body.print-mode-indicadores .ind-toolbar,
+    body.print-mode-indicadores .secao-titulo .secao-legenda { display: none !important; }
+    body.print-mode-indicadores .ind-grid {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+    }
+    body.print-mode-indicadores .ind-card:not(.is-print-included) {
+      display: none !important;
+    }
+    body.print-mode-indicadores .ind-card {
+      page-break-inside: avoid;
+      border: 1px solid #888 !important;
+      box-shadow: none !important;
+      padding: 1rem !important;
+      background: white !important;
+    }
+    body.print-mode-indicadores .ind-card::before { background: #000 !important; }
+    body.print-mode-indicadores .ind-corpo {
+      max-height: none !important;
+      opacity: 1 !important;
+      overflow: visible !important;
+      margin-top: 0.8rem !important;
+    }
+    body.print-mode-indicadores .ind-checkbox,
+    body.print-mode-indicadores .ind-chevron,
+    body.print-mode-indicadores .ind-action { display: none !important; }
+    body.print-mode-indicadores .ind-lista li { color: #000 !important; }
+    body.print-mode-indicadores .ind-lista li .fonte { color: #444 !important; }
+
+    .ind-card, .stat-card { box-shadow: none !important; }
+    a { color: #000 !important; }
+    .doc-tag { border: 1px solid #888 !important; }
+  }
+
+  /* Cabecalho de print exclusivo (apenas visivel em print) */
+  .print-only { display: none; }
+  @media print {
+    .print-only { display: block; padding: 0 0 1rem; border-bottom: 1px solid #000; margin-bottom: 1.5rem; }
+    .print-only h1 {
+      font-family: 'Lora', serif;
+      font-size: 18pt;
+      font-weight: 600;
+      color: #000;
+    }
+    .print-only .print-sub {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 9pt;
+      color: #555;
+      margin-top: 0.3rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAV =================== -->
+<nav class="brand-bar">
+  <div class="logo">
+    <div class="logo-mark"></div>
+    <span>Observatório da Equidade Educacional</span>
+  </div>
+  <div class="nav-links">
+    <a href="../../index.html">Início</a>
+    <a href="../insights3_dinamico.html">9 Leituras</a>
+    <a href="#" class="current">Matriz Documental</a>
+    <a href="#sobre">Sobre</a>
+  </div>
+</nav>
+
+<!-- =================== HEADER PRINT =================== -->
+<div class="print-only">
+  <h1 id="print-titulo">Observatório da Equidade Educacional · Matriz Documental</h1>
+  <div class="print-sub" id="print-sub">Análise de 45 instrumentos oficiais — NEES/UFAL · <span id="print-data"></span></div>
+</div>
+
+<!-- =================== HERO =================== -->
+<header class="page-header">
+  <div class="breadcrumb">Análise documental · 45 instrumentos oficiais</div>
+  <h1>Monitorar a <em>equidade</em> é medir o que o sistema educacional <u>deixa de ver</u></h1>
+  <p class="lede">Quarenta e cinco marcos legais, programas federais e instrumentos de avaliação examinados em seis dimensões estruturantes — atendimento, aprendizagem, infraestrutura, pessoal e formação, territorialidade e inclusão. Cada cruzamento documento × dimensão é classificado em quatro níveis de tratamento, da ausência ao indicador formalizado.</p>
+  <div class="meta">
+    <span><strong>Cobertura</strong> · 45 documentos</span>
+    <span><strong>Dimensões analíticas</strong> · 6</span>
+    <span><strong>Recorte temporal</strong> · 1988 — 2026</span>
+    <span><strong>Curadoria</strong> · NEES/UFAL</span>
+  </div>
+</header>
+
+<!-- =================== PANORAMA DE COBERTURA =================== -->
+<section class="bloco" id="secao-panorama">
+  <div class="secao-titulo">
+    <h2><span class="secao-numero">01</span> Panorama de <em>cobertura</em></h2>
+    <span class="secao-legenda">Documentos que tratam de cada dimensão · clique para filtrar a matriz</span>
+  </div>
+  <div class="stats" id="stats"></div>
+</section>
+
+<!-- =================== INDICADORES POR DIMENSAO =================== -->
+<section class="bloco" id="secao-indicadores">
+  <div class="secao-titulo">
+    <h2><span class="secao-numero">02</span> Indicadores oficiais <em>por dimensão</em></h2>
+    <span class="secao-legenda">Lista curatorial — não exaustiva · clique no card para expandir, marque para incluir no dossiê</span>
+  </div>
+
+  <div class="ind-toolbar" role="region" aria-label="Seleção de dimensões para o dossiê">
+    <div class="ind-toolbar-info">
+      <strong id="ind-contador-sel">0</strong> de 6 dimensões selecionadas para o dossiê
+    </div>
+    <div class="ind-toolbar-acoes">
+      <button class="ind-toolbar-btn" id="ind-selecionar-todas">Selecionar todas</button>
+      <button class="ind-toolbar-btn" id="ind-limpar-sel">Limpar seleção</button>
+      <button class="ind-toolbar-btn" id="ind-expandir-sel">Expandir selecionadas</button>
+      <button class="ind-toolbar-btn primario" id="btn-dossie" disabled>📄 Gerar dossiê (PDF)</button>
+    </div>
+  </div>
+
+  <div class="ind-grid" id="ind-grid"></div>
+</section>
+
+<!-- =================== MATRIZ =================== -->
+<section class="bloco" id="secao-matriz">
+  <div class="secao-titulo">
+    <h2><span class="secao-numero">03</span> Matriz documental · <span id="contador-docs">45</span> documentos</h2>
+    <span class="secao-legenda">Clique em uma linha para abrir a análise · clique no cabeçalho da coluna para ordenar</span>
+  </div>
+
+  <div class="filtros-card">
+    <div class="filtro">
+      <label class="filtro-label" for="filtro-categoria">Tipo de documento</label>
+      <select id="filtro-categoria"><option value="">Todos os tipos</option></select>
+    </div>
+    <div class="filtro">
+      <label class="filtro-label" for="filtro-equidade">Dimensão de equidade</label>
+      <select id="filtro-equidade">
+        <option value="">Todas</option>
+        <option value="racial">Racial / étnico-racial</option>
+        <option value="pcd">Pessoas com deficiência</option>
+        <option value="territorial">Territorial / campo</option>
+        <option value="quilombola">Quilombola</option>
+        <option value="indígena">Indígena</option>
+        <option value="socioeconômica">Socioeconômica</option>
+        <option value="gênero">Gênero</option>
+      </select>
+    </div>
+    <div class="filtro">
+      <label class="filtro-label" for="filtro-dimensao">Dimensão tratada</label>
+      <select id="filtro-dimensao">
+        <option value="">Qualquer</option>
+        <option value="atendimento">Atendimento</option>
+        <option value="aprendizagem">Aprendizagem</option>
+        <option value="infraestrutura">Infraestrutura</option>
+        <option value="pessoal_formacao">Pessoal / Formação</option>
+        <option value="territorialidade">Territorialidade</option>
+        <option value="inclusao">Inclusão</option>
+      </select>
+    </div>
+    <div class="filtro filtro-busca">
+      <label class="filtro-label" for="busca">Buscar</label>
+      <input id="busca" type="text" placeholder="Nome, identificação, órgão..." />
+    </div>
+    <button class="reset-btn" id="reset">Limpar filtros</button>
+  </div>
+
+  <!-- LEGENDA NO TOPO (movida do final) -->
+  <div class="legenda" role="region" aria-label="Legenda dos níveis de tratamento">
+    <span class="legenda-titulo">Níveis</span>
+    <div class="legenda-item"><span class="legenda-circ n0"></span> Não encontrado</div>
+    <div class="legenda-item"><span class="legenda-circ n1"></span> Menção lateral</div>
+    <div class="legenda-item"><span class="legenda-circ n2"></span> Tratamento moderado</div>
+    <div class="legenda-item"><span class="legenda-circ n3"></span> Tratamento forte com indicadores</div>
+  </div>
+
+  <div class="matriz-card">
+    <div class="matriz-container">
+      <table class="matriz" id="tabela-matriz">
+        <thead>
+          <tr>
+            <th class="doc-head" data-sort="nome">Documento <span class="sort-icon">↕</span></th>
+            <th class="dim-head" data-sort="atendimento" title="Ordenar por Atendimento">Atendimento<span class="sort-icon">↕</span></th>
+            <th class="dim-head" data-sort="aprendizagem" title="Ordenar por Aprendizagem">Aprendizagem<span class="sort-icon">↕</span></th>
+            <th class="dim-head" data-sort="infraestrutura" title="Ordenar por Infraestrutura">Infraestrutura<span class="sort-icon">↕</span></th>
+            <th class="dim-head" data-sort="pessoal_formacao" title="Ordenar por Pessoal/Formação">Pessoal · Formação<span class="sort-icon">↕</span></th>
+            <th class="dim-head" data-sort="territorialidade" title="Ordenar por Territorialidade">Territorialidade<span class="sort-icon">↕</span></th>
+            <th class="dim-head" data-sort="inclusao" title="Ordenar por Inclusão">Inclusão<span class="sort-icon">↕</span></th>
+          </tr>
+        </thead>
+        <tbody id="matriz-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- =================== FOOTER =================== -->
+<footer class="rodape" id="sobre">
+  <div class="rodape-inner">
+    <div class="rodape-grid">
+      <div class="rodape-col">
+        <h4>Sobre</h4>
+        <p>Matriz documental produzida como parte do esforço do <strong style="color:var(--cream)">Observatório da Equidade Educacional · NEES/UFAL</strong> para mapear o que o sistema oficial de monitoramento e avaliação consegue — e o que ainda deixa de ver. Curadoria editorial e análise por dimensão.</p>
+      </div>
+      <div class="rodape-col">
+        <h4>Fontes oficiais</h4>
+        <ul>
+          <li>Planalto · leis e decretos</li>
+          <li>gov.br/MEC · programas</li>
+          <li>gov.br/Inep · avaliações</li>
+          <li>gov.br/FNDE · financiamento</li>
+          <li>CNE · resoluções</li>
+        </ul>
+      </div>
+      <div class="rodape-col">
+        <h4>Iniciativa</h4>
+        <ul>
+          <li>NEES / UFAL</li>
+          <li>Ministério da Educação</li>
+          <li>Secretaria de Educação Básica</li>
+          <li>DIMAM</li>
+        </ul>
+      </div>
+    </div>
+    <div class="rodape-meta">
+      <span>© Observatório da Equidade Educacional · 2026</span>
+      <span>Análise documental — 45 fontes oficiais</span>
+    </div>
+  </div>
+</footer>
+
+<!-- =================== PAINEL LATERAL =================== -->
+<div class="overlay" id="overlay"></div>
+<aside class="painel" id="painel" role="dialog" aria-label="Detalhes do documento">
+  <div class="painel-header">
+    <div class="painel-header-main">
+      <span class="painel-id" id="pd-id"></span>
+      <h2 class="painel-titulo" id="pd-titulo"></h2>
+      <div class="painel-subtitulo" id="pd-subtitulo"></div>
+    </div>
+    <div class="painel-acoes">
+      <button class="acao-btn" id="btn-pdf-ficha" title="Exportar ficha em PDF" aria-label="Exportar ficha em PDF">📄</button>
+      <button class="acao-btn fechar" id="fechar" title="Fechar" aria-label="Fechar">×</button>
+    </div>
+  </div>
+  <dl class="painel-meta" id="pd-meta"></dl>
+  <div id="pd-dimensoes"></div>
+</aside>
+
+<!-- =================== HOVER PREVIEW =================== -->
+<div class="cell-preview" id="cell-preview" aria-hidden="true"></div>
+
+<script>
+/* ============================================================
+   CONSTANTES E DADOS
+   ============================================================ */
+
+// Indicadores oficiais por dimensao (lista curatorial inicial - nao exaustiva)
+const INDICADORES_POR_DIM = {
+  atendimento: {
+    nome: 'Atendimento',
+    descricao: 'Indicadores que medem acesso, matrícula, frequência e fluxo da população escolarizável ao sistema educacional.',
+    itens: [
+      { nome: 'Taxa de matrícula por etapa (creche, pré-escola, EF, EM, EJA)', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: 'Taxa de atendimento líquido e bruto por faixa etária', fonte: 'PNAD Contínua Educação — IBGE', url: 'https://www.ibge.gov.br/estatisticas/sociais/educacao.html' },
+      { nome: 'Distorção idade-série', fonte: 'Taxas de Rendimento — Inep', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
+      { nome: 'Cobertura de creche (0-3 anos)', fonte: 'PNAD + Sidra/IBGE', url: 'https://sidra.ibge.gov.br/' },
+      { nome: 'Demanda manifesta por vagas (fila de creche)', fonte: 'Não existe indicador nacional padronizado', url: '' }
+    ]
+  },
+  aprendizagem: {
+    nome: 'Aprendizagem',
+    descricao: 'Indicadores que medem proficiência, fluxo, alfabetização e desempenho cognitivo ao longo da trajetória escolar.',
+    itens: [
+      { nome: 'IDEB — Índice de Desenvolvimento da Educação Básica', fonte: 'Inep · combina Saeb + fluxo', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/ideb' },
+      { nome: 'Proficiência Saeb (LP e Matemática · 2EF/5EF/9EF/3EM)', fonte: 'Saeb — Inep', url: 'https://saeb.inep.gov.br/' },
+      { nome: '% de alunos no nível adequado de aprendizagem', fonte: 'Saeb — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/saeb' },
+      { nome: 'INSE — Indicador de Nível Socioeconômico', fonte: 'Inep · contextualização do Saeb', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/nivel-socioeconomico' },
+      { nome: 'Taxa de alfabetização ao final do 2º ano (Avalia-BR)', fonte: 'Compromisso Nacional Criança Alfabetizada', url: 'https://www.gov.br/mec/pt-br/acesso-a-informacao/acoes-e-programas/criancaalfabetizada' }
+    ]
+  },
+  infraestrutura: {
+    nome: 'Infraestrutura',
+    descricao: 'Indicadores que medem condições físicas, materiais, de acessibilidade e conectividade das escolas.',
+    itens: [
+      { nome: 'Indicador de Adequação da Infraestrutura Escolar', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
+      { nome: '% de escolas com acessibilidade arquitetônica', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: '% de escolas com biblioteca, laboratório, quadra esportiva', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: '% de escolas com conectividade banda larga', fonte: 'TIC Educação — Cetic.br/NIC.br', url: 'https://cetic.br/pt/pesquisa/educacao/' },
+      { nome: 'Indicador de Complexidade de Gestão da Escola', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' }
+    ]
+  },
+  pessoal_formacao: {
+    nome: 'Pessoal e Formação',
+    descricao: 'Indicadores que medem perfil, formação adequada, carga e regularidade do corpo docente.',
+    itens: [
+      { nome: 'Indicador de Adequação da Formação Docente', fonte: 'Inep · monitoramento Meta 15 PNE', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
+      { nome: 'Indicador de Esforço Docente', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
+      { nome: 'Indicador de Regularidade Docente', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
+      { nome: 'Razão alunos por turma e alunos por professor', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: '% de docentes com pós-graduação', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' }
+    ]
+  },
+  territorialidade: {
+    nome: 'Territorialidade',
+    descricao: 'Indicadores que medem desigualdade entre territórios — campo/cidade, regiões, modalidades específicas.',
+    itens: [
+      { nome: 'Localização da escola (urbana/rural)', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: 'Modalidade da escola (indígena, quilombola, campo)', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: 'Distribuição regional dos indicadores educacionais', fonte: 'Inep · agregações por UF e região', url: 'https://www.gov.br/inep/pt-br' },
+      { nome: 'Acesso ao transporte escolar', fonte: 'PNATE — FNDE', url: 'https://www.gov.br/fnde/pt-br/acesso-a-informacao/acoes-e-programas/programas/pnate' },
+      { nome: 'Densidade da rede municipal vs. estadual', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' }
+    ]
+  },
+  inclusao: {
+    nome: 'Inclusão',
+    descricao: 'Indicadores que medem participação de grupos historicamente excluídos — pessoas com deficiência, população negra, quilombolas, indígenas.',
+    itens: [
+      { nome: 'Matrículas de alunos com deficiência', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: '% de alunos PCD em classe comum (inclusão escolar)', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: '% de escolas com AEE (Sala de Recursos Multifuncional)', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: 'Cor/raça nos microdados (Portaria Inep 156/2004)', fonte: 'Censo Escolar e Saeb — Inep', url: 'https://www.gov.br/inep/pt-br' },
+      { nome: 'Matrículas de cotistas no ensino superior', fonte: 'Censo da Educação Superior — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-da-educacao-superior' },
+      { nome: 'Índice Geral de ERER (PNEERQ · Diagnóstico Equidade)', fonte: 'MEC/Secadi · PNEERQ', url: 'https://www.gov.br/mec/pt-br/pneerq' }
+    ]
+  }
+};
+
+/*__DADOS_INJETADOS__*/
+
+const DIMS = [
+  { key: 'atendimento',     nome: 'Atendimento',         num: 1 },
+  { key: 'aprendizagem',    nome: 'Aprendizagem',        num: 2 },
+  { key: 'infraestrutura',  nome: 'Infraestrutura',      num: 3 },
+  { key: 'pessoal_formacao',nome: 'Pessoal e Formação',  num: 4 },
+  { key: 'territorialidade',nome: 'Territorialidade',    num: 5 },
+  { key: 'inclusao',        nome: 'Inclusão',            num: 6 }
+];
+
+const ATRIBS = [
+  { key: 'variaveis', label: 'Variáveis / objetos monitorados', destaque: false },
+  { key: 'quant',     label: 'Mecanismo quantitativo',          destaque: false },
+  { key: 'qual',      label: 'Mecanismo qualitativo',           destaque: false },
+  { key: 'equidade',  label: 'Equidade — como entra',           destaque: true  }
+];
+
+const NE = 'não encontrado';
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function ehNE(valor) {
+  if (!valor) return true;
+  const v = String(valor).trim().toLowerCase();
+  return v === 'não encontrado' || v === 'nao encontrado' || v === '';
+}
+
+function intensidade(dim) {
+  if (!dim) return 0;
+  // Forte: equidade definida + ao menos um mecanismo quant ou qual + variaveis
+  const temVar = !ehNE(dim.variaveis);
+  const temQuant = !ehNE(dim.quant);
+  const temQual = !ehNE(dim.qual);
+  const temEquid = !ehNE(dim.equidade);
+  const score = [temVar, temQuant, temQual, temEquid].filter(Boolean).length;
+  if (score === 0) return 0;
+  if (score === 1) return 1;
+  if (score === 2 || score === 3) return 2;
+  return 3;
+}
+
+function nomeCategoria(c) {
+  const m = {
+    marco_constitucional: 'Marco Constitucional',
+    lei_federal: 'Lei Federal',
+    decreto_federal: 'Decreto Federal',
+    portaria_mec: 'Portaria MEC',
+    portaria_inep: 'Portaria Inep',
+    resolucao_cne: 'Resolução CNE',
+    instrumento_avaliacao: 'Instrumento de Avaliação',
+    indicador_educacional: 'Indicador Educacional',
+    sistema_informacao: 'Sistema de Informação',
+    programa_federal: 'Programa Federal',
+    governanca: 'Governança',
+    marco_internacional: 'Marco Internacional',
+    instrumento_monitoramento: 'Instrumento de Monitoramento'
+  };
+  return m[c] || c;
+}
+
+function perfilDoc(doc) {
+  return DIMS.map(d => intensidade(doc.dimensoes[d.key]));
+}
+
+/* ============================================================
+   ESTADO + URL
+   ============================================================ */
+const ESTADO = {
+  filtroCategoria: '',
+  filtroEquidade: '',
+  filtroDimensao: '',
+  busca: '',
+  sort: { campo: 'id', dir: 'asc' },
+  docAberto: null
+};
+
+function lerEstadoDaURL() {
+  const p = new URLSearchParams(window.location.search);
+  ESTADO.filtroCategoria = p.get('cat') || '';
+  ESTADO.filtroEquidade = p.get('eq') || '';
+  ESTADO.filtroDimensao = p.get('dim') || '';
+  ESTADO.busca = p.get('q') || '';
+  const s = p.get('sort');
+  if (s) {
+    const [campo, dir] = s.split(':');
+    ESTADO.sort = { campo, dir: dir || 'asc' };
+  }
+  const doc = p.get('doc');
+  ESTADO.docAberto = doc ? parseInt(doc, 10) : null;
+}
+
+function escreverEstadoNaURL() {
+  const p = new URLSearchParams();
+  if (ESTADO.filtroCategoria) p.set('cat', ESTADO.filtroCategoria);
+  if (ESTADO.filtroEquidade) p.set('eq', ESTADO.filtroEquidade);
+  if (ESTADO.filtroDimensao) p.set('dim', ESTADO.filtroDimensao);
+  if (ESTADO.busca) p.set('q', ESTADO.busca);
+  if (ESTADO.sort.campo !== 'id') {
+    p.set('sort', `${ESTADO.sort.campo}:${ESTADO.sort.dir}`);
+  }
+  if (ESTADO.docAberto) p.set('doc', String(ESTADO.docAberto));
+  const url = p.toString() ? `${window.location.pathname}?${p}` : window.location.pathname;
+  window.history.replaceState({}, '', url);
+}
+
+/* ============================================================
+   STATS / PANORAMA
+   ============================================================ */
+function renderStats() {
+  const cont = document.getElementById('stats');
+  const total = DADOS.length;
+  cont.innerHTML = DIMS.map(d => {
+    const comTratamento = DADOS.filter(doc => intensidade(doc.dimensoes[d.key]) >= 2).length;
+    const pct = Math.round((comTratamento / total) * 100);
+    const ativo = ESTADO.filtroDimensao === d.key ? 'is-active' : '';
+    return `
+      <div class="stat-card is-clickable ${ativo}" data-dim="${d.key}" role="button" tabindex="0">
+        <div class="stat-label">${escapeHtml(d.nome)}</div>
+        <div class="stat-valor">${comTratamento}<span class="total">/${total}</span></div>
+        <div class="stat-barra"><div class="stat-barra-fill" style="width: ${pct}%"></div></div>
+      </div>
+    `;
+  }).join('');
+  cont.querySelectorAll('.stat-card[data-dim]').forEach(card => {
+    const fn = () => {
+      const dim = card.dataset.dim;
+      const sel = document.getElementById('filtro-dimensao');
+      sel.value = (ESTADO.filtroDimensao === dim) ? '' : dim;
+      sel.dispatchEvent(new Event('change'));
+    };
+    card.addEventListener('click', fn);
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } });
+  });
+}
+
+/* ============================================================
+   INDICADORES POR DIMENSAO
+   ============================================================ */
+function contagemDocsPorDim(dimKey) {
+  return DADOS.filter(d => intensidade(d.dimensoes[dimKey]) >= 1).length;
+}
+
+// Estado de UI dos indicadores
+const IND_ESTADO = {
+  expandidas: new Set(),
+  selecionadas: new Set()
+};
+
+function renderIndicadores() {
+  const cont = document.getElementById('ind-grid');
+  cont.innerHTML = DIMS.map((d, idx) => {
+    const info = INDICADORES_POR_DIM[d.key];
+    if (!info) return '';
+    const cobertura = contagemDocsPorDim(d.key);
+    const qtdItens = info.itens.length;
+    const itens = info.itens.map(i => {
+      const fonte = i.url
+        ? `<span class="fonte"><a href="${escapeHtml(i.url)}" target="_blank" rel="noopener">${escapeHtml(i.fonte)} ↗</a></span>`
+        : `<span class="fonte" style="font-style:italic">${escapeHtml(i.fonte)}</span>`;
+      return `<li><strong>${escapeHtml(i.nome)}</strong>${fonte}</li>`;
+    }).join('');
+    const expandida = IND_ESTADO.expandidas.has(d.key);
+    const selecionada = IND_ESTADO.selecionadas.has(d.key);
+    return `
+      <article class="ind-card ${expandida ? 'is-expanded' : ''} ${selecionada ? 'is-selected' : ''}"
+               data-dim="${d.key}" role="button" tabindex="0"
+               aria-expanded="${expandida}" aria-label="Dimensão ${escapeHtml(info.nome)}">
+        <div class="ind-cabec">
+          <button class="ind-checkbox" data-act="toggle-sel" data-dim="${d.key}"
+                  aria-label="Incluir ${escapeHtml(info.nome)} no dossiê"
+                  aria-pressed="${selecionada}"></button>
+          <div class="ind-cabec-text">
+            <div class="ind-numero">Dimensão 0${idx + 1}</div>
+            <h3 class="ind-titulo">${escapeHtml(info.nome)}</h3>
+            <div class="ind-meta-resumida">
+              <span><strong>${qtdItens}</strong> indicadores</span>
+              <span class="sep">·</span>
+              <span><strong>${cobertura}</strong>/${DADOS.length} documentos mobilizam</span>
+            </div>
+          </div>
+          <div class="ind-chevron" aria-hidden="true">▾</div>
+        </div>
+        <div class="ind-corpo">
+          <p class="ind-descricao">${escapeHtml(info.descricao)}</p>
+          <ul class="ind-lista">${itens}</ul>
+          <div class="ind-action">
+            <button data-act="ver-docs" data-dim="${d.key}">Ver documentos que mobilizam</button>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  // Click no card → toggle expandir (mas não no checkbox nem em links/botões internos)
+  cont.querySelectorAll('.ind-card').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.closest('[data-act], a')) return;
+      toggleExpandida(card.dataset.dim);
+    });
+    card.addEventListener('keydown', e => {
+      if (e.target !== card) return;
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleExpandida(card.dataset.dim);
+      }
+    });
+  });
+
+  // Click no checkbox → toggle seleção
+  cont.querySelectorAll('[data-act="toggle-sel"]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleSelecionada(btn.dataset.dim);
+    });
+  });
+
+  // Click em "Ver documentos" → filtra e rola
+  cont.querySelectorAll('[data-act="ver-docs"]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const dim = btn.dataset.dim;
+      document.getElementById('filtro-dimensao').value = dim;
+      document.getElementById('filtro-dimensao').dispatchEvent(new Event('change'));
+      document.getElementById('secao-matriz').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  atualizarToolbar();
+}
+
+function toggleExpandida(dim) {
+  const card = document.querySelector(`.ind-card[data-dim="${dim}"]`);
+  if (!card) return;
+  if (IND_ESTADO.expandidas.has(dim)) {
+    IND_ESTADO.expandidas.delete(dim);
+    card.classList.remove('is-expanded');
+    card.setAttribute('aria-expanded', 'false');
+  } else {
+    IND_ESTADO.expandidas.add(dim);
+    card.classList.add('is-expanded');
+    card.setAttribute('aria-expanded', 'true');
+  }
+}
+
+function toggleSelecionada(dim) {
+  const card = document.querySelector(`.ind-card[data-dim="${dim}"]`);
+  if (!card) return;
+  const cb = card.querySelector('.ind-checkbox');
+  if (IND_ESTADO.selecionadas.has(dim)) {
+    IND_ESTADO.selecionadas.delete(dim);
+    card.classList.remove('is-selected');
+    if (cb) cb.setAttribute('aria-pressed', 'false');
+  } else {
+    IND_ESTADO.selecionadas.add(dim);
+    card.classList.add('is-selected');
+    if (cb) cb.setAttribute('aria-pressed', 'true');
+  }
+  atualizarToolbar();
+}
+
+function atualizarToolbar() {
+  const n = IND_ESTADO.selecionadas.size;
+  document.getElementById('ind-contador-sel').textContent = String(n);
+  const btn = document.getElementById('btn-dossie');
+  btn.disabled = n === 0;
+  btn.textContent = n === 0
+    ? '📄 Gerar dossiê (PDF)'
+    : `📄 Gerar dossiê (${n})`;
+}
+
+/* ============================================================
+   FILTROS E ORDENACAO
+   ============================================================ */
+function aplicarFiltros() {
+  let lista = DADOS.slice();
+
+  if (ESTADO.filtroCategoria) {
+    lista = lista.filter(d => d.categoria === ESTADO.filtroCategoria);
+  }
+  if (ESTADO.filtroEquidade) {
+    const termo = ESTADO.filtroEquidade.toLowerCase();
+    lista = lista.filter(d => {
+      const dep = (d.dimensao_equidade_principal || '').toLowerCase();
+      return dep.includes(termo);
+    });
+  }
+  if (ESTADO.filtroDimensao) {
+    lista = lista.filter(d => intensidade(d.dimensoes[ESTADO.filtroDimensao]) >= 1);
+  }
+  if (ESTADO.busca) {
+    const q = ESTADO.busca.toLowerCase();
+    lista = lista.filter(d =>
+      (d.nome_curto || '').toLowerCase().includes(q) ||
+      (d.identificacao_formal || '').toLowerCase().includes(q) ||
+      (d.orgao_responsavel || '').toLowerCase().includes(q)
+    );
+  }
+
+  // Ordenacao
+  const { campo, dir } = ESTADO.sort;
+  const mult = dir === 'desc' ? -1 : 1;
+  lista.sort((a, b) => {
+    if (campo === 'nome') {
+      return mult * a.nome_curto.localeCompare(b.nome_curto, 'pt-BR');
+    }
+    if (campo === 'id') {
+      return mult * (a.id - b.id);
+    }
+    // Por dimensao
+    const na = intensidade(a.dimensoes[campo]);
+    const nb = intensidade(b.dimensoes[campo]);
+    if (na !== nb) return mult * (nb - na); // mais forte primeiro quando asc
+    return a.id - b.id;
+  });
+
+  return lista;
+}
+
+/* ============================================================
+   RENDERIZACAO DA MATRIZ
+   ============================================================ */
+function renderMatriz() {
+  const body = document.getElementById('matriz-body');
+  const dados = aplicarFiltros();
+  document.getElementById('contador-docs').textContent = dados.length;
+
+  // Atualizar indicadores de sort no thead
+  document.querySelectorAll('#tabela-matriz th[data-sort]').forEach(th => {
+    th.classList.remove('is-sorted');
+    const ic = th.querySelector('.sort-icon');
+    if (ic) ic.textContent = '↕';
+    if (th.dataset.sort === ESTADO.sort.campo) {
+      th.classList.add('is-sorted');
+      if (ic) ic.textContent = ESTADO.sort.dir === 'asc' ? '↑' : '↓';
+    }
+  });
+
+  if (dados.length === 0) {
+    body.innerHTML = `<tr><td colspan="7" class="sem-resultado">Nenhum documento encontrado com os filtros atuais.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = dados.map(doc => {
+    const perfil = perfilDoc(doc);
+    const miniPerfil = perfil.map((n, i) => `<span class="mini-seg n${n}" title="${escapeHtml(DIMS[i].nome)}: nível ${n}"></span>`).join('');
+    const celulas = DIMS.map(d => {
+      const nivel = intensidade(doc.dimensoes[d.key]);
+      return `<td class="dim-cell" data-doc="${doc.id}" data-dim="${d.key}" data-nivel="${nivel}">
+        <div class="cell-indicador nivel-${nivel}"></div>
+      </td>`;
+    }).join('');
+    return `
+      <tr data-id="${doc.id}" class="${ESTADO.docAberto === doc.id ? 'selected' : ''}">
+        <td class="doc-cell">
+          <div class="doc-cabec">
+            <div class="doc-cabec-left">
+              <span class="doc-id">DOC ${String(doc.id).padStart(2, '0')}</span>
+              <span class="doc-nome">${escapeHtml(doc.nome_curto)}</span>
+              <div><span class="doc-tag ${escapeHtml(doc.categoria)}">${escapeHtml(nomeCategoria(doc.categoria))}</span></div>
+              <div class="mini-perfil" aria-label="Perfil de cobertura nas 6 dimensões">
+                <span class="mini-perfil-label">Perfil</span>
+                ${miniPerfil}
+              </div>
+            </div>
+          </div>
+        </td>
+        ${celulas}
+      </tr>
+    `;
+  }).join('');
+
+  body.querySelectorAll('tr[data-id]').forEach(tr => {
+    tr.addEventListener('click', () => abrirDetalhe(parseInt(tr.dataset.id, 10)));
+  });
+
+  // Hover preview nas celulas
+  body.querySelectorAll('td.dim-cell').forEach(td => {
+    td.addEventListener('mouseenter', e => mostrarPreview(e, td));
+    td.addEventListener('mousemove', e => moverPreview(e));
+    td.addEventListener('mouseleave', () => esconderPreview());
+  });
+}
+
+/* ============================================================
+   HOVER PREVIEW
+   ============================================================ */
+const preview = document.getElementById('cell-preview');
+function mostrarPreview(e, td) {
+  const docId = parseInt(td.dataset.doc, 10);
+  const dimKey = td.dataset.dim;
+  const doc = DADOS.find(d => d.id === docId);
+  if (!doc) return;
+  const dim = doc.dimensoes[dimKey];
+  const dimNome = DIMS.find(d => d.key === dimKey).nome;
+  const nivel = intensidade(dim);
+  const labelNivel = ['Não encontrado', 'Menção lateral', 'Tratamento moderado', 'Tratamento forte com indicadores'][nivel];
+  let conteudo = '';
+  if (nivel === 0) {
+    conteudo = '<em>Nenhuma menção encontrada nesta dimensão.</em>';
+  } else {
+    const v = !ehNE(dim.variaveis) ? `<div><strong>Variáveis:</strong> ${escapeHtml(dim.variaveis)}</div>` : '';
+    const eq = !ehNE(dim.equidade) ? `<div style="margin-top:0.3rem"><strong>Equidade:</strong> ${escapeHtml(dim.equidade)}</div>` : '';
+    conteudo = v + eq || `<div>${escapeHtml(dim.qual || dim.quant || '')}</div>`;
+  }
+  preview.innerHTML = `
+    <span class="cp-eyebrow">${escapeHtml(dimNome)} · ${escapeHtml(labelNivel)}</span>
+    <div class="cp-titulo">${escapeHtml(doc.nome_curto)}</div>
+    <div>${conteudo}</div>
+    <div class="cp-cta">Clique para abrir a análise completa</div>
+  `;
+  preview.classList.add('visible');
+  moverPreview(e);
+}
+function moverPreview(e) {
+  const pw = 320, ph = 200;
+  const margin = 14;
+  let x = e.clientX + margin;
+  let y = e.clientY + margin;
+  if (x + pw > window.innerWidth)  x = e.clientX - pw - margin;
+  if (y + ph > window.innerHeight) y = e.clientY - ph - margin;
+  preview.style.left = x + 'px';
+  preview.style.top  = y + 'px';
+}
+function esconderPreview() { preview.classList.remove('visible'); }
+
+/* ============================================================
+   PAINEL DE DETALHE
+   ============================================================ */
+function abrirDetalhe(id) {
+  const doc = DADOS.find(d => d.id === id);
+  if (!doc) return;
+  ESTADO.docAberto = id;
+  escreverEstadoNaURL();
+
+  document.querySelectorAll('tr[data-id]').forEach(tr => tr.classList.toggle('selected', parseInt(tr.dataset.id, 10) === id));
+
+  document.getElementById('pd-id').textContent = `Doc ${String(id).padStart(2, '0')} · ${nomeCategoria(doc.categoria)}`;
+  document.getElementById('pd-titulo').textContent = doc.nome_curto;
+  document.getElementById('pd-subtitulo').textContent = doc.identificacao_formal;
+
+  const meta = document.getElementById('pd-meta');
+  meta.innerHTML = `
+    <div class="painel-meta-item"><dt>Ano</dt><dd>${escapeHtml(doc.ano)}</dd></div>
+    <div class="painel-meta-item"><dt>Órgão responsável</dt><dd>${escapeHtml(doc.orgao_responsavel)}</dd></div>
+    <div class="painel-meta-item"><dt>Nível de ensino</dt><dd>${escapeHtml(doc.nivel_ensino)}</dd></div>
+    <div class="painel-meta-item"><dt>Dimensão de equidade</dt><dd>${escapeHtml(doc.dimensao_equidade_principal)}</dd></div>
+    <div class="painel-meta-item" style="grid-column: 1 / -1;">
+      <dt>Fonte oficial</dt>
+      <dd>${doc.fonte_oficial ? `<a href="${escapeHtml(doc.fonte_oficial)}" target="_blank" rel="noopener">${escapeHtml(doc.fonte_oficial)}</a>` : '<em>não informado</em>'}</dd>
+    </div>
+  `;
+
+  const cont = document.getElementById('pd-dimensoes');
+  cont.innerHTML = DIMS.map(d => {
+    const dim = doc.dimensoes[d.key];
+    const nivel = intensidade(dim);
+    const cores = ['var(--n0-fill)', 'var(--n1-fill)', 'var(--n2-fill)', 'var(--n3-fill)'];
+    const bordas = ['1px dashed var(--n0-bord)', '1.5px solid var(--n1-bord)', '1.5px solid var(--n2-bord)', '1.5px solid var(--n3-bord)'];
+    const semDados = Object.values(dim).every(v => ehNE(v));
+
+    const atribs = ATRIBS.map(a => {
+      const valor = dim[a.key];
+      const ne = ehNE(valor);
+      const classeLabel = a.destaque ? 'atrib-label destaque' : 'atrib-label';
+      const classeValor = ne ? 'atrib-valor ne' : (a.destaque ? 'atrib-valor destaque' : 'atrib-valor');
+      return `
+        <div class="atrib">
+          <div class="${classeLabel}">${escapeHtml(a.label)}</div>
+          <div class="${classeValor}">${escapeHtml(ne ? 'Não encontrado' : valor)}</div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <section class="dim-bloco">
+        <div class="dim-header">
+          <span class="dim-numero">${d.num}</span>
+          <span class="dim-nome">${escapeHtml(d.nome)}</span>
+          <span class="dim-bolinha" style="background: ${cores[nivel]}; border: ${bordas[nivel]}"></span>
+        </div>
+        ${semDados
+          ? '<div class="dim-sem-dados">Não encontrado tratamento desta dimensão no documento.</div>'
+          : `<div>${atribs}</div>`}
+      </section>
+    `;
+  }).join('');
+
+  document.getElementById('overlay').classList.add('active');
+  document.getElementById('painel').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharDetalhe() {
+  document.getElementById('overlay').classList.remove('active');
+  document.getElementById('painel').classList.remove('active');
+  document.body.style.overflow = '';
+  document.querySelectorAll('tr[data-id]').forEach(tr => tr.classList.remove('selected'));
+  ESTADO.docAberto = null;
+  escreverEstadoNaURL();
+}
+
+/* ============================================================
+   EVENT LISTENERS
+   ============================================================ */
+function popularFiltroCategoria() {
+  const sel = document.getElementById('filtro-categoria');
+  const cats = [...new Set(DADOS.map(d => d.categoria))].sort();
+  cats.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c;
+    o.textContent = nomeCategoria(c);
+    sel.appendChild(o);
+  });
+}
+
+function bindEvents() {
+  document.getElementById('filtro-categoria').addEventListener('change', e => {
+    ESTADO.filtroCategoria = e.target.value;
+    escreverEstadoNaURL();
+    renderMatriz();
+  });
+  document.getElementById('filtro-equidade').addEventListener('change', e => {
+    ESTADO.filtroEquidade = e.target.value;
+    escreverEstadoNaURL();
+    renderMatriz();
+  });
+  document.getElementById('filtro-dimensao').addEventListener('change', e => {
+    ESTADO.filtroDimensao = e.target.value;
+    escreverEstadoNaURL();
+    renderMatriz();
+    renderStats();
+  });
+  document.getElementById('busca').addEventListener('input', e => {
+    ESTADO.busca = e.target.value;
+    escreverEstadoNaURL();
+    renderMatriz();
+  });
+  document.getElementById('reset').addEventListener('click', () => {
+    ESTADO.filtroCategoria = '';
+    ESTADO.filtroEquidade = '';
+    ESTADO.filtroDimensao = '';
+    ESTADO.busca = '';
+    ESTADO.sort = { campo: 'id', dir: 'asc' };
+    document.getElementById('filtro-categoria').value = '';
+    document.getElementById('filtro-equidade').value = '';
+    document.getElementById('filtro-dimensao').value = '';
+    document.getElementById('busca').value = '';
+    escreverEstadoNaURL();
+    renderMatriz();
+    renderStats();
+  });
+
+  // Sort por colunas
+  document.querySelectorAll('#tabela-matriz th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const campo = th.dataset.sort;
+      if (ESTADO.sort.campo === campo) {
+        ESTADO.sort.dir = ESTADO.sort.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        ESTADO.sort.campo = campo;
+        ESTADO.sort.dir = campo === 'nome' ? 'asc' : 'desc';
+      }
+      escreverEstadoNaURL();
+      renderMatriz();
+    });
+  });
+
+  document.getElementById('fechar').addEventListener('click', fecharDetalhe);
+  document.getElementById('overlay').addEventListener('click', fecharDetalhe);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') fecharDetalhe();
+  });
+
+  // Botoes PDF
+  document.getElementById('btn-pdf-ficha').addEventListener('click', () => {
+    document.body.classList.add('print-mode-ficha');
+    document.getElementById('print-titulo').textContent =
+      `Ficha · ${document.getElementById('pd-titulo').textContent}`;
+    document.getElementById('print-sub').innerHTML =
+      `Observatório da Equidade Educacional · NEES/UFAL · gerado em ${new Date().toLocaleDateString('pt-BR')}`;
+    setTimeout(() => {
+      window.print();
+      document.body.classList.remove('print-mode-ficha');
+    }, 100);
+  });
+
+  document.getElementById('btn-dossie').addEventListener('click', () => {
+    if (IND_ESTADO.selecionadas.size === 0) return;
+
+    // Marca quais cards entram no print e expande temporariamente
+    const todasCards = document.querySelectorAll('.ind-card');
+    const expandidasAntes = new Set(IND_ESTADO.expandidas);
+    todasCards.forEach(card => {
+      const dim = card.dataset.dim;
+      if (IND_ESTADO.selecionadas.has(dim)) {
+        card.classList.add('is-print-included');
+        card.classList.add('is-expanded'); // garante que o corpo apareça
+      } else {
+        card.classList.remove('is-print-included');
+      }
+    });
+
+    const titulos = [...IND_ESTADO.selecionadas]
+      .map(k => INDICADORES_POR_DIM[k]?.nome).filter(Boolean).join(' · ');
+    document.body.classList.add('print-mode-indicadores');
+    document.getElementById('print-titulo').textContent =
+      `Dossiê · Indicadores oficiais — ${titulos}`;
+    document.getElementById('print-sub').textContent =
+      `${IND_ESTADO.selecionadas.size} de 6 dimensões · Observatório da Equidade Educacional · NEES/UFAL · gerado em ${new Date().toLocaleDateString('pt-BR')}`;
+    setTimeout(() => {
+      window.print();
+      document.body.classList.remove('print-mode-indicadores');
+      todasCards.forEach(card => {
+        card.classList.remove('is-print-included');
+        // Restaura o estado de expansão anterior
+        if (!expandidasAntes.has(card.dataset.dim)) {
+          card.classList.remove('is-expanded');
+        }
+      });
+    }, 100);
+  });
+
+  // Toolbar de seleção
+  document.getElementById('ind-selecionar-todas').addEventListener('click', () => {
+    DIMS.forEach(d => {
+      if (!IND_ESTADO.selecionadas.has(d.key)) toggleSelecionada(d.key);
+    });
+  });
+  document.getElementById('ind-limpar-sel').addEventListener('click', () => {
+    [...IND_ESTADO.selecionadas].forEach(dim => toggleSelecionada(dim));
+  });
+  document.getElementById('ind-expandir-sel').addEventListener('click', () => {
+    if (IND_ESTADO.selecionadas.size === 0) return;
+    IND_ESTADO.selecionadas.forEach(dim => {
+      if (!IND_ESTADO.expandidas.has(dim)) toggleExpandida(dim);
+    });
+    document.getElementById('secao-indicadores').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // Voltar/avancar no historico
+  window.addEventListener('popstate', () => {
+    lerEstadoDaURL();
+    aplicarEstadoNaUI();
+  });
+}
+
+function aplicarEstadoNaUI() {
+  document.getElementById('filtro-categoria').value = ESTADO.filtroCategoria;
+  document.getElementById('filtro-equidade').value = ESTADO.filtroEquidade;
+  document.getElementById('filtro-dimensao').value = ESTADO.filtroDimensao;
+  document.getElementById('busca').value = ESTADO.busca;
+  renderStats();
+  renderMatriz();
+  if (ESTADO.docAberto) {
+    abrirDetalhe(ESTADO.docAberto);
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  lerEstadoDaURL();
+  popularFiltroCategoria();
+  renderIndicadores();
+  bindEvents();
+  aplicarEstadoNaUI();
+});
+</script>
+</body>
+</html>
