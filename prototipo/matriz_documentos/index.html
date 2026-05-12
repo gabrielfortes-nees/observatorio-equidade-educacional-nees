@@ -501,6 +501,65 @@
     color: var(--brown);
   }
 
+  /* ===================== ESCOPO ===================== */
+  .escopo-card {
+    background: var(--cream-warm);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .escopo-titulo {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brown);
+    font-weight: 700;
+    border-right: 1px solid var(--rule);
+    padding-right: 1rem;
+  }
+  .escopo-info {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    flex: 1;
+    min-width: 240px;
+  }
+  .escopo-info strong { color: var(--brown); font-weight: 600; font-style: normal; }
+  .escopo-toggle {
+    display: inline-flex;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+    padding: 3px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.76rem;
+  }
+  .escopo-toggle button {
+    background: transparent;
+    border: none;
+    padding: 0.45rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .escopo-toggle button.active {
+    background: var(--brown);
+    color: var(--cream);
+    font-weight: 600;
+  }
+  .escopo-toggle button:not(.active):hover { color: var(--orange-deep); }
+
   /* ===================== FILTROS ===================== */
   .filtros-card {
     background: white;
@@ -1206,16 +1265,16 @@
 <!-- =================== HEADER PRINT =================== -->
 <div class="print-only">
   <h1 id="print-titulo">Observatório da Equidade Educacional · Matriz Documental</h1>
-  <div class="print-sub" id="print-sub">Análise de 45 instrumentos oficiais — NEES/UFAL · <span id="print-data"></span></div>
+  <div class="print-sub" id="print-sub">Análise da base legal brasileira sob a função redistributiva — NEES/UFAL · <span id="print-data"></span></div>
 </div>
 
 <!-- =================== HERO =================== -->
 <header class="page-header">
-  <div class="breadcrumb">Análise documental · 45 instrumentos oficiais</div>
-  <h1>Monitorar a <em>equidade</em> é medir o que o sistema educacional <u>deixa de ver</u></h1>
-  <p class="lede">Quarenta e cinco marcos legais, programas federais e instrumentos de avaliação examinados em seis dimensões estruturantes — atendimento, aprendizagem, infraestrutura, pessoal e formação, territorialidade e inclusão. Cada cruzamento documento × dimensão é classificado em quatro níveis de tratamento, da ausência ao indicador formalizado.</p>
+  <div class="breadcrumb">Base legal · função redistributiva</div>
+  <h1>A <em>função redistributiva</em> da União se cumpre quando <u>equaliza condições de aprender</u></h1>
+  <p class="lede">A Constituição Federal (art. 211) e a LDB (art. 9º) atribuem à União a função de transferir recursos e prestar assistência técnica a estados e municípios para <strong>corrigir desigualdades educacionais</strong>, garantir um padrão mínimo de qualidade e equalizar oportunidades de aprendizado em todo o país. Esta matriz examina os instrumentos da <strong>base legal brasileira</strong> sob esse critério, em seis dimensões estruturantes — atendimento, aprendizagem, infraestrutura, pessoal e formação, territorialidade e inclusão.</p>
   <div class="meta">
-    <span><strong>Cobertura</strong> · 45 documentos</span>
+    <span><strong>Escopo padrão</strong> · base legal (CF · leis · decretos · portarias · resoluções CNE)</span>
     <span><strong>Dimensões analíticas</strong> · 6</span>
     <span><strong>Recorte temporal</strong> · 1988 — 2026</span>
     <span><strong>Curadoria</strong> · NEES/UFAL</span>
@@ -1258,6 +1317,18 @@
   <div class="secao-titulo">
     <h2><span class="secao-numero">03</span> Matriz documental · <span id="contador-docs">45</span> documentos</h2>
     <span class="secao-legenda">Clique em uma linha para abrir a análise · clique no cabeçalho da coluna para ordenar</span>
+  </div>
+
+  <div class="escopo-card" role="region" aria-label="Escopo da visualização">
+    <span class="escopo-titulo">Escopo</span>
+    <div class="escopo-info">
+      Por padrão, a matriz mostra apenas a <strong>base legal</strong> — Constituição, leis federais, decretos, portarias e resoluções do CNE.
+      <span id="escopo-resumo"></span>
+    </div>
+    <div class="escopo-toggle" role="tablist">
+      <button id="escopo-base-legal" class="active" role="tab" aria-selected="true">Base legal</button>
+      <button id="escopo-tudo" role="tab" aria-selected="false">Todos os instrumentos</button>
+    </div>
   </div>
 
   <div class="filtros-card">
@@ -1478,6 +1549,19 @@ const ATRIBS = [
 
 const NE = 'não encontrado';
 
+// Base legal padrão — Constituição, leis, decretos, portarias e resoluções CNE.
+// Marcos internacionais, programas, instrumentos de avaliação, indicadores,
+// sistemas de informação, governança e instrumentos de monitoramento ficam
+// ocultos por padrão (acessíveis via toggle "Todos os instrumentos").
+const CATEGORIAS_BASE_LEGAL = new Set([
+  'marco_constitucional',
+  'lei_federal',
+  'decreto_federal',
+  'portaria_mec',
+  'portaria_inep',
+  'resolucao_cne'
+]);
+
 /* ============================================================
    HELPERS
    ============================================================ */
@@ -1535,6 +1619,7 @@ function perfilDoc(doc) {
    ESTADO + URL
    ============================================================ */
 const ESTADO = {
+  escopo: 'base_legal',  // 'base_legal' | 'todos'
   filtroCategoria: '',
   filtroEquidade: '',
   filtroDimensao: '',
@@ -1543,8 +1628,15 @@ const ESTADO = {
   docAberto: null
 };
 
+function docsNoEscopo() {
+  if (ESTADO.escopo === 'todos') return DADOS;
+  return DADOS.filter(d => CATEGORIAS_BASE_LEGAL.has(d.categoria));
+}
+
 function lerEstadoDaURL() {
   const p = new URLSearchParams(window.location.search);
+  const esc = p.get('escopo');
+  if (esc === 'todos' || esc === 'base_legal') ESTADO.escopo = esc;
   ESTADO.filtroCategoria = p.get('cat') || '';
   ESTADO.filtroEquidade = p.get('eq') || '';
   ESTADO.filtroDimensao = p.get('dim') || '';
@@ -1560,6 +1652,7 @@ function lerEstadoDaURL() {
 
 function escreverEstadoNaURL() {
   const p = new URLSearchParams();
+  if (ESTADO.escopo !== 'base_legal') p.set('escopo', ESTADO.escopo);
   if (ESTADO.filtroCategoria) p.set('cat', ESTADO.filtroCategoria);
   if (ESTADO.filtroEquidade) p.set('eq', ESTADO.filtroEquidade);
   if (ESTADO.filtroDimensao) p.set('dim', ESTADO.filtroDimensao);
@@ -1577,9 +1670,10 @@ function escreverEstadoNaURL() {
    ============================================================ */
 function renderStats() {
   const cont = document.getElementById('stats');
-  const total = DADOS.length;
+  const base = docsNoEscopo();
+  const total = base.length;
   cont.innerHTML = DIMS.map(d => {
-    const comTratamento = DADOS.filter(doc => intensidade(doc.dimensoes[d.key]) >= 2).length;
+    const comTratamento = base.filter(doc => intensidade(doc.dimensoes[d.key]) >= 2).length;
     const pct = Math.round((comTratamento / total) * 100);
     const ativo = ESTADO.filtroDimensao === d.key ? 'is-active' : '';
     return `
@@ -1606,7 +1700,7 @@ function renderStats() {
    INDICADORES POR DIMENSAO
    ============================================================ */
 function contagemDocsPorDim(dimKey) {
-  return DADOS.filter(d => intensidade(d.dimensoes[dimKey]) >= 1).length;
+  return docsNoEscopo().filter(d => intensidade(d.dimensoes[dimKey]) >= 1).length;
 }
 
 // Estado de UI dos indicadores
@@ -1644,7 +1738,7 @@ function renderIndicadores() {
             <div class="ind-meta-resumida">
               <span><strong>${qtdItens}</strong> indicadores</span>
               <span class="sep">·</span>
-              <span><strong>${cobertura}</strong>/${DADOS.length} documentos mobilizam</span>
+              <span><strong>${cobertura}</strong>/${docsNoEscopo().length} documentos mobilizam</span>
             </div>
           </div>
           <div class="ind-chevron" aria-hidden="true">▾</div>
@@ -1741,7 +1835,7 @@ function atualizarToolbar() {
    FILTROS E ORDENACAO
    ============================================================ */
 function aplicarFiltros() {
-  let lista = DADOS.slice();
+  let lista = docsNoEscopo().slice();
 
   if (ESTADO.filtroCategoria) {
     lista = lista.filter(d => d.categoria === ESTADO.filtroCategoria);
@@ -1973,13 +2067,49 @@ function fecharDetalhe() {
    ============================================================ */
 function popularFiltroCategoria() {
   const sel = document.getElementById('filtro-categoria');
-  const cats = [...new Set(DADOS.map(d => d.categoria))].sort();
+  const valorAtual = sel.value;
+  // Mantém o "Todos os tipos" e troca o resto
+  sel.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
+  const cats = [...new Set(docsNoEscopo().map(d => d.categoria))].sort();
   cats.forEach(c => {
     const o = document.createElement('option');
     o.value = c;
     o.textContent = nomeCategoria(c);
     sel.appendChild(o);
   });
+  // Restaura se ainda válido
+  if (cats.includes(valorAtual)) sel.value = valorAtual;
+}
+
+function atualizarEscopoUI() {
+  document.getElementById('escopo-base-legal').classList.toggle('active', ESTADO.escopo === 'base_legal');
+  document.getElementById('escopo-base-legal').setAttribute('aria-selected', String(ESTADO.escopo === 'base_legal'));
+  document.getElementById('escopo-tudo').classList.toggle('active', ESTADO.escopo === 'todos');
+  document.getElementById('escopo-tudo').setAttribute('aria-selected', String(ESTADO.escopo === 'todos'));
+  const total = docsNoEscopo().length;
+  const oculto = DADOS.length - total;
+  const resumo = document.getElementById('escopo-resumo');
+  if (ESTADO.escopo === 'base_legal') {
+    resumo.innerHTML = ` <strong>${total} de ${DADOS.length}</strong> instrumentos visíveis · outros ${oculto} (programas, instrumentos de avaliação, governança, marcos internacionais) acessíveis em "Todos os instrumentos".`;
+  } else {
+    resumo.innerHTML = ` <strong>${total} instrumentos</strong> visíveis · escopo completo.`;
+  }
+}
+
+function aplicarEscopo(novo) {
+  if (ESTADO.escopo === novo) return;
+  ESTADO.escopo = novo;
+  // Limpa filtros que podem virar inválidos
+  if (ESTADO.filtroCategoria && !docsNoEscopo().some(d => d.categoria === ESTADO.filtroCategoria)) {
+    ESTADO.filtroCategoria = '';
+    document.getElementById('filtro-categoria').value = '';
+  }
+  popularFiltroCategoria();
+  atualizarEscopoUI();
+  renderStats();
+  renderIndicadores();
+  renderMatriz();
+  escreverEstadoNaURL();
 }
 
 function bindEvents() {
@@ -2106,6 +2236,10 @@ function bindEvents() {
     document.getElementById('secao-indicadores').scrollIntoView({ behavior: 'smooth' });
   });
 
+  // Toggle de escopo (base legal × todos)
+  document.getElementById('escopo-base-legal').addEventListener('click', () => aplicarEscopo('base_legal'));
+  document.getElementById('escopo-tudo').addEventListener('click', () => aplicarEscopo('todos'));
+
   // Voltar/avancar no historico
   window.addEventListener('popstate', () => {
     lerEstadoDaURL();
@@ -2114,11 +2248,14 @@ function bindEvents() {
 }
 
 function aplicarEstadoNaUI() {
+  popularFiltroCategoria();
+  atualizarEscopoUI();
   document.getElementById('filtro-categoria').value = ESTADO.filtroCategoria;
   document.getElementById('filtro-equidade').value = ESTADO.filtroEquidade;
   document.getElementById('filtro-dimensao').value = ESTADO.filtroDimensao;
   document.getElementById('busca').value = ESTADO.busca;
   renderStats();
+  renderIndicadores();
   renderMatriz();
   if (ESTADO.docAberto) {
     abrirDetalhe(ESTADO.docAberto);
