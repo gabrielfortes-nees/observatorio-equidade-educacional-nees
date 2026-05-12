@@ -80,9 +80,9 @@
 
 ## Citação
 
-Sugestão de formato de citação:
+Sugestão de formato de citação (ABNT):
 
-> Observatório de Equidade Educacional. *Nove leituras dos dados brasileiros sobre desigualdade educacional* [recurso eletrônico]. NEES/UFAL, 2026. Disponível em: https://equidade.nees.ufal.br. Acesso em: dd/mm/aaaa.
+> FORTES, Gabriel. **Observatório de Equidade Educacional: nove leituras dos dados brasileiros sobre desigualdade educacional** [recurso eletrônico]. Maceió: Universidade Federal de Alagoas (UFAL) · Núcleo de Estudos em Educação e Sociedade (NEES), 2026. Disponível em: https://gabrielfortes-nees.github.io/observatorio-equidade-educacional-nees/. Acesso em: dd/mm/aaaa.
 
 Documentar a versão (data do último `gerado_em` nos JSONs) na página footer.
 
@@ -94,9 +94,9 @@ Documentar a versão (data do último `gerado_em` nos JSONs) na página footer.
 
 ## Equipe responsável
 
-- **Curadoria de conteúdo:** [time NEES/UFAL]
+- **Autor e curadoria de conteúdo:** Dr. Gabriel Fortes (Universidade Federal de Alagoas) · gabriel.macedo@nees.ufal.br
 - **Pipeline de dados:** [responsável back]
 - **Apresentação:** [responsável front]
 - **Validação metodológica:** [pesquisador sênior]
 
-(Preencher antes de publicar.)
+(Os papéis adicionais serão preenchidos com membros do time conforme integração.)

@@ -1,7 +1,7 @@
 # Nota técnica — uso de contrafactuais nos cenários "E se...?"
 
 **Versão:** 2026-05-12
-**Autores:** Time NEES/UFAL · Observatório de Equidade Educacional
+**Autor:** Dr. Gabriel Fortes (Universidade Federal de Alagoas) · Observatório de Equidade Educacional
 **Documento associado:** [`04_governanca_dado.md`](./04_governanca_dado.md) (badges de evidência, fontes, LGPD)
 
 ---
@@ -205,4 +205,4 @@ Pipeline completo descrito em [`06_como_rodar.md`](./06_como_rodar.md).
 
 ---
 
-*Documento aberto a comentários. Sugestões e correções vão via Pull Request no GitHub ou email para a equipe NEES/UFAL.*
+*Documento aberto a comentários. Sugestões e correções vão via Pull Request no GitHub ou email para o autor (gabriel.macedo@nees.ufal.br).*

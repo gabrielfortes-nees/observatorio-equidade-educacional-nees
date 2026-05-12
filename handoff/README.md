@@ -80,10 +80,8 @@ Este pacote é o que o time recebe para construir a versão de produção do Obs
 
 ## Contato
 
-(Preencher antes de enviar)
-
-- Pesquisador responsável: Gabriel Fortes
-- Tech lead time front:
-- Tech lead time back:
-- Pesquisador sênior validação metodológica:
-- Designer/curador:
+- **Autor e pesquisador responsável:** Dr. Gabriel Fortes (Universidade Federal de Alagoas) — gabriel.macedo@nees.ufal.br
+- Tech lead time front: *a preencher*
+- Tech lead time back: *a preencher*
+- Pesquisador sênior validação metodológica: *a preencher*
+- Designer/curador: *a preencher*
