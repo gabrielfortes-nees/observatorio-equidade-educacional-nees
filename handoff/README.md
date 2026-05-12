@@ -1,5 +1,15 @@
 # Pacote de handoff — Observatório de Equidade Educacional
 
+## 🔗 URLs ao vivo (protótipo)
+
+- **Entrada:** https://gabrielfortes-nees.github.io/observatorio-equidade-educacional-nees/
+- **Travessias** (jornada storytelling): https://gabrielfortes-nees.github.io/observatorio-equidade-educacional-nees/prototipo/travessias.html
+- **Painel** (9 leituras + mapa): https://gabrielfortes-nees.github.io/observatorio-equidade-educacional-nees/prototipo/insights3_dinamico.html
+
+Hospedado em GitHub Pages, redeploy automático a cada `git push`.
+
+## Pacote para o time
+
 Este pacote é o que o time recebe para construir a versão de produção do Observatório. Ordem de leitura recomendada:
 
 | # | Doc | Quem deve ler |
