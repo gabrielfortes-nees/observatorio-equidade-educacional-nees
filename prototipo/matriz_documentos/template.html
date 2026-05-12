@@ -419,14 +419,55 @@
   .ind-lista li .fonte a { color: var(--orange-deep); text-decoration: none; }
   .ind-lista li .fonte a:hover { text-decoration: underline; }
 
+  /* Abas Nativos | Customizados */
+  .ind-abas {
+    display: flex;
+    gap: 0.3rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ind-aba-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+    padding: 0.5rem 0.8rem 0.55rem;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    margin-bottom: -1px;
+  }
+  .ind-aba-btn:hover { color: var(--orange-deep); }
+  .ind-aba-btn.active {
+    color: var(--brown);
+    border-bottom-color: var(--orange-deep);
+  }
+  .ind-aba-cont { display: none; }
+  .ind-aba-cont.active { display: block; }
+  .ind-aba-legenda {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+    margin-bottom: 0.6rem;
+    line-height: 1.4;
+  }
+
   .ind-card .ind-action {
     margin-top: 0.9rem;
     padding-top: 0.8rem;
     border-top: 1px solid var(--rule);
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
   }
-  .ind-action button {
+  .ind-action-link {
     background: transparent;
     border: none;
     font-family: 'Work Sans', sans-serif;
@@ -439,9 +480,25 @@
     padding: 0;
     transition: color 0.2s;
   }
-  .ind-action button:hover { color: var(--brown); }
-  .ind-action button::after { content: ' →'; transition: transform 0.2s; display: inline-block; }
-  .ind-action button:hover::after { transform: translateX(3px); }
+  .ind-action-link:hover { color: var(--brown); }
+  .ind-action-link::after { content: ' →'; transition: transform 0.2s; display: inline-block; }
+  .ind-action-link:hover::after { transform: translateX(3px); }
+  .ind-action-placeholder {
+    background: transparent;
+    border: 1px dashed var(--orange-soft);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brown);
+    font-weight: 600;
+    padding: 0.4rem 0.7rem;
+    border-radius: 4px;
+    cursor: not-allowed;
+    opacity: 0.75;
+  }
+  .ind-action-placeholder::before { content: '↗ '; }
+  .ind-action-placeholder[title]:hover { opacity: 1; border-color: var(--orange-deep); }
 
   /* Barra de seleção do dossiê */
   .ind-toolbar {
@@ -790,6 +847,21 @@
   .doc-tag.governanca { background: var(--highlight); color: var(--brown); }
   .doc-tag.marco_internacional { background: var(--ink); color: var(--cream); }
 
+  /* Badge "função redistributiva" — atravessa categorias */
+  .doc-tag.redistributiva {
+    background: var(--brown);
+    color: var(--cream);
+    letter-spacing: 0.09em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .doc-tag.redistributiva::before {
+    content: '⇋';
+    font-size: 1.05em;
+    line-height: 1;
+  }
+
   /* Mini-perfil: 6 segmentos do perfil do doc */
   .mini-perfil {
     display: flex;
@@ -1009,6 +1081,48 @@
     word-break: break-all;
   }
   .painel-meta-item dd a::after { content: ' ↗'; font-size: 0.85em; }
+
+  /* Bloco "Função redistributiva neste instrumento" no painel lateral */
+  .red-bloco {
+    padding: 1.4rem 2rem 1.5rem;
+    border-bottom: 1px solid var(--rule);
+    background: linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%);
+  }
+  .red-eyebrow {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brown);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .red-eyebrow::before {
+    content: '⇋';
+    color: var(--orange-deep);
+    font-size: 1rem;
+    line-height: 1;
+  }
+  .red-titulo {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--brown);
+    line-height: 1.3;
+    margin-bottom: 0.6rem;
+  }
+  .red-texto {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink);
+    line-height: 1.55;
+    border-left: 3px solid var(--orange-deep);
+    padding-left: 0.9rem;
+  }
 
   .dim-bloco {
     padding: 1.6rem 2rem 1.1rem;
@@ -1327,6 +1441,7 @@
     </div>
     <div class="escopo-toggle" role="tablist">
       <button id="escopo-base-legal" class="active" role="tab" aria-selected="true">Base legal</button>
+      <button id="escopo-redistributivos" role="tab" aria-selected="false" title="Apenas instrumentos com função redistributiva da União">⇋ Redistributivos</button>
       <button id="escopo-tudo" role="tab" aria-selected="false">Todos os instrumentos</button>
     </div>
   </div>
@@ -1447,6 +1562,7 @@
     </div>
   </div>
   <dl class="painel-meta" id="pd-meta"></dl>
+  <div id="pd-redistributiva"></div>
   <div id="pd-dimensoes"></div>
 </aside>
 
@@ -1458,73 +1574,113 @@
    CONSTANTES E DADOS
    ============================================================ */
 
-// Indicadores oficiais por dimensao (lista curatorial inicial - nao exaustiva)
+// Indicadores oficiais por dimensão — organizados em dois níveis:
+//   nativos      → indicadores já estabelecidos (Inep, Cetic, IBGE), priorizados
+//                  pela lente da função redistributiva da União: avaliam se a
+//                  rede está equalizando condições entre escolas.
+//   customizados → indicadores que as redes podem construir a partir dos
+//                  microdados públicos para olhar a distribuição intra-rede.
+// Lista curatorial — não exaustiva. Linguagem sem ranking: "dispersão",
+// "variância", "distribuição", "equalização" no lugar de melhor/pior.
 const INDICADORES_POR_DIM = {
   atendimento: {
     nome: 'Atendimento',
-    descricao: 'Indicadores que medem acesso, matrícula, frequência e fluxo da população escolarizável ao sistema educacional.',
-    itens: [
+    descricao: 'A função redistributiva no atendimento responde se a rede consegue ofertar matrícula, vaga e fluxo nas etapas obrigatórias, com cobertura equivalente entre territórios e grupos sob sua responsabilidade.',
+    nativos: [
       { nome: 'Taxa de matrícula por etapa (creche, pré-escola, EF, EM, EJA)', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
       { nome: 'Taxa de atendimento líquido e bruto por faixa etária', fonte: 'PNAD Contínua Educação — IBGE', url: 'https://www.ibge.gov.br/estatisticas/sociais/educacao.html' },
       { nome: 'Distorção idade-série', fonte: 'Taxas de Rendimento — Inep', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
-      { nome: 'Cobertura de creche (0-3 anos)', fonte: 'PNAD + Sidra/IBGE', url: 'https://sidra.ibge.gov.br/' },
-      { nome: 'Demanda manifesta por vagas (fila de creche)', fonte: 'Não existe indicador nacional padronizado', url: '' }
+      { nome: 'Cobertura de creche (0–3 anos)', fonte: 'PNAD + Sidra/IBGE', url: 'https://sidra.ibge.gov.br/' }
+    ],
+    customizados: [
+      { nome: 'Distribuição territorial das vagas dentro da rede (vagas por bairro/distrito)', fonte: 'Construído a partir do Censo Escolar', url: '' },
+      { nome: 'Demanda manifesta vs. oferta efetiva por território', fonte: 'Necessita registro local de demanda (cadastro municipal)', url: '' },
+      { nome: 'Variância da taxa de distorção idade-série entre escolas da mesma rede', fonte: 'Construído · Taxas de Rendimento desagregadas', url: '' },
+      { nome: 'Cobertura de transporte escolar para alunos do campo na rede', fonte: 'Construído · cruza PNATE com Censo Escolar', url: '' }
     ]
   },
   aprendizagem: {
     nome: 'Aprendizagem',
-    descricao: 'Indicadores que medem proficiência, fluxo, alfabetização e desempenho cognitivo ao longo da trajetória escolar.',
-    itens: [
+    descricao: 'A função redistributiva na aprendizagem se cumpre quando a rede consegue manter padrão equivalente de oportunidades de aprender entre suas escolas — não apenas média, mas distribuição.',
+    nativos: [
       { nome: 'IDEB — Índice de Desenvolvimento da Educação Básica', fonte: 'Inep · combina Saeb + fluxo', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/ideb' },
       { nome: 'Proficiência Saeb (LP e Matemática · 2EF/5EF/9EF/3EM)', fonte: 'Saeb — Inep', url: 'https://saeb.inep.gov.br/' },
       { nome: '% de alunos no nível adequado de aprendizagem', fonte: 'Saeb — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/saeb' },
-      { nome: 'INSE — Indicador de Nível Socioeconômico', fonte: 'Inep · contextualização do Saeb', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/nivel-socioeconomico' },
-      { nome: 'Taxa de alfabetização ao final do 2º ano (Avalia-BR)', fonte: 'Compromisso Nacional Criança Alfabetizada', url: 'https://www.gov.br/mec/pt-br/acesso-a-informacao/acoes-e-programas/criancaalfabetizada' }
+      { nome: 'INSE — Indicador de Nível Socioeconômico (contexto para leitura justa)', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/nivel-socioeconomico' },
+      { nome: 'Taxa de alfabetização ao final do 2º ano (Avalia-BR)', fonte: 'Compromisso Nacional Criança Alfabetizada · MEC', url: 'https://www.gov.br/mec/pt-br/acesso-a-informacao/acoes-e-programas/criancaalfabetizada' }
+    ],
+    customizados: [
+      { nome: 'Dispersão (desvio-padrão) do IDEB entre escolas da rede', fonte: 'Construído · IDEB por escola', url: '' },
+      { nome: 'Proficiência Saeb por escola controlada pelo INSE — escolas com NSE similar e resultados muito distintos', fonte: 'Construído · microdados Saeb', url: '' },
+      { nome: 'Equidade racial intra-rede: variância da proficiência entre estudantes pretos, pardos e brancos na mesma escola', fonte: 'Construído · Saeb desagregado', url: '' },
+      { nome: 'Curva de alfabetização da rede (% de crianças alfabetizadas ao 2º ano por escola)', fonte: 'Construído · Avalia-BR por escola', url: '' }
     ]
   },
   infraestrutura: {
     nome: 'Infraestrutura',
-    descricao: 'Indicadores que medem condições físicas, materiais, de acessibilidade e conectividade das escolas.',
-    itens: [
-      { nome: 'Indicador de Adequação da Infraestrutura Escolar', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
+    descricao: 'A função redistributiva na infraestrutura se cumpre quando a rede oferece condições físicas equivalentes em todas as suas escolas — não basta média alta, é preciso baixa variância.',
+    nativos: [
+      { nome: 'Indicador de Adequação da Infraestrutura Escolar (IIE) — Inep', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
       { nome: '% de escolas com acessibilidade arquitetônica', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
-      { nome: '% de escolas com biblioteca, laboratório, quadra esportiva', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: '% de escolas com biblioteca, laboratório e quadra esportiva', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
       { nome: '% de escolas com conectividade banda larga', fonte: 'TIC Educação — Cetic.br/NIC.br', url: 'https://cetic.br/pt/pesquisa/educacao/' },
-      { nome: 'Indicador de Complexidade de Gestão da Escola', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' }
+      { nome: 'Indicador de Complexidade de Gestão (contexto da escola)', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' }
+    ],
+    customizados: [
+      { nome: 'Distribuição do IIE entre escolas da rede (histograma · faixas de adequação)', fonte: 'Construído · IIE por escola', url: '' },
+      { nome: 'Cobertura de bibliotecas/quadras/laboratórios por território da rede', fonte: 'Construído · Censo Escolar geolocalizado', url: '' },
+      { nome: 'Concentração do PDDE-extra e recursos discricionários entre escolas', fonte: 'Construído · execução financeira por escola', url: '' },
+      { nome: 'Equalização da conectividade entre escolas urbanas e rurais da rede', fonte: 'Construído · TIC Educação + Censo Escolar', url: '' }
     ]
   },
   pessoal_formacao: {
     nome: 'Pessoal e Formação',
-    descricao: 'Indicadores que medem perfil, formação adequada, carga e regularidade do corpo docente.',
-    itens: [
-      { nome: 'Indicador de Adequação da Formação Docente', fonte: 'Inep · monitoramento Meta 15 PNE', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
+    descricao: 'A função redistributiva no corpo docente se cumpre quando a rede assegura formação e estabilidade equivalentes em todas as suas escolas — sem que algumas concentrem docentes mais qualificados que outras.',
+    nativos: [
+      { nome: 'Indicador de Adequação da Formação Docente (Meta 15 do PNE)', fonte: 'Inep · monitoramento PNE', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
       { nome: 'Indicador de Esforço Docente', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
       { nome: 'Indicador de Regularidade Docente', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
       { nome: 'Razão alunos por turma e alunos por professor', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
       { nome: '% de docentes com pós-graduação', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' }
+    ],
+    customizados: [
+      { nome: 'Dispersão da adequação docente entre escolas da rede', fonte: 'Construído · Adequação por escola', url: '' },
+      { nome: 'Distribuição da rotatividade docente nas escolas da rede', fonte: 'Construído · Censo Escolar longitudinal', url: '' },
+      { nome: 'Razão professor/aluno por escola — equalização entre escolas centrais e periféricas', fonte: 'Construído · Censo Escolar', url: '' },
+      { nome: 'Concentração de docentes pós-graduados em escolas com NSE mais alto', fonte: 'Construído · cruza pós-graduação docente + INSE da escola', url: '' }
     ]
   },
   territorialidade: {
     nome: 'Territorialidade',
-    descricao: 'Indicadores que medem desigualdade entre territórios — campo/cidade, regiões, modalidades específicas.',
-    itens: [
+    descricao: 'A função redistributiva na territorialidade se cumpre quando a rede consegue ofertar condições equivalentes entre territórios sob sua jurisdição — campo e cidade, centro e periferia, distritos indígenas e quilombolas.',
+    nativos: [
       { nome: 'Localização da escola (urbana/rural)', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
       { nome: 'Modalidade da escola (indígena, quilombola, campo)', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
       { nome: 'Distribuição regional dos indicadores educacionais', fonte: 'Inep · agregações por UF e região', url: 'https://www.gov.br/inep/pt-br' },
-      { nome: 'Acesso ao transporte escolar', fonte: 'PNATE — FNDE', url: 'https://www.gov.br/fnde/pt-br/acesso-a-informacao/acoes-e-programas/programas/pnate' },
-      { nome: 'Densidade da rede municipal vs. estadual', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' }
+      { nome: 'Acesso ao transporte escolar — PNATE', fonte: 'FNDE', url: 'https://www.gov.br/fnde/pt-br/acesso-a-informacao/acoes-e-programas/programas/pnate' }
+    ],
+    customizados: [
+      { nome: 'Mapa territorial dos indicadores da rede (resultado, infra, docentes) por bairro/distrito', fonte: 'Construído · Censo Escolar geolocalizado', url: '' },
+      { nome: 'Equalização entre escolas do campo e urbanas da rede em infraestrutura e aprendizagem', fonte: 'Construído · cruza localização e IIE/IDEB', url: '' },
+      { nome: 'Cobertura de transporte escolar para escolas do campo na rede', fonte: 'Construído · PNATE + Censo Escolar', url: '' },
+      { nome: 'Distribuição dos investimentos próprios da rede por território', fonte: 'Construído · execução orçamentária local', url: '' }
     ]
   },
   inclusao: {
     nome: 'Inclusão',
-    descricao: 'Indicadores que medem participação de grupos historicamente excluídos — pessoas com deficiência, população negra, quilombolas, indígenas.',
-    itens: [
+    descricao: 'A função redistributiva na inclusão se cumpre quando a rede garante condições de participação efetiva a grupos historicamente excluídos — pessoas com deficiência, população negra, povos indígenas e quilombolas — distribuindo apoio onde a necessidade está.',
+    nativos: [
       { nome: 'Matrículas de alunos com deficiência', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
       { nome: '% de alunos PCD em classe comum (inclusão escolar)', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
       { nome: '% de escolas com AEE (Sala de Recursos Multifuncional)', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
       { nome: 'Cor/raça nos microdados (Portaria Inep 156/2004)', fonte: 'Censo Escolar e Saeb — Inep', url: 'https://www.gov.br/inep/pt-br' },
-      { nome: 'Matrículas de cotistas no ensino superior', fonte: 'Censo da Educação Superior — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-da-educacao-superior' },
       { nome: 'Índice Geral de ERER (PNEERQ · Diagnóstico Equidade)', fonte: 'MEC/Secadi · PNEERQ', url: 'https://www.gov.br/mec/pt-br/pneerq' }
+    ],
+    customizados: [
+      { nome: 'Distribuição de matrículas PCD entre escolas da rede (concentração vs. inclusão difusa)', fonte: 'Construído · Censo Escolar por escola', url: '' },
+      { nome: 'Cobertura de AEE em escolas com matrículas PCD na rede', fonte: 'Construído · Censo Escolar', url: '' },
+      { nome: 'Composição racial dos estudantes por escola da rede', fonte: 'Construído · Censo Escolar com cor/raça', url: '' },
+      { nome: 'Equalização do acesso a profissional de apoio entre escolas com matrículas PCD', fonte: 'Construído · cruza profissionais e matrículas PCD', url: '' }
     ]
   }
 };
@@ -1630,13 +1786,14 @@ const ESTADO = {
 
 function docsNoEscopo() {
   if (ESTADO.escopo === 'todos') return DADOS;
+  if (ESTADO.escopo === 'redistributivos') return DADOS.filter(d => d.tem_funcao_redistributiva);
   return DADOS.filter(d => CATEGORIAS_BASE_LEGAL.has(d.categoria));
 }
 
 function lerEstadoDaURL() {
   const p = new URLSearchParams(window.location.search);
   const esc = p.get('escopo');
-  if (esc === 'todos' || esc === 'base_legal') ESTADO.escopo = esc;
+  if (esc === 'todos' || esc === 'base_legal' || esc === 'redistributivos') ESTADO.escopo = esc;
   ESTADO.filtroCategoria = p.get('cat') || '';
   ESTADO.filtroEquidade = p.get('eq') || '';
   ESTADO.filtroDimensao = p.get('dim') || '';
@@ -1709,19 +1866,24 @@ const IND_ESTADO = {
   selecionadas: new Set()
 };
 
+function renderListaIndicadores(itens) {
+  return itens.map(i => {
+    const fonte = i.url
+      ? `<span class="fonte"><a href="${escapeHtml(i.url)}" target="_blank" rel="noopener">${escapeHtml(i.fonte)} ↗</a></span>`
+      : `<span class="fonte" style="font-style:italic">${escapeHtml(i.fonte)}</span>`;
+    return `<li><strong>${escapeHtml(i.nome)}</strong>${fonte}</li>`;
+  }).join('');
+}
+
 function renderIndicadores() {
   const cont = document.getElementById('ind-grid');
   cont.innerHTML = DIMS.map((d, idx) => {
     const info = INDICADORES_POR_DIM[d.key];
     if (!info) return '';
     const cobertura = contagemDocsPorDim(d.key);
-    const qtdItens = info.itens.length;
-    const itens = info.itens.map(i => {
-      const fonte = i.url
-        ? `<span class="fonte"><a href="${escapeHtml(i.url)}" target="_blank" rel="noopener">${escapeHtml(i.fonte)} ↗</a></span>`
-        : `<span class="fonte" style="font-style:italic">${escapeHtml(i.fonte)}</span>`;
-      return `<li><strong>${escapeHtml(i.nome)}</strong>${fonte}</li>`;
-    }).join('');
+    const nativos = info.nativos || [];
+    const customizados = info.customizados || [];
+    const qtdTotal = nativos.length + customizados.length;
     const expandida = IND_ESTADO.expandidas.has(d.key);
     const selecionada = IND_ESTADO.selecionadas.has(d.key);
     return `
@@ -1736,7 +1898,7 @@ function renderIndicadores() {
             <div class="ind-numero">Dimensão 0${idx + 1}</div>
             <h3 class="ind-titulo">${escapeHtml(info.nome)}</h3>
             <div class="ind-meta-resumida">
-              <span><strong>${qtdItens}</strong> indicadores</span>
+              <span><strong>${qtdTotal}</strong> indicadores</span>
               <span class="sep">·</span>
               <span><strong>${cobertura}</strong>/${docsNoEscopo().length} documentos mobilizam</span>
             </div>
@@ -1745,16 +1907,30 @@ function renderIndicadores() {
         </div>
         <div class="ind-corpo">
           <p class="ind-descricao">${escapeHtml(info.descricao)}</p>
-          <ul class="ind-lista">${itens}</ul>
+          <div class="ind-abas" role="tablist">
+            <button class="ind-aba-btn active" data-act="aba" data-dim="${d.key}" data-aba="nativos" role="tab" aria-selected="true">Nativos · ${nativos.length}</button>
+            <button class="ind-aba-btn" data-act="aba" data-dim="${d.key}" data-aba="customizados" role="tab" aria-selected="false">Customizados · ${customizados.length}</button>
+          </div>
+          <div class="ind-aba-cont active" data-cont="nativos" data-dim="${d.key}">
+            <div class="ind-aba-legenda">Indicadores oficiais já estabelecidos, lidos sob a lente da função redistributiva — a rede equaliza condições entre suas escolas?</div>
+            <ul class="ind-lista">${renderListaIndicadores(nativos)}</ul>
+          </div>
+          <div class="ind-aba-cont" data-cont="customizados" data-dim="${d.key}">
+            <div class="ind-aba-legenda">Indicadores que a rede pode construir a partir dos microdados públicos para mapear a distribuição intra-rede e identificar onde concentrar apoio.</div>
+            <ul class="ind-lista">${renderListaIndicadores(customizados)}</ul>
+          </div>
           <div class="ind-action">
-            <button data-act="ver-docs" data-dim="${d.key}">Ver documentos que mobilizam</button>
+            <button class="ind-action-link" data-act="ver-docs" data-dim="${d.key}">Ver documentos que mobilizam</button>
+            <button class="ind-action-placeholder" data-act="painel-rede" data-dim="${d.key}"
+                    title="Em desenvolvimento — abrirá um painel com a distribuição intra-rede de ${escapeHtml(info.nome.toLowerCase())} entre as escolas"
+                    aria-disabled="true">Explorar painel da rede</button>
           </div>
         </div>
       </article>
     `;
   }).join('');
 
-  // Click no card → toggle expandir (mas não no checkbox nem em links/botões internos)
+  // Click no card → toggle expandir (não no checkbox, abas, links ou botões internos)
   cont.querySelectorAll('.ind-card').forEach(card => {
     card.addEventListener('click', e => {
       if (e.target.closest('[data-act], a')) return;
@@ -1769,15 +1945,29 @@ function renderIndicadores() {
     });
   });
 
-  // Click no checkbox → toggle seleção
+  // Checkbox → toggle seleção
   cont.querySelectorAll('[data-act="toggle-sel"]').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); toggleSelecionada(btn.dataset.dim); });
+  });
+
+  // Abas Nativos × Customizados
+  cont.querySelectorAll('[data-act="aba"]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
-      toggleSelecionada(btn.dataset.dim);
+      const card = btn.closest('.ind-card');
+      const aba = btn.dataset.aba;
+      card.querySelectorAll('[data-act="aba"]').forEach(b => {
+        const ativo = b.dataset.aba === aba;
+        b.classList.toggle('active', ativo);
+        b.setAttribute('aria-selected', String(ativo));
+      });
+      card.querySelectorAll('[data-cont]').forEach(c => {
+        c.classList.toggle('active', c.dataset.cont === aba);
+      });
     });
   });
 
-  // Click em "Ver documentos" → filtra e rola
+  // "Ver documentos" → filtra a matriz
   cont.querySelectorAll('[data-act="ver-docs"]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -1786,6 +1976,11 @@ function renderIndicadores() {
       document.getElementById('filtro-dimensao').dispatchEvent(new Event('change'));
       document.getElementById('secao-matriz').scrollIntoView({ behavior: 'smooth' });
     });
+  });
+
+  // Placeholder "Explorar painel da rede" → sem ação por enquanto
+  cont.querySelectorAll('[data-act="painel-rede"]').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); e.preventDefault(); });
   });
 
   atualizarToolbar();
@@ -1919,7 +2114,10 @@ function renderMatriz() {
             <div class="doc-cabec-left">
               <span class="doc-id">DOC ${String(doc.id).padStart(2, '0')}</span>
               <span class="doc-nome">${escapeHtml(doc.nome_curto)}</span>
-              <div><span class="doc-tag ${escapeHtml(doc.categoria)}">${escapeHtml(nomeCategoria(doc.categoria))}</span></div>
+              <div>
+                <span class="doc-tag ${escapeHtml(doc.categoria)}">${escapeHtml(nomeCategoria(doc.categoria))}</span>
+                ${doc.tem_funcao_redistributiva ? '<span class="doc-tag redistributiva" title="Operacionaliza a função redistributiva da União">Função redistributiva</span>' : ''}
+              </div>
               <div class="mini-perfil" aria-label="Perfil de cobertura nas 6 dimensões">
                 <span class="mini-perfil-label">Perfil</span>
                 ${miniPerfil}
@@ -2013,6 +2211,20 @@ function abrirDetalhe(id) {
     </div>
   `;
 
+  // Bloco "Função redistributiva neste instrumento" (só aparece se doc tiver)
+  const redCont = document.getElementById('pd-redistributiva');
+  if (doc.tem_funcao_redistributiva && doc.como_redistribui) {
+    redCont.innerHTML = `
+      <section class="red-bloco">
+        <div class="red-eyebrow">Função redistributiva</div>
+        <div class="red-titulo">Como este instrumento operacionaliza a função redistributiva da União</div>
+        <div class="red-texto">${escapeHtml(doc.como_redistribui)}</div>
+      </section>
+    `;
+  } else {
+    redCont.innerHTML = '';
+  }
+
   const cont = document.getElementById('pd-dimensoes');
   cont.innerHTML = DIMS.map(d => {
     const dim = doc.dimensoes[d.key];
@@ -2082,15 +2294,24 @@ function popularFiltroCategoria() {
 }
 
 function atualizarEscopoUI() {
-  document.getElementById('escopo-base-legal').classList.toggle('active', ESTADO.escopo === 'base_legal');
-  document.getElementById('escopo-base-legal').setAttribute('aria-selected', String(ESTADO.escopo === 'base_legal'));
-  document.getElementById('escopo-tudo').classList.toggle('active', ESTADO.escopo === 'todos');
-  document.getElementById('escopo-tudo').setAttribute('aria-selected', String(ESTADO.escopo === 'todos'));
+  const map = {
+    'base_legal': 'escopo-base-legal',
+    'redistributivos': 'escopo-redistributivos',
+    'todos': 'escopo-tudo'
+  };
+  Object.entries(map).forEach(([escopo, btnId]) => {
+    const btn = document.getElementById(btnId);
+    const ativo = ESTADO.escopo === escopo;
+    btn.classList.toggle('active', ativo);
+    btn.setAttribute('aria-selected', String(ativo));
+  });
   const total = docsNoEscopo().length;
-  const oculto = DADOS.length - total;
   const resumo = document.getElementById('escopo-resumo');
   if (ESTADO.escopo === 'base_legal') {
+    const oculto = DADOS.length - total;
     resumo.innerHTML = ` <strong>${total} de ${DADOS.length}</strong> instrumentos visíveis · outros ${oculto} (programas, instrumentos de avaliação, governança, marcos internacionais) acessíveis em "Todos os instrumentos".`;
+  } else if (ESTADO.escopo === 'redistributivos') {
+    resumo.innerHTML = ` <strong>${total} instrumentos</strong> que operacionalizam a função redistributiva da União (CF art. 211, LDB art. 9º) — transferência de recursos, assistência técnica, correção de desigualdades.`;
   } else {
     resumo.innerHTML = ` <strong>${total} instrumentos</strong> visíveis · escopo completo.`;
   }
@@ -2236,8 +2457,9 @@ function bindEvents() {
     document.getElementById('secao-indicadores').scrollIntoView({ behavior: 'smooth' });
   });
 
-  // Toggle de escopo (base legal × todos)
+  // Toggle de escopo (base legal × redistributivos × todos)
   document.getElementById('escopo-base-legal').addEventListener('click', () => aplicarEscopo('base_legal'));
+  document.getElementById('escopo-redistributivos').addEventListener('click', () => aplicarEscopo('redistributivos'));
   document.getElementById('escopo-tudo').addEventListener('click', () => aplicarEscopo('todos'));
 
   // Voltar/avancar no historico

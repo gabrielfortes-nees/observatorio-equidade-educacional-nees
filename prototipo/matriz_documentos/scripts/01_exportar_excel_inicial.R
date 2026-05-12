@@ -73,7 +73,50 @@ for (d in dados) {
 matriz_longa <- do.call(rbind, linhas)
 cat("Geradas", nrow(matriz_longa), "linhas na matriz longa.\n")
 
-# ----- Aba 3: legenda das categorias ----------------------
+# ----- Aba 3: funcao redistributiva da Uniao (CF 211 + LDB 9) ----
+# Marca os instrumentos que operacionalizam a funcao redistributiva da Uniao
+# (transferir recursos, prestar assistencia tecnica, corrigir desigualdades,
+# garantir padrao minimo, equalizar oportunidades) e descreve como fazem.
+# Demais docs ficam com "tem=0" e podem ser editados pelo usuario no Excel.
+redistrib_seed <- list(
+  list(1L,  1L,"Vincula recursos a educacao (art. 212 — 18% da Uniao e 25% de estados e municipios) e estabelece o regime de colaboracao com funcao redistributiva e supletiva da Uniao (art. 211, paragrafo 1)."),
+  list(2L,  1L, "Art. 9, X-XIII atribui a Uniao a responsabilidade de prestar assistencia tecnica e financeira a estados e municipios para garantir oferta com padrao minimo de qualidade."),
+  list(7L,  1L, "Politica afirmativa nacional que equaliza acesso ao ensino superior publico federal — reserva 50% das vagas com subcotas por renda, raca/cor, PCD e (apos 2023) quilombolas."),
+  list(9L,  1L, "Diretriz III explicita superacao das desigualdades; metas 7 (qualidade), 8 (escolaridade media por raca/renda/territorio) e 20 (financiamento como % do PIB) operam logica redistributiva entre redes."),
+  list(10L, 1L, "Instrumento redistributivo central — tres complementacoes da Uniao (VAAF, VAAT, VAAR) elevam o gasto-aluno em redes com menor capacidade fiscal. VAAR condiciona transferencia a melhoria de aprendizagem e a reducao de desigualdades (raca, NSE, PCD)."),
+  list(11L, 1L, "Transferencia condicional da Uniao diretamente ao estudante (CadUnico/Bolsa Familia) com gatilhos de matricula, frequencia e conclusao — equaliza condicoes de permanencia no ensino medio publico."),
+  list(12L, 1L, "Apoio financeiro e tecnico da Uniao para ampliar a matricula em tempo integral, com criterios redistributivos por vulnerabilidade territorial e socioeconomica."),
+  list(14L, 1L, "Apoio tecnico e financeiro da Uniao para escolas do campo, assentados, quilombolas e ribeirinhos, com diretrizes proprias de infraestrutura, projeto pedagogico e formacao docente."),
+  list(15L, 1L, "Criterios de apoio da Uniao consideram proporcao de criancas nao alfabetizadas, NSE, recortes etnico-raciais, genero e PCD — alocacao redistributiva por necessidade da rede."),
+  list(16L, 1L, "Aporta R$ 1,5 bi ate 2027 para implementar a Lei 10.639/2003 com criterios tecnicos por rede; inclui o Diagnostico Equidade em 100% das redes como condicao de monitoramento."),
+  list(8L,  1L, "LBI determina ao poder publico assegurar oferta de educacao inclusiva com AEE, profissional de apoio e acessibilidade (art. 28) — vincula a Uniao a apoio tecnico e ao financiamento da rede.")
+)
+redistrib_df <- data.frame(
+  id_doc = vapply(redistrib_seed, \(x) x[[1]], integer(1)),
+  tem_funcao_redistributiva = vapply(redistrib_seed, \(x) x[[2]], integer(1)),
+  como_redistribui = vapply(redistrib_seed, \(x) x[[3]], character(1)),
+  stringsAsFactors = FALSE
+)
+# Completar com todos os outros docs (tem=0, como=NA)
+ids_seed <- redistrib_df$id_doc
+ids_faltam <- setdiff(metadados$id, ids_seed)
+if (length(ids_faltam) > 0) {
+  redistrib_df <- rbind(redistrib_df,
+    data.frame(
+      id_doc = ids_faltam,
+      tem_funcao_redistributiva = 0L,
+      como_redistribui = NA_character_,
+      stringsAsFactors = FALSE
+    )
+  )
+}
+redistrib_df <- redistrib_df[order(redistrib_df$id_doc), ]
+# Acoplar nome do doc para facilitar edicao manual no Excel
+redistrib_df$nome_curto <- metadados$nome_curto[match(redistrib_df$id_doc, metadados$id)]
+redistrib_df <- redistrib_df[, c("id_doc", "nome_curto",
+                                 "tem_funcao_redistributiva", "como_redistribui")]
+
+# ----- Aba 4: legenda das categorias ----------------------
 legenda <- data.frame(
   chave_categoria = c("marco_constitucional","lei_federal","decreto_federal",
                       "portaria_mec","portaria_inep","resolucao_cne",
@@ -92,10 +135,12 @@ legenda <- data.frame(
 wb <- createWorkbook()
 addWorksheet(wb, "metadados")
 addWorksheet(wb, "matriz_longa")
+addWorksheet(wb, "funcao_redistributiva")
 addWorksheet(wb, "categorias")
 
 writeData(wb, "metadados", metadados)
 writeData(wb, "matriz_longa", matriz_longa)
+writeData(wb, "funcao_redistributiva", redistrib_df)
 writeData(wb, "categorias", legenda)
 
 # Estilo de cabecalho
@@ -103,15 +148,20 @@ estilo_hdr <- createStyle(textDecoration = "bold", fgFill = "#F5EBD7",
                           border = "bottom", borderStyle = "thin")
 addStyle(wb, "metadados", estilo_hdr, rows = 1, cols = seq_len(ncol(metadados)))
 addStyle(wb, "matriz_longa", estilo_hdr, rows = 1, cols = seq_len(ncol(matriz_longa)))
+addStyle(wb, "funcao_redistributiva", estilo_hdr, rows = 1, cols = seq_len(ncol(redistrib_df)))
 addStyle(wb, "categorias", estilo_hdr, rows = 1, cols = seq_len(ncol(legenda)))
 
 setColWidths(wb, "metadados", cols = 1:ncol(metadados),
              widths = c(5, 40, 25, 40, 10, 30, 25, 35, 60))
 setColWidths(wb, "matriz_longa", cols = 1:ncol(matriz_longa),
              widths = c(6, 40, 18, 22, 50, 50, 50, 50))
+setColWidths(wb, "funcao_redistributiva", cols = 1:ncol(redistrib_df),
+             widths = c(6, 40, 12, 90))
 setColWidths(wb, "categorias", cols = 1:2, widths = c(28, 32))
 
 saveWorkbook(wb, caminho_saida, overwrite = TRUE)
 cat("Excel salvo em:", caminho_saida, "\n")
 cat("Abas: metadados (", nrow(metadados), " linhas), matriz_longa (",
-    nrow(matriz_longa), " linhas), categorias (", nrow(legenda), " linhas).\n", sep = "")
+    nrow(matriz_longa), " linhas), funcao_redistributiva (",
+    nrow(redistrib_df), " linhas, ", sum(redistrib_df$tem_funcao_redistributiva == 1),
+    " pre-marcadas), categorias (", nrow(legenda), " linhas).\n", sep = "")

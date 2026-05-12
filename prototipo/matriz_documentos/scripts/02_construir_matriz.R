@@ -36,7 +36,17 @@ if (!file.exists(caminho_template)) stop("Template nao encontrado: ", caminho_te
 meta <- as.data.frame(read_excel(caminho_xlsx, sheet = "metadados"))
 matriz <- as.data.frame(read_excel(caminho_xlsx, sheet = "matriz_longa"))
 
-cat("Lidos", nrow(meta), "documentos e", nrow(matriz), "linhas de matriz.\n")
+# Aba funcao_redistributiva eh opcional (compat. com Excel antigo)
+redistrib <- tryCatch(
+  as.data.frame(read_excel(caminho_xlsx, sheet = "funcao_redistributiva")),
+  error = function(e) data.frame(id_doc = integer(0),
+                                 tem_funcao_redistributiva = integer(0),
+                                 como_redistribui = character(0))
+)
+
+cat("Lidos", nrow(meta), "documentos,", nrow(matriz),
+    "linhas de matriz,", sum(redistrib$tem_funcao_redistributiva == 1, na.rm = TRUE),
+    "docs com funcao redistributiva.\n")
 
 ordem_dim <- c("atendimento", "aprendizagem", "infraestrutura",
                "pessoal_formacao", "territorialidade", "inclusao")
@@ -61,6 +71,14 @@ dados <- lapply(seq_len(nrow(meta)), function(i) {
       )
     }
   }
+  red <- redistrib[redistrib$id_doc == m$id, ]
+  tem_red <- if (nrow(red) >= 1 && !is.na(red$tem_funcao_redistributiva[1])) {
+    as.integer(red$tem_funcao_redistributiva[1]) == 1L
+  } else FALSE
+  como_red <- if (nrow(red) >= 1 && !is.na(red$como_redistribui[1])) {
+    red$como_redistribui[1]
+  } else ""
+
   list(
     id = m$id,
     nome_curto = m$nome_curto,
@@ -71,6 +89,8 @@ dados <- lapply(seq_len(nrow(meta)), function(i) {
     nivel_ensino = m$nivel_ensino,
     dimensao_equidade_principal = m$dimensao_equidade_principal,
     fonte_oficial = m$fonte_oficial,
+    tem_funcao_redistributiva = tem_red,
+    como_redistribui = como_red,
     dimensoes = dimensoes
   )
 })
