@@ -419,6 +419,25 @@
   .ind-lista li .fonte a { color: var(--orange-deep); text-decoration: none; }
   .ind-lista li .fonte a:hover { text-decoration: underline; }
 
+  /* Itens VAAR · réguas legais formalizadas do Fundeb */
+  .ind-lista li.is-vaar {
+    padding-left: 1.5rem;
+    background: linear-gradient(90deg, var(--cream-warm) 0%, transparent 90%);
+    border-bottom: 1px solid var(--rule);
+    border-radius: 3px;
+    margin: 0.2rem 0;
+  }
+  .ind-lista li.is-vaar::before {
+    content: '⇋';
+    color: var(--brown);
+    font-size: 0.95rem;
+    top: 0.5rem;
+    font-weight: 700;
+  }
+  .ind-lista li.is-vaar strong { color: var(--brown); }
+  .ind-lista li.is-vaar .fonte { color: var(--brown-soft); }
+  .ind-lista li.is-vaar .fonte a { color: var(--brown); }
+
   /* Abas Nativos | Customizados */
   .ind-abas {
     display: flex;
@@ -1601,12 +1620,14 @@ const INDICADORES_POR_DIM = {
   },
   aprendizagem: {
     nome: 'Aprendizagem',
-    descricao: 'A função redistributiva na aprendizagem se cumpre quando a rede consegue manter padrão equivalente de oportunidades de aprender entre suas escolas — não apenas média, mas distribuição.',
+    descricao: 'A função redistributiva na aprendizagem se cumpre quando a rede consegue manter padrão equivalente de oportunidades de aprender entre suas escolas (não apenas média, mas distribuição).',
     nativos: [
-      { nome: 'IDEB — Índice de Desenvolvimento da Educação Básica', fonte: 'Inep · combina Saeb + fluxo', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/ideb' },
-      { nome: 'Proficiência Saeb (LP e Matemática · 2EF/5EF/9EF/3EM)', fonte: 'Saeb — Inep', url: 'https://saeb.inep.gov.br/' },
-      { nome: '% de alunos no nível adequado de aprendizagem', fonte: 'Saeb — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/saeb' },
-      { nome: 'INSE — Indicador de Nível Socioeconômico (contexto para leitura justa)', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/nivel-socioeconomico' },
+      { vaar: true, nome: 'VAAR · Indicador de Equidade da Aprendizagem (Saeb desagregado por raça/cor, NSE e PCD)', fonte: 'Inep · regulamentação Decreto 11.421/2023', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/saeb' },
+      { vaar: true, nome: 'VAAR · Melhoria da proficiência no Saeb (variação positiva LP + Matemática entre as duas últimas edições)', fonte: 'Inep · Saeb · regulamentação Decreto 11.421/2023', url: 'https://saeb.inep.gov.br/' },
+      { nome: 'IDEB · Índice de Desenvolvimento da Educação Básica', fonte: 'Inep · combina Saeb + fluxo', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/ideb' },
+      { nome: 'Proficiência Saeb (LP e Matemática · 2EF/5EF/9EF/3EM)', fonte: 'Saeb · Inep', url: 'https://saeb.inep.gov.br/' },
+      { nome: '% de alunos no nível adequado de aprendizagem', fonte: 'Saeb · Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/saeb' },
+      { nome: 'INSE · Indicador de Nível Socioeconômico (contexto para leitura justa)', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/nivel-socioeconomico' },
       { nome: 'Taxa de alfabetização ao final do 2º ano (Avalia-BR)', fonte: 'Compromisso Nacional Criança Alfabetizada · MEC', url: 'https://www.gov.br/mec/pt-br/acesso-a-informacao/acoes-e-programas/criancaalfabetizada' }
     ],
     customizados: [
@@ -1635,13 +1656,16 @@ const INDICADORES_POR_DIM = {
   },
   pessoal_formacao: {
     nome: 'Pessoal e Formação',
-    descricao: 'A função redistributiva no corpo docente se cumpre quando a rede assegura formação e estabilidade equivalentes em todas as suas escolas — sem que algumas concentrem docentes mais qualificados que outras.',
+    descricao: 'A função redistributiva no corpo docente se cumpre quando a rede assegura formação, remuneração e estabilidade equivalentes em todas as suas escolas (sem que algumas concentrem condições docentes melhores que outras).',
     nativos: [
+      { vaar: true, nome: 'VAAR · Cumprimento da Lei do Piso (% de docentes com remuneração igual ou superior ao piso nacional, Lei 11.738/2008)', fonte: 'Censo Escolar · Inep + planos municipais/estaduais', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { vaar: true, nome: 'VAAR · Plano de carreira docente atualizado e em execução', fonte: 'Verificação documental da rede (Simec)', url: '' },
+      { vaar: true, nome: 'VAAR · % de docentes efetivos (concurso público vigente)', fonte: 'Censo Escolar · Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
       { nome: 'Indicador de Adequação da Formação Docente (Meta 15 do PNE)', fonte: 'Inep · monitoramento PNE', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
       { nome: 'Indicador de Esforço Docente', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
       { nome: 'Indicador de Regularidade Docente', fonte: 'Inep · Nota Técnica', url: 'https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais' },
-      { nome: 'Razão alunos por turma e alunos por professor', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
-      { nome: '% de docentes com pós-graduação', fonte: 'Censo Escolar — Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' }
+      { nome: 'Razão alunos por turma e alunos por professor', fonte: 'Censo Escolar · Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' },
+      { nome: '% de docentes com pós-graduação', fonte: 'Censo Escolar · Inep', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/censo-escolar' }
     ],
     customizados: [
       { nome: 'Dispersão da adequação docente entre escolas da rede', fonte: 'Construído · Adequação por escola', url: '' },
@@ -1871,7 +1895,9 @@ function renderListaIndicadores(itens) {
     const fonte = i.url
       ? `<span class="fonte"><a href="${escapeHtml(i.url)}" target="_blank" rel="noopener">${escapeHtml(i.fonte)} ↗</a></span>`
       : `<span class="fonte" style="font-style:italic">${escapeHtml(i.fonte)}</span>`;
-    return `<li><strong>${escapeHtml(i.nome)}</strong>${fonte}</li>`;
+    const cls = i.vaar ? ' class="is-vaar"' : '';
+    const titulo = i.vaar ? ' title="Régua legal formalizada — condicionalidade ou critério do VAAR-Fundeb (Lei 14.113/2020, art. 14, § 3º)"' : '';
+    return `<li${cls}${titulo}><strong>${escapeHtml(i.nome)}</strong>${fonte}</li>`;
   }).join('');
 }
 
