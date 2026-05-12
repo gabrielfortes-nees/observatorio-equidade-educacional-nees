@@ -20,6 +20,7 @@ Este pacote é o que o time recebe para construir a versão de produção do Obs
 | 4 | [04_governanca_dado.md](04_governanca_dado.md) | **Conteúdo + Validação** — fontes, evidência, limitações, LGPD |
 | 5 | [05_backlog.md](05_backlog.md) | **Tech lead** — tickets por responsável, ordem de sprints |
 | 6 | [06_como_rodar.md](06_como_rodar.md) | **Back + DevOps** — passo a passo de execução do pipeline |
+| 7 | [07_nota_tecnica_contrafactuais.md](07_nota_tecnica_contrafactuais.md) | **Validação metodológica + Conteúdo** — uso de contrafactuais em L3, L6 e L9: tipologia, cálculos, mini-relatório |
 
 ## O que cada perfil precisa
 
