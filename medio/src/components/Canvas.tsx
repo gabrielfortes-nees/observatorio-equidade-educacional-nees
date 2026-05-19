@@ -18,6 +18,7 @@ import { STEPS, type Step } from '../lib/steps';
 import { CANVAS_W, CANVAS_H, BASELINE, SVG_NS, make, roughBarPath, scoreToY } from '../lib/svg';
 import { renderMedioXkcdInto } from '../lib/medioXkcdImperative';
 import { POSES, type Pose } from '../lib/poses';
+import { spawnParticles, barRect, type Rect } from '../lib/particles';
 
 const INK = '#2a1f18';
 const INK_SOFT = '#5a4a3f';
@@ -36,6 +37,7 @@ interface CanvasProps {
 
 export function Canvas({ stepIndex, reducedMotion }: CanvasProps) {
   const barsLayerRef = useRef<SVGGElement>(null);
+  const particlesLayerRef = useRef<SVGGElement>(null);
   const mediosLayerRef = useRef<SVGGElement>(null);
   const labelsLayerRef = useRef<SVGGElement>(null);
   const overlayLayerRef = useRef<SVGGElement>(null);
@@ -44,18 +46,67 @@ export function Canvas({ stepIndex, reducedMotion }: CanvasProps) {
   const mediosRef = useRef<Map<string, MedioInstance>>(new Map());
   const barsRef = useRef<Set<string>>(new Set());
 
+  // Snapshot do passo anterior, pra calcular diff de barras e disparar partículas
+  // só quando houver mudança significativa.
+  const prevStepRef = useRef<Step | null>(null);
+
   useEffect(() => {
     const step = STEPS[stepIndex];
     if (!step) return;
     const barsLayer = barsLayerRef.current;
+    const particlesLayer = particlesLayerRef.current;
     const mediosLayer = mediosLayerRef.current;
     const labelsLayer = labelsLayerRef.current;
     const overlayLayer = overlayLayerRef.current;
-    if (!barsLayer || !mediosLayer || !labelsLayer || !overlayLayer) return;
+    if (!barsLayer || !particlesLayer || !mediosLayer || !labelsLayer || !overlayLayer) return;
 
     const SHORT = reducedMotion ? 0.01 : 0.3;
     const MED = reducedMotion ? 0.01 : 0.6;
     const LONG = reducedMotion ? 0.01 : 0.9;
+
+    const prevStep = prevStepRef.current;
+    prevStepRef.current = step;
+
+    // ===== PARTÍCULAS (efeito "Médio se desfaz") =====
+    // Disparam quando o passo introduz barras NOVAS (id que não existia antes).
+    // As partículas voam dos elementos REMOVIDOS (ou do Médio atual, se nada foi
+    // removido) pras posições das barras novas, dando o efeito de "matéria do
+    // Médio formando as barras". É a meta-narrativa visual da peça.
+    if (prevStep) {
+      const prevBarIds = new Set(prevStep.bars.map((b) => b.id));
+      const newBars = step.bars.filter((b) => !prevBarIds.has(b.id));
+      const removedBars = prevStep.bars.filter((b) => !step.bars.some((nb) => nb.id === b.id));
+
+      if (newBars.length > 0) {
+        const targets: Rect[] = newBars.map((b) =>
+          barRect(b.x, b.w, scoreToY(b.score), BASELINE, b.color ?? INK),
+        );
+
+        // Define as FONTES: barras removidas (se houver) ou retângulo aproximado
+        // ao redor do Médio "M" persistente (que é a memória do número original).
+        let sources: Rect[];
+        if (removedBars.length > 0) {
+          sources = removedBars.map((b) =>
+            barRect(b.x, b.w, scoreToY(b.score), BASELINE, b.color ?? INK),
+          );
+        } else {
+          const mInst = mediosRef.current.get('M');
+          const mGroup = mInst?.group;
+          const transform = mGroup?.getAttribute('transform') ?? '';
+          const match = /matrix\(1,0,0,1,([-\d.]+),([-\d.]+)\)|translate\(([-\d.]+),\s*([-\d.]+)\)/.exec(transform);
+          const tx = match ? parseFloat(match[1] || match[3]) : 400;
+          const ty = match ? parseFloat(match[2] || match[4]) : 250;
+          // Fonte: pequeno retângulo ao redor do Médio
+          sources = [{ x: tx - 25, y: ty - 30, w: 50, h: 80, color: INK_SOFT }];
+        }
+
+        spawnParticles(particlesLayer, sources, targets, {
+          count: Math.min(280, 30 + newBars.length * 20),
+          duration: 0.9,
+          reducedMotion,
+        });
+      }
+    }
 
     // ===== BARRAS =====
     const wantedBarIds = new Set(step.bars.map((b) => b.id));
@@ -182,6 +233,11 @@ export function Canvas({ stepIndex, reducedMotion }: CanvasProps) {
           inst.pendingFaceTimer = undefined;
         }
       });
+      // Mata tweens de partículas vivas e remove os elementos
+      [...particlesLayer.children].forEach((c) => {
+        gsap.killTweensOf(c);
+        c.remove();
+      });
     };
 
     function removeMedio(id: string) {
@@ -293,6 +349,7 @@ export function Canvas({ stepIndex, reducedMotion }: CanvasProps) {
       aria-label={STEPS[stepIndex]?.alt ?? 'Visualização do Médio'}
     >
       <g ref={barsLayerRef} />
+      <g ref={particlesLayerRef} />
       <g ref={mediosLayerRef} />
       <g ref={labelsLayerRef} />
       <g ref={overlayLayerRef} />

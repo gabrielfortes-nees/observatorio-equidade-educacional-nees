@@ -1,0 +1,69 @@
+{
+  "fonte": "INEP/SAEB 2023, microdados de aluno do 9º ano EF, matemática",
+  "variavel": "PROFICIENCIA_MT_SAEB (escala SAEB)",
+  "unidade": "pontos",
+  "n_alunos": 2083218,
+  "nacional": 257.1,
+  "rede": {
+    "privada": 295,
+    "publica": 249.9,
+    "diferenca": 45
+  },
+  "regiao": {
+    "N": 243.5,
+    "NE": 249.5,
+    "SE": 262.6,
+    "S": 266.4,
+    "CO": 258.8
+  },
+  "regiao_rede": {
+    "1": {
+      "regiao": "N",
+      "privada": 279.6,
+      "publica": 240.2
+    },
+    "2": {
+      "regiao": "NE",
+      "privada": 285.5,
+      "publica": 243
+    },
+    "3": {
+      "regiao": "SE",
+      "privada": 300.4,
+      "publica": 253.5
+    },
+    "4": {
+      "regiao": "S",
+      "privada": 302.6,
+      "publica": 260.7
+    },
+    "5": {
+      "regiao": "CO",
+      "privada": 293.8,
+      "publica": 252.6
+    }
+  },
+  "norte_publico": 240.2,
+  "sudeste_privado": 300.4,
+  "interseccional": {
+    "privilegiado": {
+      "cor": "branca",
+      "rede": "privada",
+      "regiao": "Sul",
+      "mae_escolaridade": "superior completo",
+      "media": 311.4,
+      "n_amostra": 1330
+    },
+    "deprimido": {
+      "cor": "preta",
+      "rede": "publica",
+      "regiao": "Norte",
+      "mae_escolaridade": "sem 5º ano",
+      "media": 218.9,
+      "n_amostra": 2072
+    },
+    "diferenca": 92.5
+  },
+  "nuvem_quantis": [156.3, 181.9, 195.9, 206.2, 215, 222.9, 230.5, 237.9, 245.3, 252.6, 259.8, 267.1, 274.4, 281.9, 290, 298.5, 308.2, 319.6, 334.9, 362.7],
+  "gerado_em": "2026-05-19 20:31:53 -03"
+}

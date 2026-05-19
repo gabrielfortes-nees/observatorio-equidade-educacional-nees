@@ -1,5 +1,7 @@
 // Tela final com os créditos: ancoragem teórica (Collins, Soares), nota sobre
-// dados ilustrativos, botão pra recomeçar.
+// fonte oficial dos dados, botão pra recomeçar.
+
+import { DADOS_META } from '../lib/steps';
 
 interface CreditsProps {
   onRestart: () => void;
@@ -7,6 +9,7 @@ interface CreditsProps {
 }
 
 export function Credits({ onRestart, onClose }: CreditsProps) {
+  const n = DADOS_META.n_alunos.toLocaleString('pt-BR');
   return (
     <div className="credits" role="dialog" aria-modal="true" aria-labelledby="credits-title">
       <div className="breadcrumb">Fim da peça · 13 de 13</div>
@@ -20,8 +23,8 @@ export function Credits({ onRestart, onClose }: CreditsProps) {
         próprias diferenças.
       </p>
       <p>
-        Dados ilustrativos, baseados em ordens de grandeza do SAEB 9º ano, matemática.
-        Versão final usará microdados oficiais do INEP.
+        Dados oficiais: <strong>{DADOS_META.fonte}</strong>. Médias ponderadas por PESO_ALUNO_MT
+        sobre <strong>{n}</strong> alunos com proficiência válida.
       </p>
 
       <div className="thinkers">

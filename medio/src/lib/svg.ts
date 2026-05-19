@@ -8,8 +8,11 @@ export const CANVAS_W = 800;
 export const CANVAS_H = 540;
 export const BASELINE = 460;
 export const TOP_PAD = 60;
-export const SCORE_MIN = 200;
-export const SCORE_MAX = 310;
+// Escala alargada pra acomodar os extremos reais do SAEB 2023 9º ano matemática
+// (P2.5 ≈ 156, P97.5 ≈ 363). O range usado é mais largo que esses extremos pra
+// dar margem visual.
+export const SCORE_MIN = 140;
+export const SCORE_MAX = 380;
 
 export function scoreToY(score: number): number {
   const range = SCORE_MAX - SCORE_MIN;
