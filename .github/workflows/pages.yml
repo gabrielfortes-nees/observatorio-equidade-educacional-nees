@@ -1,0 +1,84 @@
+# Deploy do site completo do Observatório de Equidade Educacional no GitHub Pages.
+#
+# Estrutura publicada (sob o subcaminho /observatorio-equidade-educacional-nees/):
+#   /                       → landing (index.html da raiz do repo)
+#   /prototipo/...          → protótipos estáticos (travessias, insights3, matriz)
+#   /medio/                 → app Vite+React do "Médio" (build de produção)
+#
+# Por que esta abordagem:
+#   O Pages, quando configurado em modo "GitHub Actions", serve o site INTEIRO
+#   a partir do artefato que este workflow produz. Como o repo já tem páginas
+#   estáticas (index.html, prototipo/) E uma SPA buildada (medio/dist), o job
+#   precisa MONTAR um único diretório com tudo antes de publicar.
+
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Permissões mínimas necessárias para publicar no Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Evita deploys paralelos disputando o ambiente do Pages.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: medio/package-lock.json
+
+      - name: Instalar dependências do Médio
+        working-directory: medio
+        run: npm ci
+
+      - name: Build do Médio
+        working-directory: medio
+        env:
+          BUILD_BASE: /observatorio-equidade-educacional-nees/medio/
+        run: npm run build
+
+      - name: Montar diretório do site
+        run: |
+          mkdir -p _site
+          cp index.html _site/index.html
+          cp -r prototipo _site/prototipo
+          cp -r medio/dist _site/medio
+          echo "Conteúdo final do _site:"
+          find _site -maxdepth 2 -type f -o -type d | sort
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload do artefato do Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

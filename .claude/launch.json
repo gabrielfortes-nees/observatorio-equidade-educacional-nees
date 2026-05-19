@@ -20,6 +20,17 @@
       ],
       "port": 8732,
       "startPath": "/index.html"
+    },
+    {
+      "name": "medio-dev",
+      "runtimeExecutable": "/opt/homebrew/bin/npm",
+      "runtimeArgs": [
+        "run", "dev", "--prefix",
+        "/Users/gabrielfortes/Documents/Claude/Projects/Observatorio_Equidade_Educacional/medio",
+        "--", "--port", "5173"
+      ],
+      "port": 5173,
+      "startPath": "/"
     }
   ]
 }
