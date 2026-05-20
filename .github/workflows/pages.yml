@@ -57,11 +57,20 @@ jobs:
       - name: Montar diretório do site
         run: |
           mkdir -p _site
+          # Landing e protótipos estáticos
           cp index.html _site/index.html
           cp -r prototipo _site/prototipo
+          # JSONs agregados consumidos pelo insights3_dinamico via fetch
+          # relativo (../pipeline/data/agregados/...). Estrutura idêntica à do
+          # disco pra preservar os caminhos.
+          mkdir -p _site/pipeline/data
+          cp -r pipeline/data/agregados _site/pipeline/data/agregados
+          # SPA buildada do Médio
           cp -r medio/dist _site/medio
-          echo "Conteúdo final do _site:"
-          find _site -maxdepth 2 -type f -o -type d | sort
+          echo "Conteúdo final do _site (top 3 níveis):"
+          find _site -maxdepth 3 -type d | sort
+          echo "Tamanho do _site:"
+          du -sh _site
 
       - name: Configurar Pages
         uses: actions/configure-pages@v5
