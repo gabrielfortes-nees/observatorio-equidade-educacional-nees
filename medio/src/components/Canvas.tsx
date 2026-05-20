@@ -18,7 +18,7 @@ import { STEPS, type Step } from '../lib/steps';
 import { CANVAS_W, CANVAS_H, BASELINE, SVG_NS, make, roughBarPath, scoreToY } from '../lib/svg';
 import { renderMedioXkcdInto } from '../lib/medioXkcdImperative';
 import { POSES, type Pose } from '../lib/poses';
-import { spawnParticles, barRect, type Rect } from '../lib/particles';
+import { spawnParticles, gridPoints, type Rect, type TargetPoint } from '../lib/particles';
 
 const INK = '#2a1f18';
 const INK_SOFT = '#5a4a3f';
@@ -67,28 +67,45 @@ export function Canvas({ stepIndex, reducedMotion }: CanvasProps) {
     const prevStep = prevStepRef.current;
     prevStepRef.current = step;
 
-    // ===== PARTÍCULAS (efeito "Médio se desfaz") =====
+    // ===== PARTÍCULAS (efeito "construção da barra") =====
     // Disparam quando o passo introduz barras NOVAS (id que não existia antes).
-    // As partículas voam dos elementos REMOVIDOS (ou do Médio atual, se nada foi
-    // removido) pras posições das barras novas, dando o efeito de "matéria do
-    // Médio formando as barras". É a meta-narrativa visual da peça.
+    // Pra cada barra nova, geramos uma GRADE de pontos-alvo dentro do retângulo
+    // da barra; cada pixel voa de uma fonte (barra removida ou corpo do Médio)
+    // até seu ponto na grade, fica parado um instante (você vê os pixels
+    // FORMANDO a barra), depois faz fade-out enquanto a barra sólida aparece.
     if (prevStep) {
       const prevBarIds = new Set(prevStep.bars.map((b) => b.id));
       const newBars = step.bars.filter((b) => !prevBarIds.has(b.id));
       const removedBars = prevStep.bars.filter((b) => !step.bars.some((nb) => nb.id === b.id));
 
       if (newBars.length > 0) {
-        const targets: Rect[] = newBars.map((b) =>
-          barRect(b.x, b.w, scoreToY(b.score), BASELINE, b.color ?? INK),
-        );
+        // Densidade: ~1 pixel por 90 unidades de área, capado em 80 pixels por
+        // barra (pra barras grandes não estourarem o orçamento de DOM).
+        const targets: TargetPoint[] = [];
+        const PER_AREA = 1 / 90;
+        const MAX_PER_BAR = 80;
+        for (const b of newBars) {
+          const top = scoreToY(b.score);
+          const h = BASELINE - top;
+          const desired = Math.max(8, Math.min(MAX_PER_BAR, Math.round(b.w * h * PER_AREA)));
+          targets.push(...gridPoints(b.x, top, b.w, h, desired, b.color ?? INK));
+        }
 
-        // Define as FONTES: barras removidas (se houver) ou retângulo aproximado
-        // ao redor do Médio "M" persistente (que é a memória do número original).
+        // Cap global pra performance da nuvem (passo 8 → 9 com 20 barras)
+        const MAX_TOTAL = 700;
+        if (targets.length > MAX_TOTAL) {
+          targets.sort(() => Math.random() - 0.5);
+          targets.length = MAX_TOTAL;
+        }
+
+        // Define as FONTES: barras removidas (se houver) ou retângulo
+        // aproximado ao redor do Médio "M" persistente.
         let sources: Rect[];
         if (removedBars.length > 0) {
-          sources = removedBars.map((b) =>
-            barRect(b.x, b.w, scoreToY(b.score), BASELINE, b.color ?? INK),
-          );
+          sources = removedBars.map((b) => {
+            const top = scoreToY(b.score);
+            return { x: b.x, y: top, w: b.w, h: BASELINE - top, color: b.color ?? INK };
+          });
         } else {
           const mInst = mediosRef.current.get('M');
           const mGroup = mInst?.group;
@@ -96,13 +113,12 @@ export function Canvas({ stepIndex, reducedMotion }: CanvasProps) {
           const match = /matrix\(1,0,0,1,([-\d.]+),([-\d.]+)\)|translate\(([-\d.]+),\s*([-\d.]+)\)/.exec(transform);
           const tx = match ? parseFloat(match[1] || match[3]) : 400;
           const ty = match ? parseFloat(match[2] || match[4]) : 250;
-          // Fonte: pequeno retângulo ao redor do Médio
-          sources = [{ x: tx - 25, y: ty - 30, w: 50, h: 80, color: INK_SOFT }];
+          sources = [{ x: tx - 22, y: ty - 30, w: 44, h: 80, color: INK_SOFT }];
         }
 
         spawnParticles(particlesLayer, sources, targets, {
-          count: Math.min(280, 30 + newBars.length * 20),
-          duration: 0.9,
+          duration: 0.55,
+          dwellTime: 0.55,
           reducedMotion,
         });
       }
@@ -407,8 +423,11 @@ function placeBar(
   }
 
   if (isNew) {
-    // Só anima opacidade pra aparecer.
-    gsap.to(p, { opacity, duration: 0.6, ease: 'power2.out' });
+    // Atrasa o fade-in da barra sólida pra coincidir com a chegada e dwell
+    // dos pixels (que estão construindo a barra). Os pixels chegam ~0.6s, ficam
+    // visíveis até ~1.1s, e fazem fade-out em ~1.4s. A barra sólida aparece
+    // dentro dessa janela, materializando "atrás" dos pixels.
+    gsap.to(p, { opacity, duration: 0.7, delay: 0.55, ease: 'power2.out' });
   } else {
     // Bar existente: tween d (forma) + fill + opacity num único tween.
     gsap.to(p, {

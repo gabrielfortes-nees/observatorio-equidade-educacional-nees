@@ -1,15 +1,20 @@
-// Efeito de partículas pra transições significativas entre passos.
+// Efeito de "construção por pixels" pras transições da peça.
 //
 // Conceito: a média é "muitas pessoas viradas numa coisa só". Quando o Médio se
 // divide (passo 3 → 4) ou se reúne (passo 5), ele literalmente se desfaz em
-// partículas que voam pras posições das novas barras (ou se reagrupam na barra
-// única). É a meta-narrativa visual da peça: a estatística aparece compondo e
-// se decompondo.
+// pixels que voam pras posições de cada barra — não como purpurina aleatória,
+// mas chegando em uma GRADE de coordenadas que desenha a forma da barra. Os
+// pixels DESCANSAM ali um instante (o espectador vê eles formando a barra),
+// depois fazem fade-out enquanto a barra sólida materializa por trás.
 //
-// Disparado pelo Canvas quando há barras NOVAS ou REMOVIDAS entre passos.
-// Cada partícula é um círculo SVG pequeno (raio 1.5-2.5px), animado por GSAP
-// de uma posição-fonte aleatória pra uma posição-destino aleatória. Staggered
-// delay dá o sensação de "explosão controlada".
+// Ordem temporal:
+//   t=0.0  pixels nascem na fonte, com opacidade 0
+//   t=0.0–0.6   voam até a posição-alvo na grade dentro da barra
+//   t=0.6–1.0   descansam visíveis (a "construção" da barra é vista)
+//   t=1.0–1.4   fade-out enquanto a barra sólida fade-in completa
+//
+// O Canvas, ao chamar este módulo, deve atrasar o fade-in da barra sólida
+// em ~0.5s pra os pixels chegarem primeiro.
 
 import gsap from 'gsap';
 import { make } from './svg';
@@ -22,58 +27,64 @@ export interface Rect {
   color?: string;
 }
 
+export interface TargetPoint {
+  x: number;
+  y: number;
+  color: string;
+}
+
 interface SpawnOptions {
-  count?: number;
-  duration?: number;
+  duration?: number;     // duração do voo (sem dwell e sem fade)
+  dwellTime?: number;    // tempo "parado" antes do fade-out
   reducedMotion?: boolean;
 }
 
 export function spawnParticles(
   layer: SVGGElement,
   sources: Rect[],
-  targets: Rect[],
+  targets: TargetPoint[],
   opts: SpawnOptions = {},
 ): void {
-  const { count = 220, duration = 0.85, reducedMotion = false } = opts;
+  const {
+    duration = 0.55,
+    dwellTime = 0.5,
+    reducedMotion = false,
+  } = opts;
   if (reducedMotion || sources.length === 0 || targets.length === 0) return;
 
-  // Pré-aloca todas as partículas em DOM, com opacity 0, posicionadas em fontes.
-  // Depois dispara o tween com delay aleatório pra criar a sensação de jato.
-  for (let i = 0; i < count; i++) {
+  // Embaralha targets pra evitar padrão linear no voo (quem chega primeiro
+  // não fica num lugar específico da barra).
+  const shuffled = [...targets].sort(() => Math.random() - 0.5);
+
+  for (let i = 0; i < shuffled.length; i++) {
+    const pt = shuffled[i];
     const src = sources[Math.floor(Math.random() * sources.length)];
-    const dst = targets[Math.floor(Math.random() * targets.length)];
     const sx = src.x + Math.random() * src.w;
     const sy = src.y + Math.random() * src.h;
-    const dx = dst.x + Math.random() * dst.w;
-    const dy = dst.y + Math.random() * dst.h;
-    const r = 1.4 + Math.random() * 1.0;
-    const finalOpacity = 0.55 + Math.random() * 0.35;
-    const color = dst.color ?? src.color ?? '#5a4a3f';
+    const r = 1.6 + Math.random() * 0.7;
 
-    const p = make('circle', {
-      cx: sx,
-      cy: sy,
-      r,
-      fill: color,
-    });
+    const p = make('circle', { cx: sx, cy: sy, r, fill: pt.color });
     p.style.opacity = '0';
     layer.appendChild(p);
 
-    const stagger = Math.random() * 0.35;
+    const flyStagger = (i / shuffled.length) * 0.25 + Math.random() * 0.18;
+    const flyDur = duration * (0.85 + Math.random() * 0.3);
+    const peakOpacity = 0.7 + Math.random() * 0.25;
 
-    // 1ª fase: aparece e voa pra posição-destino
+    // Fase 1: voo até a posição-alvo
     gsap.to(p, {
-      attr: { cx: dx, cy: dy },
-      opacity: finalOpacity,
-      duration: duration * (0.7 + Math.random() * 0.5),
-      delay: stagger,
+      attr: { cx: pt.x, cy: pt.y },
+      opacity: peakOpacity,
+      duration: flyDur,
+      delay: flyStagger,
       ease: 'power2.out',
       onComplete: () => {
-        // 2ª fase: fica visível um instante, depois fade out e remove do DOM
+        // Fase 2: dwell (fica parado, visível, formando a barra) e fade-out
         gsap.to(p, {
           opacity: 0,
           duration: 0.35,
-          delay: 0.15 + Math.random() * 0.25,
+          delay: dwellTime + Math.random() * 0.15,
+          ease: 'power1.in',
           onComplete: () => p.remove(),
         });
       },
@@ -81,36 +92,34 @@ export function spawnParticles(
   }
 }
 
-// Helper pra calcular Rect de uma barra (com base no score e geometria do canvas).
-export function barRect(
+// Gera uma grade de pontos dentro de um retângulo, com leve jitter pra parecer
+// mais "natural" (pixel rabiscado, não régua perfeita).
+// `count` é alvo aproximado; a grade vai gerar próximo disso, respeitando a
+// proporção do retângulo (cols/rows ≈ w/h).
+export function gridPoints(
   x: number,
+  y: number,
   w: number,
-  barTopY: number,
-  baselineY: number,
-  color?: string,
-): Rect {
-  return { x, y: barTopY, w, h: baselineY - barTopY, color };
-}
-
-// Helper pra calcular Rect do corpo do Médio aproximado (usado como fonte
-// quando o Médio "se desfaz" sem ter barras anteriores).
-export function medioBodyRect(
-  centerX: number,
-  feetY: number,
-  scale = 1,
-  color?: string,
-): Rect {
-  // O corpo do xkcd Médio (XKCD const) cobre aproximadamente:
-  //   vertical: do feetY até feetY - (43 + 32 + headOffset 15) ≈ feetY - 90
-  //   horizontal: ±20 ao redor do centerX (com braços abertos pode ir além,
-  //   mas usamos o tronco como aproximação razoável)
-  const heightLocal = 90 * scale;
-  const halfWidth = 18 * scale;
-  return {
-    x: centerX - halfWidth,
-    y: feetY - heightLocal,
-    w: halfWidth * 2,
-    h: heightLocal,
-    color,
-  };
+  h: number,
+  count: number,
+  color: string,
+  jitter = 1.4,
+): TargetPoint[] {
+  if (count <= 0 || w <= 0 || h <= 0) return [];
+  const ratio = w / h;
+  const rows = Math.max(2, Math.round(Math.sqrt(count / Math.max(0.05, ratio))));
+  const cols = Math.max(2, Math.round(count / rows));
+  const dx = w / (cols + 1);
+  const dy = h / (rows + 1);
+  const out: TargetPoint[] = [];
+  for (let i = 1; i <= cols; i++) {
+    for (let j = 1; j <= rows; j++) {
+      out.push({
+        x: x + i * dx + (Math.random() - 0.5) * jitter,
+        y: y + j * dy + (Math.random() - 0.5) * jitter,
+        color,
+      });
+    }
+  }
+  return out;
 }
