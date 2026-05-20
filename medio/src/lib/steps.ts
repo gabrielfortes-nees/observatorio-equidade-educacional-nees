@@ -296,7 +296,7 @@ export const STEPS: Step[] = [
       bars,
       medios,
       speech: `<p>Olha o que eu faço quando me usam <span class="mark">sozinho</span>:</p>
-               <p>Pego desigualdade que veio de fora — bairro, renda, história, cor da pele — e devolvo <span class="orange">como se fosse diferença de desempenho</span>.</p>
+               <p>Pego desigualdade que veio de fora (bairro, renda, história, cor da pele) e devolvo <span class="orange">como se fosse diferença de desempenho</span>.</p>
                <p><span class="mark">Como se estivesse nas crianças.</span></p>
                <span class="aside">Eu não invento a desigualdade. Mas eu disfarço de onde ela vem.</span>`,
       alt: 'Médio em pose de quem percebeu: usado sozinho, ele transforma desigualdade externa (bairro, renda, raça, história) em diferença interna, como se a injustiça estivesse nas crianças.',
@@ -329,7 +329,7 @@ export const STEPS: Step[] = [
     return {
       bars,
       medios,
-      speech: `<p>Olha, eu sirvo. Monitorar a rede ao longo do tempo, comparar país com país, ver pra onde a coisa anda.</p>
+      speech: `<p>Olha, eu sirvo para algumas coisas. Monitorar a rede ao longo do tempo, comparar país com país, ver pra onde a coisa anda.</p>
                <p>E olha uma coisa que eu faço bem: quando me calculam <span class="orange">separado pra grupos que normalmente somem nos números grandes</span> — meninas negras do Norte, indígenas, quilombolas — aí eu mostro o que estava escondido.</p>
                <p><span class="mark">A média de quem é esquecido é onde a desigualdade aparece com nome.</span></p>
                <span class="aside">Política educacional precisa de mim — e do que tá em volta de mim, ao mesmo tempo.</span>`,
@@ -366,9 +366,9 @@ export const STEPS: Step[] = [
       medios,
       overlay: 'final',
       speech: `<p>Quando olharem pra mim, perguntem também:</p>
-               <p>— o que tá dentro da minha <span class="orange">dispersão</span>?</p>
-               <p>— quanto é diferença, e quanto é <span class="mark">injustiça que vinha de antes</span>?</p>
-               <p>— quem o sistema preparou pra estar no topo, e quem o sistema preparou pra estar embaixo?</p>
+               <p>— O que tá dentro da minha <span class="orange">dispersão</span>?</p>
+               <p>— Quanto é diferença, e quanto é <span class="mark">injustiça que vinha de antes</span>?</p>
+               <p>— Quem o sistema preparou pra estar no topo, e quem o sistema preparou pra estar embaixo?</p>
                <span class="aside">Essa distinção é com vocês. Eu sou só a conta. Mas a conta também é política.</span>`,
       alt: `Os dois extremos reais da dispersão ficam em destaque: o quantil inferior em marrom (${R(NUVEM[0])}) e o superior em vermelho-marca (${R(NUVEM[n - 1])}). A peça termina com Médio pedindo que cada uso da média venha acompanhado de perguntas estruturais.`,
     } satisfies Step;
