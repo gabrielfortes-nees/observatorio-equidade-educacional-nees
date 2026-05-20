@@ -42,6 +42,31 @@ export interface Step {
   alt: string;
 }
 
+// Título curto de cada ato, na ordem dos passos. Usado nos tooltips dos dots
+// de progresso e em qualquer header compacto futuro. Manter sincronizado com
+// a lista STEPS.
+export const STEP_TITLES: string[] = [
+  'Apresentação',
+  'Como sou calculado',
+  'A inquietação',
+  'Rede de ensino',
+  'Volta à média',
+  'Região e rede',
+  'Outra vez',
+  'Cor, renda, escolaridade',
+  'Dispersão',
+  'Estrutural vs individual',
+  'O que eu faço sozinho',
+  'Quando sirvo bem',
+  'Pedido final',
+];
+
+// Agrupamento macro: 3 blocos com pausa visual entre eles.
+//   0-2: apresentação
+//   3-7: cortes (rede, região, interseccional)
+//   8-12: distinção, percepção, reconciliação, pedido
+export const STEP_BLOCK_STARTS: number[] = [3, 8];
+
 // Paleta abreviada
 const C = {
   orange: '#D35400',

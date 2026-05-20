@@ -19,7 +19,7 @@ import { Canvas } from './components/Canvas';
 import { Speech } from './components/Speech';
 import { ProgressDots } from './components/ProgressDots';
 import { Credits } from './components/Credits';
-import { STEPS, TOTAL_STEPS } from './lib/steps';
+import { STEPS, TOTAL_STEPS, STEP_TITLES, STEP_BLOCK_STARTS } from './lib/steps';
 
 function usePrefersReducedMotion(): boolean {
   const [reduced, setReduced] = useState<boolean>(() => {
@@ -120,7 +120,13 @@ export function App() {
 
         <footer className="piece-footer">
           <div className="meta">protótipo · SAEB 9º ano · matemática (dados ilustrativos)</div>
-          <ProgressDots total={TOTAL_STEPS} current={currentStep} onGoTo={goTo} />
+          <ProgressDots
+            total={TOTAL_STEPS}
+            current={currentStep}
+            onGoTo={goTo}
+            titles={STEP_TITLES}
+            blockStartIndices={STEP_BLOCK_STARTS}
+          />
           <div className="controls">
             <button
               type="button"

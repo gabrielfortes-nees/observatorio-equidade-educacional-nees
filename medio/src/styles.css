@@ -169,6 +169,13 @@ button {
   align-items: center;
   justify-content: center;
   min-height: 480px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.canvas-wrap:hover {
+  background: rgba(211, 84, 0, 0.025);
 }
 
 svg.canvas {
@@ -205,6 +212,7 @@ svg.canvas {
   line-height: 1.6;
   color: var(--ink);
   min-height: 220px;
+  max-width: 42ch;
 }
 
 .speech p {
@@ -295,6 +303,22 @@ svg.canvas {
 
 .dot:hover {
   border-color: var(--orange-deep);
+}
+
+/* Pequeno gap entre blocos macro da peça (apresentação | cortes | distinção+pedido) */
+.dot.block-start {
+  margin-left: 14px;
+  position: relative;
+}
+.dot.block-start::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  width: 1px;
+  height: 8px;
+  background: var(--rule);
+  transform: translateY(-50%);
 }
 
 .controls {
