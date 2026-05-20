@@ -91,14 +91,29 @@ export function App() {
       <BrandBar />
 
       <main className="piece-stage" aria-label="Peça Médio: confissões de um número em conflito">
-        <header className="piece-header">
-          <div className="breadcrumb">Storytelling · estatística e equidade</div>
-          <h1>
-            Médio: <em>confissões de um número em conflito</em>
-          </h1>
-          <div className="ato-info">
-            Ato {currentStep + 1} de {TOTAL_STEPS}
-          </div>
+        <header className={`piece-header${currentStep === 0 ? '' : ' compact'}`}>
+          {currentStep === 0 ? (
+            <>
+              <div className="breadcrumb">Storytelling · estatística e equidade</div>
+              <h1>
+                Médio: <em>confissões de um número em conflito</em>
+              </h1>
+              <div className="ato-info">
+                Ato 1 de {TOTAL_STEPS}
+              </div>
+            </>
+          ) : (
+            // A partir do ato 2 o título da peça já foi apresentado; o header
+            // encolhe pra liberar espaço vertical pro canvas e pra fala. Só
+            // o título do ato + a posição no arco continuam visíveis.
+            <div className="breadcrumb compact-row">
+              <span className="piece-name">Médio</span>
+              <span className="dot-sep" aria-hidden="true">·</span>
+              <span className="ato-title">{STEP_TITLES[currentStep] ?? `Ato ${currentStep + 1}`}</span>
+              <span className="dot-sep" aria-hidden="true">·</span>
+              <span className="ato-counter">{currentStep + 1} de {TOTAL_STEPS}</span>
+            </div>
+          )}
         </header>
 
         <section className="main-grid">

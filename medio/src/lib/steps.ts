@@ -55,6 +55,7 @@ export const STEP_TITLES: string[] = [
   'Outra vez',
   'Cor, renda, escolaridade',
   'Dispersão',
+  'Dois tipos misturados',
   'Estrutural vs individual',
   'O que eu faço sozinho',
   'Quando sirvo bem',
@@ -64,7 +65,7 @@ export const STEP_TITLES: string[] = [
 // Agrupamento macro: 3 blocos com pausa visual entre eles.
 //   0-2: apresentação
 //   3-7: cortes (rede, região, interseccional)
-//   8-12: distinção, percepção, reconciliação, pedido
+//   8-13: dispersão, distinção, percepção, reconciliação, pedido
 export const STEP_BLOCK_STARTS: number[] = [3, 8];
 
 // Paleta abreviada
@@ -274,12 +275,39 @@ export const STEPS: Step[] = [
       speech: `<p>Calma. Não, espera. Deixa eu pensar.</p>
                <p>Toda média tem uma <span class="orange">nuvem em volta</span>. Estatísticos chamam de <span class="mark">dispersão</span>.</p>
                <p>Essa nuvem sempre vai existir. Pessoas são diferentes mesmo.</p>
-               <p>Mas tem <span class="mark">dois tipos de diferença</span> misturadas dentro dela. E eu nunca tinha separado uma da outra.</p>`,
+               <span class="aside">A média é só a foto do centro. A dispersão é o que estava em volta.</span>`,
       alt: `Vinte barras formam a nuvem real da distribuição do SAEB 2023, do P2.5 (${R(NUVEM[0])}) ao P97.5 (${R(NUVEM[NUVEM.length - 1])}). Médio sai da nuvem e vai pro canto esquerdo, em pose pensativa.`,
     } satisfies Step;
   })(),
 
-  // 10 — distinção (Soares)
+  // 10 — provocação: dois tipos misturados (prepara Soares)
+  (() => {
+    const cloud = buildCloud20();
+    // Mesma nuvem do ato anterior, mantendo continuidade visual.
+    const bars: BarDef[] = cloud.map((b, i) => {
+      const t = i / (cloud.length - 1);
+      const palette = [C.brown, C.brownSoft, C.inkFaint, '#A88B6E', C.orange, C.mark];
+      const idx = Math.min(palette.length - 1, Math.floor(t * palette.length));
+      return { ...b, color: palette[idx], opacity: 0.55, showScore: false };
+    });
+    const medios: MedioPlacement[] = cloud.map((b) => ({
+      id: `dt${b.id}`, barId: b.id, scale: 0.4, pose: 'tiny',
+    }));
+    // Médio narrador transita de 'thinking' (ato 9) pra 'curious' (espera, algo bateu).
+    medios.unshift({ id: 'M', freeX: NARRATOR_X, freeY: NARRATOR_Y, scale: 0.9, pose: 'curious', opacity: 0.95 });
+
+    return {
+      bars,
+      medios,
+      speech: `<p>Mas tem uma coisa que eu nunca tinha parado pra olhar.</p>
+               <p>Essa nuvem é, na verdade, <span class="mark">dois tipos de diferença</span> misturados.</p>
+               <p>E enquanto eu mantiver os dois juntos, eu continuo escondendo o que importa.</p>
+               <span class="aside">Quantos anos eu fui um número e ninguém separou isso?</span>`,
+      alt: 'Médio percebe que a dispersão é, na verdade, dois tipos de diferença misturados. Mesma nuvem do ato anterior, agora em pose curiosa (sobrancelha levantada).',
+    } satisfies Step;
+  })(),
+
+  // 11 — distinção (Soares)
   (() => {
     const cloud = buildCloud20();
     const bars: BarDef[] = cloud.map((b, i) => {
@@ -303,7 +331,7 @@ export const STEPS: Step[] = [
     } satisfies Step;
   })(),
 
-  // 11 — Médio percebe (Collins, sem nomear)
+  // 12 — Médio percebe (Collins, sem nomear)
   (() => {
     const cloud = buildCloud20();
     const palette = [C.brown, C.brownSoft, C.inkFaint, '#A88B6E', C.orange, C.mark];
@@ -328,7 +356,7 @@ export const STEPS: Step[] = [
     } satisfies Step;
   })(),
 
-  // 12 — reconciliação (visibilização)
+  // 13 — reconciliação (visibilização)
   (() => {
     const cloud = buildCloud20();
     const bars: BarDef[] = cloud.map((b, i) => {
@@ -362,7 +390,7 @@ export const STEPS: Step[] = [
     } satisfies Step;
   })(),
 
-  // 13 — pedido final
+  // 14 — pedido final
   (() => {
     const cloud = buildCloud20();
     const n = cloud.length;

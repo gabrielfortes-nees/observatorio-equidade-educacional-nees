@@ -154,6 +154,45 @@ button {
   letter-spacing: 0.08em;
 }
 
+/* A partir do ato 2 o header encolhe pra dar espaço ao canvas + fala */
+.piece-header.compact {
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.piece-header .compact-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--orange-deep);
+  font-weight: 700;
+  padding: 0.25rem 0;
+}
+
+.piece-header .compact-row .piece-name {
+  color: var(--orange-deep);
+}
+
+.piece-header .compact-row .ato-title {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.piece-header .compact-row .ato-counter {
+  color: var(--ink-faint);
+  font-weight: 600;
+}
+
+.piece-header .compact-row .dot-sep {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
 /* ===== Main grid: canvas à esquerda, narrativa à direita ===== */
 .main-grid {
   display: grid;
