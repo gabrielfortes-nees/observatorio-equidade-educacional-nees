@@ -57,8 +57,10 @@ jobs:
       - name: Montar diretório do site
         run: |
           mkdir -p _site
-          # Landing e protótipos estáticos
+          touch _site/.nojekyll
+          # Landing (home), página de interseccionalidade e protótipos estáticos
           cp index.html _site/index.html
+          cp -r interseccionalidade _site/interseccionalidade
           cp -r prototipo _site/prototipo
           # JSONs agregados consumidos pelo insights3_dinamico via fetch
           # relativo (../pipeline/data/agregados/...). Estrutura idêntica à do
