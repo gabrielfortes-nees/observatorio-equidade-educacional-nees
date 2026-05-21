@@ -1,104 +1,111 @@
-## 12 — L3 (contrafactual REESCRITO): "Infraestrutura como direito"
-## SAEB e Censo Escolar usam códigos de escola diferentes → agregamos por MUNICÍPIO.
-## Para cada município:
-##   • % escolas com 3/3 itens (água+banheiro PNE+alimentação) — Censo Escolar 2025
-##   • % alunos com aprendizagem adequada em LP — SAEB 2023 5º EF
-## Quartilizamos os municípios pela infra e mostramos o gap em proficiência.
+## 12 — L3 (REESCRITA): "O gap que sobra mesmo assim"
+## Contrafactual em camadas. Decompõe o gap racial de proficiência:
+##   gap bruto → remove camada do trabalho → remove camada da renda → resíduo
+## O resíduo é o gap que persiste mesmo igualando trabalho e renda —
+## a parte que não é classe nem jornada, é raça.
+## Método: padronização por estratos (standardization). Base: SAEB 2023 9º EF.
 source("/Users/gabrielfortes/Documents/Claude/Projects/Observatorio_Equidade_Educacional/pipeline/R/00_setup.R")
 
-esc  <- as.data.table(read_parquet(file.path(DIR_PROC, "censo_escolar_2025_escola.parquet")))
-saeb <- as.data.table(read_parquet(file.path(DIR_PROC, "saeb_2023_5ef.parquet")))
+saeb <- as.data.table(read_parquet(file.path(DIR_PROC, "saeb_2023_9ef.parquet")))
+saeb <- saeb[in_publica == 1 & !is.na(proficiencia_lp_saeb) & !is.na(inse_aluno)]
+saeb <- saeb[tx_resp_q04 %in% c("A", "B", "C", "D", "E")]
+saeb[, raca := fcase(
+  tx_resp_q04 %in% c("A", "D"), "branca",
+  tx_resp_q04 %in% c("B", "C"), "preta",
+  tx_resp_q04 == "E",          "indigena"
+)]
+saeb <- saeb[raca %in% c("branca", "preta")]
 
-## Infra escola: 3/3 itens
-esc[, infra_3_3 := as.integer(in_agua_potavel == 1 & in_banheiro_pne == 1 & in_alimentacao == 1)]
+## ---------- Carga de trabalho (Q21c doméstico + Q21d fora) ----------
+horas <- c(A = 0, B = 0.5, C = 1.5, D = 4, E = 6)         # horas/dia aproximadas
+saeb[, h_dom  := horas[tx_resp_q21c]]
+saeb[, h_fora := horas[tx_resp_q21d]]
+saeb <- saeb[!is.na(h_dom) & !is.na(h_fora)]
+saeb[, carga := h_dom + h_fora]
+saeb[, trab_faixa := fcase(
+  carga == 0,            "nenhuma",
+  carga > 0 & carga <= 2, "leve",
+  carga > 2,             "pesada"
+)]
 
-## SAEB usa id_municipio INEP (não IBGE); agrego por UF (mesmo padrão nos dois).
-## % escolas 3/3 por UF
-infra_uf <- esc[!is.na(infra_3_3),
-                 .(pct_3_3 = mean(infra_3_3) * 100,
-                   n_escolas = .N), by = co_uf]
+## ---------- Quintil de INSE ----------
+saeb[, inse_q := cut(inse_aluno,
+                     breaks = quantile(inse_aluno, probs = seq(0, 1, 0.2), na.rm = TRUE),
+                     include.lowest = TRUE, labels = paste0("Q", 1:5))]
 
-## % alunos adequados por UF (SAEB)
-saeb <- saeb[in_publica == 1 & !is.na(proficiencia_lp_saeb)]
-saeb[, adequado := as.integer(proficiencia_lp_saeb >= ADEQ_LP_5EF)]
-prof_uf <- saeb[, .(prof_adequado = mean(adequado) * 100,
-                     prof_media = mean(proficiencia_lp_saeb),
-                     n_alunos = .N), by = id_uf]
+## ---------- Função de padronização ----------
+## gap padronizado: para cada estrato, calcula gap branca-preta;
+## média ponderada pela distribuição de TODOS os alunos (população de referência).
+gap_padronizado <- function(dt, vars_estrato) {
+  ag <- dt[, .(
+    prof_br = mean(proficiencia_lp_saeb[raca == "branca"]),
+    prof_pr = mean(proficiencia_lp_saeb[raca == "preta"]),
+    n_br = sum(raca == "branca"),
+    n_pr = sum(raca == "preta"),
+    n_tot = .N
+  ), by = vars_estrato]
+  ## só estratos com os dois grupos presentes
+  ag <- ag[n_br >= 20 & n_pr >= 20]
+  ag[, gap := prof_br - prof_pr]
+  ag[, weighted.mean(gap, n_tot)]
+}
 
-## merge UF × UF
-mq <- merge(infra_uf, prof_uf,
-            by.x = "co_uf", by.y = "id_uf")
-## quartilizar UFs pela % escolas 3/3 (27 UFs → 4 quartis)
-mq <- mq[order(pct_3_3)]
-mq[, quartil_infra := cut(seq_len(.N) / .N, breaks = seq(0, 1, 0.25),
-                           include.lowest = TRUE,
-                           labels = c("Q1 (menos infra)", "Q2", "Q3", "Q4 (mais infra)"))]
+## ---------- As três medidas ----------
+gap_bruto       <- saeb[raca == "branca", mean(proficiencia_lp_saeb)] -
+                   saeb[raca == "preta",  mean(proficiencia_lp_saeb)]
+gap_sem_trab    <- gap_padronizado(saeb, "trab_faixa")
+gap_residuo     <- gap_padronizado(saeb, c("trab_faixa", "inse_q"))
 
-agg_q <- mq[, .(infra_media = round(weighted.mean(pct_3_3, n_alunos), 1),
-                prof_adequado = round(weighted.mean(prof_adequado, n_alunos), 1),
-                prof_media = round(weighted.mean(prof_media, n_alunos), 1),
-                n_ufs = .N,
-                n_alunos_total = sum(n_alunos)),
-            by = quartil_infra][order(quartil_infra)]
+camada_trabalho <- gap_bruto    - gap_sem_trab
+camada_renda    <- gap_sem_trab - gap_residuo
 
-## Cenário REAL: cada quartil com seu valor de aprendizagem observado
-## Cenário "SEM INFRA": estimativa simples — cada quartil cai para o valor de Q1
-##   (interpretação: "se nenhuma escola brasileira tivesse os 3 itens básicos,
-##    a aprendizagem em todas as UFs convergiria para o pior cenário observado").
-##   Mais conservador que extrapolar curvas de dose-resposta inexistentes.
-pior_q <- agg_q$prof_adequado[1]
-bars <- lapply(seq_len(nrow(agg_q)), function(i) {
-  list(
-    label = as.character(agg_q$quartil_infra[i]),
-    real  = agg_q$prof_adequado[i],
-    off   = pior_q,
-    infra_pct = agg_q$infra_media[i],
-    prof_media = agg_q$prof_media[i],
-    n_ufs = agg_q$n_ufs[i],
-    color_key = c("counterfactual", "brown", "orangeSoft", "orange")[i]
-  )
-})
+## proteção: se alguma camada ficar levemente negativa por ruído, zera
+camada_trabalho <- max(camada_trabalho, 0)
+camada_renda    <- max(camada_renda, 0)
 
-## resumos
-total_escolas <- nrow(esc)
-esc_3_3 <- sum(esc$infra_3_3, na.rm = TRUE)
-pct_3_3_br   <- round(esc_3_3 / total_escolas * 100, 1)
-pct_falta_br <- round(100 - pct_3_3_br, 1)
+pct_residuo <- gap_residuo / gap_bruto * 100
 
-gap_pp <- round(agg_q$prof_adequado[nrow(agg_q)] - agg_q$prof_adequado[1], 1)
-gap_pontos <- round(agg_q$prof_media[nrow(agg_q)] - agg_q$prof_media[1], 1)
+## ---------- Estrutura JSON ----------
+## Barra empilhada: o gap bruto decomposto em 3 fatias.
+## trabalho e renda são as fatias "explicáveis"; o resíduo é a fatia da raça.
+segmentos <- list(
+  list(label = "Carga de trabalho",
+       descricao = "doméstico + remunerado",
+       valor = round(camada_trabalho, 1), grupo = "explicado"),
+  list(label = "Renda (nível socioeconômico)",
+       descricao = "quintil de INSE",
+       valor = round(camada_renda, 1),    grupo = "explicado"),
+  list(label = "Resíduo",
+       descricao = "o que não é trabalho nem renda",
+       valor = round(gap_residuo, 1),     grupo = "residuo")
+)
 
 L3 <- list(
   meta = list(
     leitura = "L3",
-    titulo_curto = "Infraestrutura como direito",
-    eyebrow = "Leitura 03 · Contrafactual · infraestrutura escolar como política",
-    fonte = "Censo Escolar 2025 (IN_AGUA_POTAVEL + IN_BANHEIRO_PNE + IN_ALIMENTACAO) × SAEB 2023 5º EF — agregado por município",
+    titulo_curto = "O gap que sobra mesmo assim",
+    eyebrow = "Leitura 03 · Contrafactual · SAEB 2023 9º EF · decomposição do gap racial",
+    fonte = "SAEB 2023 — microdados aluno · 9º EF · escolas públicas · decomposição por padronização (estratos de carga de trabalho × quintil de INSE)",
     contrafactual = TRUE,
-    cf_key = "infra",
-    n_escolas = total_escolas,
-    n_ufs_match = nrow(mq),
+    cf_key = "residuo",
+    evidencia = "Padronização por estratos (standardization) — compara estudantes brancos e pretos/pardos com a mesma carga de trabalho e a mesma faixa de renda. Não é modelo causal; é decomposição descritiva. Selo: evidência indireta.",
     gerado_em = format(Sys.time(), "%Y-%m-%d %H:%M:%S")
   ),
   narrativa = list(
-    pct_escolas_3_3 = pct_3_3_br,
-    pct_escolas_faltando = pct_falta_br,
-    adequado_q1 = agg_q$prof_adequado[1],
-    adequado_q4 = agg_q$prof_adequado[nrow(agg_q)],
-    gap_adequado_pp = gap_pp,
-    gap_pontos = gap_pontos
+    gap_bruto = round(gap_bruto, 1),
+    camada_trabalho = round(camada_trabalho, 1),
+    camada_renda = round(camada_renda, 1),
+    gap_residuo = round(gap_residuo, 1),
+    pct_residuo = round(pct_residuo, 0)
   ),
   viz = list(
-    indicador = "Por quartil municipal de cobertura 3/3 (água + banheiro PNE + alimentação)",
-    titulo_real = "Mais infraestrutura → mais aprendizagem",
-    titulo_off  = "Menos infraestrutura → mais distância da aprendizagem",
-    bars = bars,
-    callout = sprintf(
-      "Em %.1f%% das escolas brasileiras falta ao menos um item básico (água potável, banheiro acessível ou alimentação). Comparando municípios no quartil mais e menos infraestruturados: a aprendizagem adequada em LP varia %.1f pp; a proficiência média varia %.1f pontos SAEB.",
-      pct_falta_br, gap_pp, gap_pontos)
+    indicador = "Gap de proficiência LP entre estudantes brancos e pretos/pardos (pontos SAEB)",
+    gap_bruto = round(gap_bruto, 1),
+    segmentos = segmentos,
+    anotacao = sprintf("mesmo igualando renda e trabalho, sobram %.1f pontos", gap_residuo)
   )
 )
 
 write_json(L3, file.path(DIR_AGG, "L3.json"), pretty = TRUE, auto_unbox = TRUE)
-cat_step(sprintf("L3 ✓ | %s UFs match | Q1 %.1f%% vs Q4 %.1f%% (gap %.1f pp)",
-                 nrow(mq), agg_q$prof_adequado[1], agg_q$prof_adequado[nrow(agg_q)], gap_pp))
+cat_step(sprintf("L3 ✓ | bruto %.1f → s/ trabalho %.1f → resíduo %.1f (%.0f%% do gap persiste)",
+                 gap_bruto, gap_sem_trab, gap_residuo, pct_residuo))

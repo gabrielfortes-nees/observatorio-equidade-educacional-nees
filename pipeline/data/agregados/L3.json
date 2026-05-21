@@ -1,65 +1,44 @@
 {
   "meta": {
     "leitura": "L3",
-    "titulo_curto": "Infraestrutura como direito",
-    "eyebrow": "Leitura 03 · Contrafactual · infraestrutura escolar como política",
-    "fonte": "Censo Escolar 2025 (IN_AGUA_POTAVEL + IN_BANHEIRO_PNE + IN_ALIMENTACAO) × SAEB 2023 5º EF — agregado por município",
+    "titulo_curto": "O gap que sobra mesmo assim",
+    "eyebrow": "Leitura 03 · Contrafactual · SAEB 2023 9º EF · decomposição do gap racial",
+    "fonte": "SAEB 2023 — microdados aluno · 9º EF · escolas públicas · decomposição por padronização (estratos de carga de trabalho × quintil de INSE)",
     "contrafactual": true,
-    "cf_key": "infra",
-    "n_escolas": 180540,
-    "n_ufs_match": 27,
-    "gerado_em": "2026-05-11 09:49:41"
+    "cf_key": "residuo",
+    "evidencia": "Padronização por estratos (standardization) — compara estudantes brancos e pretos/pardos com a mesma carga de trabalho e a mesma faixa de renda. Não é modelo causal; é decomposição descritiva. Selo: evidência indireta.",
+    "gerado_em": "2026-05-21 18:42:14"
   },
   "narrativa": {
-    "pct_escolas_3_3": 45.7,
-    "pct_escolas_faltando": 54.3,
-    "adequado_q1": 24.8,
-    "adequado_q4": 44.3,
-    "gap_adequado_pp": 19.5,
-    "gap_pontos": 26.7
+    "gap_bruto": 15.7,
+    "camada_trabalho": 0.2,
+    "camada_renda": 3.8,
+    "gap_residuo": 11.7,
+    "pct_residuo": 75
   },
   "viz": {
-    "indicador": "Por quartil municipal de cobertura 3/3 (água + banheiro PNE + alimentação)",
-    "titulo_real": "Mais infraestrutura → mais aprendizagem",
-    "titulo_off": "Menos infraestrutura → mais distância da aprendizagem",
-    "bars": [
+    "indicador": "Gap de proficiência LP entre estudantes brancos e pretos/pardos (pontos SAEB)",
+    "gap_bruto": 15.7,
+    "segmentos": [
       {
-        "label": "Q1 (menos infra)",
-        "real": 24.8,
-        "off": 24.8,
-        "infra_pct": 30.8,
-        "prof_media": 190.2,
-        "n_ufs": 6,
-        "color_key": "counterfactual"
+        "label": "Carga de trabalho",
+        "descricao": "doméstico + remunerado",
+        "valor": 0.2,
+        "grupo": "explicado"
       },
       {
-        "label": "Q2",
-        "real": 38.8,
-        "off": 24.8,
-        "infra_pct": 43.9,
-        "prof_media": 209.2,
-        "n_ufs": 7,
-        "color_key": "brown"
+        "label": "Renda (nível socioeconômico)",
+        "descricao": "quintil de INSE",
+        "valor": 3.8,
+        "grupo": "explicado"
       },
       {
-        "label": "Q3",
-        "real": 41.9,
-        "off": 24.8,
-        "infra_pct": 51.6,
-        "prof_media": 213.6,
-        "n_ufs": 7,
-        "color_key": "orangeSoft"
-      },
-      {
-        "label": "Q4 (mais infra)",
-        "real": 44.3,
-        "off": 24.8,
-        "infra_pct": 65.5,
-        "prof_media": 216.9,
-        "n_ufs": 7,
-        "color_key": "orange"
+        "label": "Resíduo",
+        "descricao": "o que não é trabalho nem renda",
+        "valor": 11.7,
+        "grupo": "residuo"
       }
     ],
-    "callout": "Em 54.3% das escolas brasileiras falta ao menos um item básico (água potável, banheiro acessível ou alimentação). Comparando municípios no quartil mais e menos infraestruturados: a aprendizagem adequada em LP varia 19.5 pp; a proficiência média varia 26.7 pontos SAEB."
+    "anotacao": "mesmo igualando renda e trabalho, sobram 11.7 pontos"
   }
 }

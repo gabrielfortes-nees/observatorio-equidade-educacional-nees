@@ -1,90 +1,95 @@
 {
   "meta": {
     "leitura": "L2",
-    "titulo_curto": "Escolaridade da mãe explica mais",
-    "eyebrow": "Leitura 02 · SAEB 2023 · 9º ano · escolaridade dos pais (5 níveis)",
-    "fonte": "SAEB 2023 9º EF — TX_RESP_Q08 (mãe) / Q09 (pai) × PROFICIENCIA_LP_SAEB · escolas públicas · A-E úteis · F (não sei) descartado",
-    "n_total": 1418205,
-    "gerado_em": "2026-05-11 01:15:58"
+    "titulo_curto": "O gap racial dentro da mesma escola",
+    "eyebrow": "Leitura 02 · SAEB 2023 · 5º EF · proficiência LP por escola",
+    "fonte": "SAEB 2023 — microdados aluno · escolas públicas · 20.825 escolas com ao menos 10 estudantes brancos e 10 pretos/pardos",
+    "n_escolas": 20825,
+    "gerado_em": "2026-05-21 18:42:09"
   },
   "narrativa": {
-    "gap_mae_pontos": 38.3,
-    "gap_pai_pontos": 32.3,
-    "gap_diff": 6,
-    "prof_mae_nao_ef": 232.5,
-    "prof_mae_sup": 270.7,
-    "prof_pai_nao_ef": 238.6,
-    "prof_pai_sup": 270.9
+    "gap_bruto": 9.7,
+    "gap_intra_medio": 4,
+    "pct_sobrevive": 41,
+    "pct_escolas_gap_branco": 62.4,
+    "n_escolas": 20825
   },
   "viz": {
-    "indicador": "Proficiência SAEB do filho (LP, 9º EF) por escolaridade dos pais",
-    "eixo_x": ["não compl.\nfund.", "EF até\n5º ano", "EF\ncompl.", "EM\ncompl.", "Superior\ncompl."],
-    "eixo_y_min": 227,
-    "eixo_y_max": 276,
-    "serie_mae": [
+    "indicador": "Distribuição do gap de proficiência LP (branco − preto/pardo) dentro de cada escola",
+    "gap_bruto": 9.7,
+    "gap_intra_medio": 4,
+    "histograma": [
       {
-        "x": 1,
-        "x_label": "não compl.\nfund.",
-        "y": 232.5,
-        "n": 117743
+        "centro": -35,
+        "inicio": -40,
+        "fim": -30,
+        "n": 296,
+        "lado": "preto"
       },
       {
-        "x": 2,
-        "x_label": "EF até\n5º ano",
-        "y": 249.5,
-        "n": 191625
+        "centro": -25,
+        "inicio": -30,
+        "fim": -20,
+        "n": 833,
+        "lado": "preto"
       },
       {
-        "x": 3,
-        "x_label": "EF\ncompl.",
-        "y": 252.7,
-        "n": 251544
+        "centro": -15,
+        "inicio": -20,
+        "fim": -10,
+        "n": 2228,
+        "lado": "preto"
       },
       {
-        "x": 4,
-        "x_label": "EM\ncompl.",
-        "y": 264,
-        "n": 581583
+        "centro": -5,
+        "inicio": -10,
+        "fim": 0,
+        "n": 4482,
+        "lado": "preto"
       },
       {
-        "x": 5,
-        "x_label": "Superior\ncompl.",
-        "y": 270.7,
-        "n": 275710
+        "centro": 5,
+        "inicio": 0,
+        "fim": 10,
+        "n": 5792,
+        "lado": "branco"
+      },
+      {
+        "centro": 15,
+        "inicio": 10,
+        "fim": 20,
+        "n": 4189,
+        "lado": "branco"
+      },
+      {
+        "centro": 25,
+        "inicio": 20,
+        "fim": 30,
+        "n": 2033,
+        "lado": "branco"
+      },
+      {
+        "centro": 35,
+        "inicio": 30,
+        "fim": 40,
+        "n": 719,
+        "lado": "branco"
+      },
+      {
+        "centro": 45,
+        "inicio": 40,
+        "fim": 50,
+        "n": 196,
+        "lado": "branco"
+      },
+      {
+        "centro": 55,
+        "inicio": 50,
+        "fim": 60,
+        "n": 57,
+        "lado": "branco"
       }
     ],
-    "serie_pai": [
-      {
-        "x": 1,
-        "x_label": "não compl.\nfund.",
-        "y": 238.6,
-        "n": 140755
-      },
-      {
-        "x": 2,
-        "x_label": "EF até\n5º ano",
-        "y": 252.6,
-        "n": 203249
-      },
-      {
-        "x": 3,
-        "x_label": "EF\ncompl.",
-        "y": 254.4,
-        "n": 208478
-      },
-      {
-        "x": 4,
-        "x_label": "EM\ncompl.",
-        "y": 264.9,
-        "n": 428401
-      },
-      {
-        "x": 5,
-        "x_label": "Superior\ncompl.",
-        "y": 270.9,
-        "n": 174414
-      }
-    ],
-    "anotacao": "mãe: +38 pontos · pai: +32 pontos"
+    "anotacao": "62% das escolas: brancos acima de pretos/pardos"
   }
 }

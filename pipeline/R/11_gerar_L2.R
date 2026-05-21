@@ -1,68 +1,91 @@
-## 11 — L2: escolaridade da mãe (Q08) e do pai (Q09) × proficiência SAEB 9º EF
-## CÓDIGOS REAIS (SAEB 2023 9EF): A=não compl. EF, B=EF 5º ano, C=EF compl.,
-##                                D=EM compl., E=Sup. compl., F=não sei (descartar)
+## 11 — L2 (REESCRITA): "Dentro da mesma escola"
+## Gap racial de proficiência entre colegas da MESMA escola.
+## Mostra que o gap não é só "escolas diferentes" — sobrevive intra-escola.
+## Base: SAEB 2023 · 5º EF · LP · escolas públicas
 source("/Users/gabrielfortes/Documents/Claude/Projects/Observatorio_Equidade_Educacional/pipeline/R/00_setup.R")
 
-saeb <- as.data.table(read_parquet(file.path(DIR_PROC, "saeb_2023_9ef.parquet")))
-saeb <- saeb[!is.na(proficiencia_lp_saeb) & in_publica == 1]
+`%||%` <- function(a, b) if (length(a) == 0 || is.null(a) || is.na(a)) b else a
 
-niveis_ord <- c("A", "B", "C", "D", "E")
-niveis_lbl <- c("não compl.\nfund.", "EF até\n5º ano", "EF\ncompl.", "EM\ncompl.", "Superior\ncompl.")
+saeb <- as.data.table(read_parquet(file.path(DIR_PROC, "saeb_2023_5ef.parquet")))
+saeb <- saeb[in_publica == 1 & !is.na(proficiencia_lp_saeb)]
+saeb <- saeb[tx_resp_q04 %in% c("A", "B", "C", "D", "E")]
+saeb[, raca := fcase(
+  tx_resp_q04 %in% c("A", "D"), "branca",
+  tx_resp_q04 %in% c("B", "C"), "preta",
+  tx_resp_q04 == "E",          "indigena"
+)]
+saeb <- saeb[raca %in% c("branca", "preta")]
 
-curva_calc <- function(dt, var_name) {
-  out <- dt[get(var_name) %in% niveis_ord,
-            .(prof = mean(proficiencia_lp_saeb, na.rm = TRUE), n = .N),
-            by = c(var_name)]
-  setnames(out, var_name, "nivel")
-  out[order(match(nivel, niveis_ord))]
-}
+## ---------- Gap bruto nacional ----------
+prof_br <- saeb[raca == "branca", mean(proficiencia_lp_saeb)]
+prof_pr <- saeb[raca == "preta",  mean(proficiencia_lp_saeb)]
+gap_bruto <- prof_br - prof_pr
 
-mae <- curva_calc(saeb, "tx_resp_q08")
-pai <- curva_calc(saeb, "tx_resp_q09")
+## ---------- Gap dentro de cada escola ----------
+por_escola <- saeb[, .(
+  prof_branca = mean(proficiencia_lp_saeb[raca == "branca"]),
+  prof_preta  = mean(proficiencia_lp_saeb[raca == "preta"]),
+  n_branca = sum(raca == "branca"),
+  n_preta  = sum(raca == "preta")
+), by = id_escola]
 
-curva_to_list <- function(dt) {
-  lapply(seq_len(nrow(dt)), function(i) {
-    list(
-      x       = match(dt$nivel[i], niveis_ord),
-      x_label = niveis_lbl[match(dt$nivel[i], niveis_ord)],
-      y       = round(dt$prof[i], 1),
-      n       = dt$n[i]
-    )
-  })
-}
+## só escolas com massa crítica dos dois grupos (gap intra estável)
+MIN_GRP <- 10
+escolas_mistas <- por_escola[n_branca >= MIN_GRP & n_preta >= MIN_GRP]
+escolas_mistas[, gap_intra := prof_branca - prof_preta]
+escolas_mistas[, peso := n_branca + n_preta]
 
-gap_mae <- round(tail(mae$prof, 1) - head(mae$prof, 1), 1)
-gap_pai <- round(tail(pai$prof, 1) - head(pai$prof, 1), 1)
+gap_intra_medio <- escolas_mistas[, weighted.mean(gap_intra, peso)]
+pct_gap_branco  <- escolas_mistas[, mean(gap_intra > 0) * 100]
+n_escolas       <- nrow(escolas_mistas)
+
+## quanto do gap bruto "sobrevive" dentro da mesma escola
+pct_sobrevive <- gap_intra_medio / gap_bruto * 100
+
+## ---------- Histograma da distribuição dos gaps intra-escola ----------
+breaks <- seq(-40, 60, by = 10)
+n_bins <- length(breaks) - 1
+escolas_mistas[, bin_idx := findInterval(pmin(pmax(gap_intra, breaks[1]), breaks[n_bins+1] - 0.001),
+                                          breaks, rightmost.closed = TRUE)]
+contagem <- escolas_mistas[, .N, by = bin_idx]
+histograma <- lapply(seq_len(n_bins), function(i) {
+  centro <- (breaks[i] + breaks[i + 1]) / 2
+  n_i <- contagem[bin_idx == i, N]
+  list(
+    centro = centro,
+    inicio = breaks[i],
+    fim    = breaks[i + 1],
+    n      = if (length(n_i) == 0) 0L else as.integer(n_i),
+    lado   = if (centro > 0) "branco" else "preto"
+  )
+})
 
 L2 <- list(
   meta = list(
     leitura = "L2",
-    titulo_curto = "Escolaridade da mãe explica mais",
-    eyebrow = "Leitura 02 · SAEB 2023 · 9º ano · escolaridade dos pais (5 níveis)",
-    fonte = "SAEB 2023 9º EF — TX_RESP_Q08 (mãe) / Q09 (pai) × PROFICIENCIA_LP_SAEB · escolas públicas · A-E úteis · F (não sei) descartado",
-    n_total = nrow(saeb[tx_resp_q08 %in% niveis_ord]),
+    titulo_curto = "O gap racial dentro da mesma escola",
+    eyebrow = "Leitura 02 · SAEB 2023 · 5º EF · proficiência LP por escola",
+    fonte = sprintf("SAEB 2023 — microdados aluno · escolas públicas · %s escolas com ao menos %d estudantes brancos e %d pretos/pardos",
+                    format(n_escolas, big.mark = "."), MIN_GRP, MIN_GRP),
+    n_escolas = n_escolas,
     gerado_em = format(Sys.time(), "%Y-%m-%d %H:%M:%S")
   ),
   narrativa = list(
-    gap_mae_pontos = gap_mae,
-    gap_pai_pontos = gap_pai,
-    gap_diff = round(gap_mae - gap_pai, 1),
-    prof_mae_nao_ef = round(mae$prof[1], 1),
-    prof_mae_sup    = round(tail(mae$prof, 1), 1),
-    prof_pai_nao_ef = round(pai$prof[1], 1),
-    prof_pai_sup    = round(tail(pai$prof, 1), 1)
+    gap_bruto = round(gap_bruto, 1),
+    gap_intra_medio = round(gap_intra_medio, 1),
+    pct_sobrevive = round(pct_sobrevive, 0),
+    pct_escolas_gap_branco = round(pct_gap_branco, 1),
+    n_escolas = n_escolas
   ),
   viz = list(
-    indicador = "Proficiência SAEB do filho (LP, 9º EF) por escolaridade dos pais",
-    eixo_x = niveis_lbl,
-    eixo_y_min = floor(min(c(mae$prof, pai$prof)) - 5),
-    eixo_y_max = ceiling(max(c(mae$prof, pai$prof)) + 5),
-    serie_mae = curva_to_list(mae),
-    serie_pai = curva_to_list(pai),
-    anotacao = sprintf("mãe: +%.0f pontos · pai: +%.0f pontos", gap_mae, gap_pai)
+    indicador = "Distribuição do gap de proficiência LP (branco − preto/pardo) dentro de cada escola",
+    gap_bruto = round(gap_bruto, 1),
+    gap_intra_medio = round(gap_intra_medio, 1),
+    histograma = histograma,
+    anotacao = sprintf("%.0f%% das escolas: brancos acima de pretos/pardos", pct_gap_branco)
   )
 )
 
 write_json(L2, file.path(DIR_AGG, "L2.json"), pretty = TRUE, auto_unbox = TRUE)
-cat_step(sprintf("L2 ✓ | gap mãe = %.1f pts · gap pai = %.1f pts · diferença = %.1f",
-                 gap_mae, gap_pai, gap_mae - gap_pai))
+cat_step(sprintf("L2 ✓ | gap bruto %.1f | gap intra-escola %.1f (%.0f%% sobrevive) | %.1f%% escolas pró-branco",
+                 gap_bruto, gap_intra_medio, pct_sobrevive, pct_gap_branco))

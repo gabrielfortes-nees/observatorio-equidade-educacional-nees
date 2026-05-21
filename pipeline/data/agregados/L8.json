@@ -1,55 +1,89 @@
 {
   "meta": {
     "leitura": "L8",
-    "titulo_curto": "Quem abandonou ao menos uma vez",
-    "eyebrow": "Leitura 08 · SAEB 2023 · 3º EM · TX_RESP_Q20 (autodeclaração) × raça/cor",
-    "fonte": "SAEB 2023 — 3º EM, questionário aluno · escolas públicas",
-    "n_total": 1380809,
-    "aviso_metodologico": "Microdado aluno-a-aluno do Censo Escolar foi descontinuado pelo INEP em 2022. Esta leitura usa autodeclaração no SAEB do 3º EM — limitada porque quem efetivamente abandonou JÁ NÃO está respondendo o SAEB (sub-representação). A magnitude real é maior. Para a taxa oficial agregada, ver Taxas de Rendimento INEP.",
-    "gerado_em": "2026-05-11 00:42:41"
+    "titulo_curto": "O funil tem cor",
+    "eyebrow": "Leitura 08 · SAEB 2023 · composição racial em 3 pontos da trajetória",
+    "fonte": "SAEB 2023 — microdados aluno · escolas públicas · 5º EF, 9º EF e 3º EM · cor/raça autodeclarada (TX_RESP_Q04)",
+    "aviso_metodologico": "Comparação entre etapas (coorte sintética), não rastreamento individual. Cada etapa é uma geração diferente avaliada em 2023 — a leitura é da forma do funil, não de indivíduos seguidos no tempo.",
+    "gerado_em": "2026-05-21 18:42:22"
   },
   "narrativa": {
-    "pct_brancos": 4.6,
-    "pct_pardos": 6.9,
-    "pct_pretos": 7.8,
-    "pct_indigenas": 12.6,
-    "razao_pretos_brancos": 1.7,
-    "razao_indigenas_brancos": 2.74
+    "preta_5ef": 64.4,
+    "preta_9ef": 63.4,
+    "preta_3em": 60.7,
+    "branca_5ef": 33.3,
+    "branca_3em": 38,
+    "queda_preta_pp": 3.7,
+    "n_5ef": 1862398,
+    "n_3em": 1451089
   },
   "viz": {
-    "indicador": "% do 3º EM que declarou ter abandonado pelo menos uma vez",
-    "bars": [
+    "indicador": "Composição racial dos estudantes em cada ponto da trajetória (%)",
+    "etapas": [
       {
-        "label": "Brancos",
-        "value": 4.6,
-        "valor_2x": 0.6,
-        "n": 496606
+        "etapa": "5º ano EF",
+        "n": 1862398,
+        "segmentos": [
+          {
+            "grupo": "Brancos e amarelos",
+            "valor": 33.3,
+            "cor": "alto"
+          },
+          {
+            "grupo": "Pretos e pardos",
+            "valor": 64.4,
+            "cor": "baixo"
+          },
+          {
+            "grupo": "Indígenas",
+            "valor": 2.2,
+            "cor": "mark"
+          }
+        ]
       },
       {
-        "label": "Pardos",
-        "value": 6.9,
-        "valor_2x": 1.1,
-        "n": 630684
+        "etapa": "9º ano EF",
+        "n": 1968192,
+        "segmentos": [
+          {
+            "grupo": "Brancos e amarelos",
+            "valor": 34.7,
+            "cor": "alto"
+          },
+          {
+            "grupo": "Pretos e pardos",
+            "valor": 63.4,
+            "cor": "baixo"
+          },
+          {
+            "grupo": "Indígenas",
+            "valor": 1.9,
+            "cor": "mark"
+          }
+        ]
       },
       {
-        "label": "Pretos",
-        "value": 7.8,
-        "valor_2x": 1.3,
-        "n": 207690
-      },
-      {
-        "label": "Amarelos",
-        "value": 8.8,
-        "valor_2x": 1.5,
-        "n": 28148
-      },
-      {
-        "label": "Indígenas",
-        "value": 12.6,
-        "valor_2x": 2.6,
-        "n": 17681
+        "etapa": "3º ano EM",
+        "n": 1451089,
+        "segmentos": [
+          {
+            "grupo": "Brancos e amarelos",
+            "valor": 38,
+            "cor": "alto"
+          },
+          {
+            "grupo": "Pretos e pardos",
+            "valor": 60.7,
+            "cor": "baixo"
+          },
+          {
+            "grupo": "Indígenas",
+            "valor": 1.3,
+            "cor": "mark"
+          }
+        ]
       }
     ],
-    "anotacao": "pretos: 1.70× brancos · indígenas: 2.74× brancos"
+    "anotacao": "a fatia preta/parda encolhe 3.7 pp do 5º EF ao 3º EM"
   }
 }

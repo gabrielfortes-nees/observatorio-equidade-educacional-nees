@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Equidade Educacional · 9 leituras dos dados brasileiros</title>
+<title>Explorando dados com interseccionalidade · Observatório de Equidade Educacional</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -988,10 +988,10 @@
 <!-- ============= PAGE HEADER ============= -->
 <header class="page-header">
   <div class="breadcrumb">Plataforma de Dados · Equidade Educacional</div>
-  <h1>9 leituras dos dados sobre <em>desempenho, permanência e abandono</em> na educação básica brasileira.</h1>
+  <h1>Explorando dados com <em>interseccionalidade</em>: desempenho, permanência e abandono na educação básica.</h1>
   <p class="lede">A escola brasileira é desigual — mas a desigualdade não é uniforme. Ela cruza raça, gênero, território e classe de formas que os indicadores médios não conseguem mostrar. Cada leitura aqui combina dado quantitativo aberto com pesquisa qualitativa que dá contexto, contraste ou apoio ao número. Selecione uma dimensão para começar.</p>
   <div class="meta">
-    <span>9 leituras + síntese</span>
+    <span>9 leituras interseccionais + síntese</span>
     <span><strong>3 contrafactuais</strong> · explore o que aconteceria sem políticas existentes</span>
     <span>Em diálogo com pesquisa qualitativa brasileira e crítica internacional</span>
   </div>
@@ -1072,7 +1072,7 @@
 
     <p class="sil-thesis">"Dados que não existem não apenas se calam — silenciam. E o silêncio é uma forma específica de não-existência política."</p>
 
-    <p class="sil-body">As nove leituras desta página apoiam-se em variáveis disponíveis nos sistemas oficiais brasileiros — SAEB, Censo Escolar, PNAD, Censo da Educação Superior. Mas o que esses sistemas medem é resultado de decisões históricas sobre <strong>o que vale a pena registrar</strong>. Variáveis que nunca foram coletadas, ou que foram registradas de forma agregada demais para sustentar leitura interseccional, produzem ausência sistemática nas políticas que daí se desenham.</p>
+    <p class="sil-body">As leituras desta página apoiam-se em variáveis disponíveis nos sistemas oficiais brasileiros — SAEB, Censo Escolar, PNAD, Censo da Educação Superior. Mas o que esses sistemas medem é resultado de decisões históricas sobre <strong>o que vale a pena registrar</strong>. Variáveis que nunca foram coletadas, ou que foram registradas de forma agregada demais para sustentar leitura interseccional, produzem ausência sistemática nas políticas que daí se desenham.</p>
 
     <p class="sil-body">Reivindicar a coleta dessas variáveis é, portanto, mais do que um pedido técnico. É <strong>gesto de disputa epistêmica</strong> por reconhecimento dentro do espaço de formulação de política educacional — uma contribuição central do feminismo negro brasileiro (Lélia Gonzalez sobre o lugar do silêncio; Sueli Carneiro sobre o epistemicídio) e dos estudos decoloniais sobre quem tem o direito de produzir conhecimento sobre si.</p>
 
@@ -1092,7 +1092,7 @@
 
 <!-- ============= BRIDGE ============= -->
 <div class="bridge">
-  <div class="bridge-eyebrow">Você viu nove leituras. Há centenas.</div>
+  <div class="bridge-eyebrow">Você viu nove leituras interseccionais. Há centenas.</div>
   <h2>Os dados estão abertos.<br>Faça <em>suas próprias perguntas</em>.</h2>
   <p>O mapa abaixo permite explorar livremente os indicadores por estado, município, ano e marcador interseccional.</p>
 </div>
@@ -1189,12 +1189,12 @@ const readings = {
   },
   L2: {
     tabNum: 'Leitura 02',
-    tabText: 'A escolaridade da mãe explica mais do que a do pai.',
+    tabText: 'Dentro da mesma escola, o gap racial não some.',
     counterfactual: false
   },
   L3: {
     tabNum: 'Leitura 03 · Contrafactual',
-    tabText: 'Sem o PNAE, o gap entre regiões se aprofunda.',
+    tabText: 'Igualando renda e trabalho, 75% do gap racial fica.',
     counterfactual: true
   },
   L4: {
@@ -1204,12 +1204,12 @@ const readings = {
   },
   L5: {
     tabNum: 'Leitura 05',
-    tabText: 'Casa que pesa, escola que falta — tempo, infra, clima.',
+    tabText: 'A sala onde uma professora conduz cinco séries.',
     counterfactual: false
   },
   L6: {
     tabNum: 'Leitura 06 · Contrafactual',
-    tabText: 'Sem Bolsa Família, a peneira da renda se aprofunda.',
+    tabText: 'Sem a merenda, a âncora de permanência some.',
     counterfactual: true
   },
   L7: {
@@ -1219,7 +1219,7 @@ const readings = {
   },
   L8: {
     tabNum: 'Leitura 08',
-    tabText: 'A coorte que não voltou — 15 em cada 100, ausentes.',
+    tabText: 'O funil tem cor: a cada série, menos estudantes negros.',
     counterfactual: false
   },
   L9: {
@@ -1273,82 +1273,107 @@ const stories = {
     }
   },
 
-  /* ============= L2 ============= */
+  /* ============= L2 — gap intra-escola ============= */
   'L2': {
-    eyebrow: 'Leitura 02 · SAEB 2023 · 9º ano · escolaridade dos pais',
-    title: 'A escolaridade da <em>mãe</em> explica mais do que a do pai. E ela é, ela mesma, <em>racialmente marcada</em>.',
-    text: `<p>Filhos de mães com ensino superior completo têm em média <strong>+35 pontos no SAEB</strong> em relação a filhos de mães com fundamental incompleto — controlando por sexo, raça e renda. A escolaridade do pai pesa também, mas a inclinação da curva materna é visivelmente maior.</p>
-    <p>O ponto crítico: <strong>a mãe negra brasileira tem em média dois ciclos a menos de escolaridade que a mãe branca</strong>. A variável "escolaridade da mãe" carrega, em si, a marca racial da geração anterior. O SAEB mede o que a mãe estudou; não mede o que a mãe ensina.</p>`,
-    source: 'Fonte: SAEB 2023 · Q08/Q09 · regressão controlada por INSE, sexo, raça · camada SINASC para escolaridade materna por raça',
+    eyebrow: 'Leitura 02 · SAEB 2023 · 5º EF · proficiência por escola',
+    title: 'O gap racial não é só entre escolas. Ele está <em>dentro da mesma sala</em>.',
+    text: '',
+    source: '',
     quali: {
       mark: 'Em diálogo com a pesquisa qualitativa',
-      text: `<strong>Yosso (2005)</strong>, com a teoria da <em>community cultural wealth</em>, contrasta com a leitura do número: a Q08 do SAEB captura escolaridade formal, mas invisibiliza o capital aspiracional, navegacional e familial que a mãe negra mobiliza para sustentar a trajetória dos filhos. O dado mostra desvantagem; a literatura crítica mostra agência ativa que a métrica não vê.`,
-      ref: 'Yosso, T. J. (2005) · Race, Ethnicity and Education, v.8, n.1, p.69-91.'
+      text: `<strong>Carvalho (2009)</strong> documenta como alfabetizadoras categorizam estudantes negros — especialmente meninos — com mais marcações de "indisciplina" e mais classificações de fracasso. O gap que sobrevive dentro da mesma escola encontra eco nessa etnografia: não é só a escola que a criança frequenta; é o olhar avaliador que recai sobre o corpo dela ali dentro.`,
+      ref: 'Carvalho, M. P. de (2009) · Cadernos de Pesquisa, v.39, n.138.'
     },
     counterfactual: false,
     viz: (el, payload) => {
       if (!payload) return;
-      const s = svgIn(el, 560, 320);
-      const margin = { top: 50, right: 80, bottom: 50, left: 60 };
+      const hist = payload.viz.histograma;
+      const s = svgIn(el, 560, 330);
+      const margin = { top: 48, right: 24, bottom: 56, left: 50 };
       const w = 560 - margin.left - margin.right;
-      const h = 320 - margin.top - margin.bottom;
+      const h = 330 - margin.top - margin.bottom;
       const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-      const escLabels = payload.viz.eixo_x;
-      const x = d3.scaleLinear().domain([1, escLabels.length]).range([0, w]);
-      const y = d3.scaleLinear().domain([payload.viz.eixo_y_min, payload.viz.eixo_y_max]).range([h, 0]);
-      const ticks = y.ticks(4);
-      ticks.forEach(t => {
-        g.append('line').attr('x1', 0).attr('x2', w).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', C.rule).attr('stroke-dasharray', '2,3').attr('stroke-width', 0.5);
-        g.append('text').attr('x', -6).attr('y', y(t)).attr('text-anchor', 'end').attr('dy', '0.35em').attr('font-family','Work Sans').attr('font-size',9).attr('fill', C.inkFaint).text(t);
+      const x = d3.scaleBand().domain(hist.map(d => d.centro)).range([0, w]).padding(0.14);
+      const yMax = Math.max(...hist.map(d => d.n));
+      const y = d3.scaleLinear().domain([0, yMax]).range([h, 0]);
+      g.append('text').attr('x', 0).attr('y', -30).attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).attr('letter-spacing','0.12em').style('text-transform','uppercase').text('Nº DE ESCOLAS POR TAMANHO DO GAP INTERNO (BRANCO − PRETO/PARDO)');
+      hist.forEach(d => {
+        g.append('rect').attr('x', x(d.centro)).attr('y', y(d.n)).attr('width', x.bandwidth()).attr('height', h - y(d.n))
+          .attr('fill', d.lado === 'branco' ? C.orangeDeep : C.brown).attr('opacity', 0.85);
+        if (d.n > 0) g.append('text').attr('x', x(d.centro) + x.bandwidth()/2).attr('y', y(d.n) - 4).attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkSoft).text(d.n);
+        g.append('text').attr('x', x(d.centro) + x.bandwidth()/2).attr('y', h + 14).attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkFaint).text(d.centro > 0 ? '+' + d.centro : d.centro);
       });
-      escLabels.forEach((label, i) => {
-        g.append('text').attr('x', x(i+1)).attr('y', h + 15).attr('text-anchor', 'middle').attr('font-family','Work Sans').attr('font-size',9).attr('fill', C.inkSoft).text(label);
-      });
-      g.append('text').attr('x', 0).attr('y', -28).attr('font-family','Work Sans').attr('font-size',9).attr('fill', C.inkFaint).attr('letter-spacing', '0.12em').style('text-transform', 'uppercase').text('PROFICIÊNCIA SAEB DO FILHO POR ESCOLARIDADE DOS PAIS');
-      const lineGen = d3.line().x(d=>x(d.x)).y(d=>y(d.y)).curve(d3.curveMonotoneX);
-      const drawSerie = (data, color, dash, weight, label) => {
-        g.append('path').attr('d', lineGen(data)).attr('fill', 'none').attr('stroke', color).attr('stroke-width', weight).attr('stroke-dasharray', dash || 'none');
-        data.forEach(d => g.append('circle').attr('cx', x(d.x)).attr('cy', y(d.y)).attr('r', 4).attr('fill', color));
-        const last = data[data.length - 1];
-        g.append('text').attr('x', x(last.x) + 8).attr('y', y(last.y)).attr('dy', '0.35em').attr('font-family','Work Sans').attr('font-size',10).attr('font-weight', 700).attr('fill', color).text(label);
-      };
-      drawSerie(payload.viz.serie_pai, C.inkFaint, '4,3', 2, 'pai');
-      drawSerie(payload.viz.serie_mae, C.orangeDeep, null, 2.5, 'mãe');
-      g.append('text').attr('x', x(escLabels.length/2)).attr('y', 30).attr('text-anchor', 'middle').attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill', C.mark).attr('font-weight', 600).text(payload.viz.anotacao);
+      // linha do zero
+      const zeroBin = hist.find(d => d.centro === 5);
+      if (zeroBin) {
+        const xz = x(5) - x.step() * x.padding() / 2;
+        g.append('line').attr('x1', xz).attr('x2', xz).attr('y1', -8).attr('y2', h).attr('stroke', C.ink).attr('stroke-width', 1).attr('stroke-dasharray', '2,3');
+      }
+      g.append('text').attr('x', 0).attr('y', h + 38).attr('font-family','Lora').attr('font-style','italic').attr('font-size',10).attr('fill', C.brown).text('◄ gap favorece pretos/pardos');
+      g.append('text').attr('x', w).attr('y', h + 38).attr('text-anchor','end').attr('font-family','Lora').attr('font-style','italic').attr('font-size',10).attr('fill', C.orangeDeep).text('gap favorece brancos ►');
+      g.append('text').attr('x', w/2).attr('y', -12).attr('text-anchor','middle').attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill', C.mark).attr('font-weight',600).text(payload.viz.anotacao);
     }
   },
 
-  /* ============= L3 — PNAE counterfactual ============= */
+  /* ============= L3 — decomposição do gap (contrafactual) ============= */
   'L3': {
-    eyebrow: 'Leitura 03 · Contrafactual · infraestrutura escolar como política',
-    title: 'A infraestrutura básica é uma <em>política educacional</em>.',
-    text: `<p>O PNAE atende cerca de <strong>40 milhões de estudantes</strong> em escolas públicas. Em regiões de alta vulnerabilidade alimentar, ele é frequentemente a refeição mais nutritiva do dia. Sua influência sobre frequência escolar e desempenho cognitivo é amplamente documentada.</p>
-    <p>A interrupção temporária do programa durante a pandemia (2020-2021) ofereceu uma janela natural para observar o efeito: <strong>queda de 6 a 9 pontos percentuais</strong> em indicadores de aprendizagem nas escolas mais vulneráveis. A merenda não é benefício marginal — é infraestrutura básica do funcionamento da escola pública brasileira.</p>`,
-    source: `Fonte: FNDE/MEC · estudos UFV, UnB e FGV sobre impacto do PNAE
-      <span class="evidence-badge moderate" style="display:inline-flex;margin-left:0.5rem;">
-        <span class="dot"></span> Evidência indireta
-        <span class="tooltip">Há literatura robusta sobre impacto da alimentação escolar em frequência e desempenho, mas o tamanho exato do efeito de "remoção do PNAE" é uma extrapolação a partir de períodos de descontinuidade observados (pandemia, atrasos de repasse).</span>
-      </span>`,
+    eyebrow: 'Leitura 03 · Contrafactual · SAEB 2023 9º EF · decomposição do gap racial',
+    title: '',
+    text: '',
+    source: '',
     quali: {
       mark: 'Em diálogo com a pesquisa qualitativa',
-      text: `<strong>Cavalleiro (2000)</strong> apoia a leitura ao mostrar, no avesso, o que a merenda materializa: o reconhecimento institucional do corpo da criança. Onde a etnografia documenta silenciamento sobre raça e classe na pré-escola, a alimentação escolar é o gesto contrário — o estado dizendo, na rotina, que aquele corpo importa o suficiente para ser nutrido.`,
-      ref: 'Cavalleiro, E. S. (2000) · Do silêncio do lar ao silêncio escolar.'
+      text: `<strong>Gomes (2012)</strong> ajuda a nomear o resíduo: a escola não é uma instituição neutra que apenas reflete desigualdades de fora — ela própria produz e reitera hierarquias raciais no currículo, na avaliação e na convivência. O gap que permanece depois de igualar renda e trabalho não é um mistério estatístico; é o nome técnico para racismo institucional.`,
+      ref: 'Gomes, N. L. (2012) · Relações étnico-raciais, educação e descolonização dos currículos · Currículo sem Fronteiras.'
     },
     counterfactual: true,
-    titleOff: 'Sem o básico, todas as UFs <em>convergiriam para o pior cenário observado</em>.',
-    cfKey: 'infra',
+    titleOff: 'Igualando renda e trabalho, o gap encolhe — mas <em>não desaparece</em>.',
+    cfKey: 'residuo',
     viz: (el, payload) => {
       if (!payload) return;
-      const palette = { orange: C.orange, orangeSoft: C.orangeSoft, brown: C.brown, counterfactual: C.counterfactual };
-      cfRenderers.infra = makeCounterfactualViz(el, {
-        W: 560, H: 320,
-        xMax: 80, ticks: 5,
-        xLabel: '% APRENDIZAGEM ADEQUADA EM LP — 5º ANO · POR QUARTIL DE INFRA (UF)',
-        bars: payload.viz.bars.map(b => ({
-          label: b.label, real: b.real, off: b.off,
-          color: palette[b.color_key] || C.orange
-        }))
+      const segs = payload.viz.segmentos;
+      const total = payload.viz.gap_bruto;
+      const s = svgIn(el, 560, 300);
+      const margin = { top: 64, right: 30, bottom: 70, left: 30 };
+      const w = 560 - margin.left - margin.right;
+      const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+      const x = d3.scaleLinear().domain([0, total * 1.04]).range([0, w]);
+      const barY = 24, barH = 58;
+      g.append('text').attr('x', 0).attr('y', -40).attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).attr('letter-spacing','0.12em').style('text-transform','uppercase').text('GAP DE PROFICIÊNCIA LP (BRANCO − PRETO/PARDO) · PONTOS SAEB');
+      g.append('text').attr('x', x(total)).attr('y', -22).attr('text-anchor','end').attr('font-family','Lora').attr('font-size',13).attr('font-weight',700).attr('fill',C.ink).text('gap bruto: ' + String(total).replace('.',',') + ' pts');
+      const corDe = seg => seg.grupo === 'residuo' ? C.mark : (seg.label.indexOf('trabalho') === 0 || seg.label.indexOf('Carga') === 0 ? C.orangeSoft : C.brown);
+      let acc = 0;
+      const partes = [];
+      segs.forEach(seg => {
+        const rect = g.append('rect').attr('x', x(acc)).attr('y', barY).attr('width', x(seg.valor)).attr('height', barH)
+          .attr('fill', corDe(seg)).attr('opacity', 0.9).attr('stroke','white').attr('stroke-width',1);
+        const val = g.append('text').attr('x', x(acc) + x(seg.valor)/2).attr('y', barY + barH/2 + 4).attr('text-anchor','middle')
+          .attr('font-family','Work Sans').attr('font-size',12).attr('font-weight',700).attr('fill','white')
+          .text(String(seg.valor).replace('.',','));
+        const lbl = g.append('text').attr('x', x(acc) + x(seg.valor)/2).attr('y', barY + barH + 18).attr('text-anchor','middle')
+          .attr('font-family','Work Sans').attr('font-size',9).attr('fill', C.inkSoft).text(seg.label);
+        const dsc = g.append('text').attr('x', x(acc) + x(seg.valor)/2).attr('y', barY + barH + 31).attr('text-anchor','middle')
+          .attr('font-family','Lora').attr('font-style','italic').attr('font-size',8.5).attr('fill', C.inkFaint).text(seg.descricao);
+        partes.push({ seg, rect, val, lbl, dsc, x0: acc });
+        acc += seg.valor;
       });
+      const residuo = segs.find(s2 => s2.grupo === 'residuo');
+      const anota = g.append('text').attr('x', 0).attr('y', barY + barH + 52).attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill',C.mark).attr('font-weight',600).text(payload.viz.anotacao).attr('opacity',0);
+      anota.transition().delay(600).duration(500).attr('opacity',1);
+
+      cfRenderers.residuo = { update: (scenario) => {
+        const off = scenario === 'off';
+        let cursor = 0;
+        partes.forEach(p => {
+          const isResid = p.seg.grupo === 'residuo';
+          const wSeg = (off && !isResid) ? 0 : x(p.seg.valor);
+          const xSeg = off ? (isResid ? 0 : 0) : x(p.x0);
+          p.rect.transition().duration(700).attr('x', xSeg).attr('width', wSeg).attr('opacity', (off && !isResid) ? 0 : 0.9);
+          p.val.transition().duration(700).attr('x', xSeg + wSeg/2).attr('opacity', (off && !isResid) ? 0 : 1);
+          p.lbl.transition().duration(700).attr('x', xSeg + wSeg/2).attr('opacity', (off && !isResid) ? 0 : 1);
+          p.dsc.transition().duration(700).attr('x', xSeg + wSeg/2).attr('opacity', (off && !isResid) ? 0 : 1);
+        });
+      }};
     }
   },
 
@@ -1399,79 +1424,66 @@ const stories = {
     }
   },
 
-  /* ============= L5 ============= */
+  /* ============= L5 — sala multisseriada ============= */
   'L5': {
-    eyebrow: 'Leitura 05 · SAEB 2023 · uso do tempo, infraestrutura, clima escolar',
-    title: 'Casa que pesa, escola que falta — permanência é <em>quatro coisas ao mesmo tempo</em>.',
-    text: `<p>Meninas pretas e pardas relatam em média <strong>17 horas semanais</strong> de trabalho doméstico — quase o dobro dos meninos. Mas o relato não está sozinho. Ele se sobrepõe a uma escola que não tem banheiro adequado em <strong>1 a cada 7 escolas rurais</strong>, e onde o sentimento de pertencimento varia por sexo e raça.</p>
-    <p>Permanência é, simultaneamente: <strong>tempo</strong> (o que a casa cobra), <strong>infraestrutura</strong> (o que a escola não dá), <strong>clima</strong> (o que o ambiente escolar comunica) e <strong>expectativa</strong> (o que o currículo dirige a cada corpo). Tratar como problema isolado é tratar como problema errado.</p>`,
-    source: 'Fonte: SAEB 2023 (Q21c, Q23a-i) · Censo Escolar 2023 (IN_BANHEIRO_PNE, IN_AGUA_POTAVEL) · TP_LOCALIZACAO',
+    eyebrow: 'Leitura 05 · Censo Escolar 2025 · turmas multisseriadas na escola rural',
+    title: '',
+    text: '',
+    source: '',
     quali: {
       mark: 'Em diálogo com a pesquisa qualitativa',
-      text: `<strong>Paraíso (2016)</strong> contrasta com a leitura puramente material: o currículo escolar reforça o mesmo script de cuidado, atenção e silêncio que a casa cobra das meninas. <strong>Reay (2017)</strong> apoia ao mostrar que classificação interna da escola (sets, streams) hierarquiza permanência por classe — a infraestrutura precária encontra um aluno já tratado como caso de risco, não como sujeito legítimo.`,
-      ref: 'Paraíso, M. A. (2016) · Currículo sem Fronteiras · Reay, D. (2017) · Miseducation, Policy Press.'
+      text: `<strong>Hage (2014)</strong>, em pesquisa sobre escolas rurais multisseriadas na Amazônia, recusa a leitura da multissérie como pura precariedade: ela é também um modo de organização do ensino enraizado no território, sustentado por professoras que costuram saberes locais e currículo. Permanecer e concluir a trajetória partindo dessa escola é uma forma de pertencimento — não um déficit a ser corrigido de fora.`,
+      ref: 'Hage, S. M. (2014) · Educação & Realidade · escolas multisseriadas e educação do campo.'
     },
     counterfactual: false,
     viz: (el, payload) => {
       if (!payload) return;
-      const s = svgIn(el, 560, 340);
-      const margin = { top: 30, right: 20, bottom: 20, left: 20 };
+      const bars = payload.viz.bars;
+      const s = svgIn(el, 560, 320);
+      const margin = { top: 48, right: 60, bottom: 36, left: 116 };
       const w = 560 - margin.left - margin.right;
-      const h = 340 - margin.top - margin.bottom;
+      const h = 320 - margin.top - margin.bottom;
       const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-      const cellW = w / 2 - 10;
-      const cellH = h / 2 - 10;
-      function smallCell(gx, gy, title) {
-        const cell = g.append('g').attr('transform', `translate(${gx},${gy})`);
-        cell.append('text').attr('x', 0).attr('y', -4).attr('font-family','Work Sans').attr('font-size',8).attr('fill',C.inkFaint).attr('letter-spacing','0.1em').style('text-transform','uppercase').text(title);
-        return cell;
-      }
-      function renderQuad(cell, dados, color, suffix, maxOverride) {
-        const items = dados.map(d => ({ l: d.label, v: d.v }));
-        const y = d3.scaleBand().domain(items.map(d=>d.l)).range([5, cellH-5]).padding(0.25);
-        const maxV = maxOverride || Math.max(...items.map(d=>d.v)) * 1.15;
-        const labelW = 80;
-        const x = d3.scaleLinear().domain([0, maxV]).range([0, cellW - labelW - 25]);
-        items.forEach(d => {
-          cell.append('rect').attr('x', labelW).attr('y', y(d.l)).attr('width', x(d.v)).attr('height', y.bandwidth()).attr('fill', color).attr('opacity', 0.75);
-          cell.append('text').attr('x', labelW - 5).attr('y', y(d.l) + y.bandwidth()/2).attr('dy', '0.35em').attr('text-anchor', 'end').attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkSoft).text(d.l);
-          const valTxt = typeof d.v === 'number' && !Number.isInteger(d.v) ? d.v.toFixed(1) : d.v;
-          cell.append('text').attr('x', labelW + x(d.v) + 4).attr('y', y(d.l) + y.bandwidth()/2).attr('dy', '0.35em').attr('font-family','Work Sans').attr('font-size',9).attr('font-weight',700).attr('fill', C.ink).text(valTxt + suffix);
-        });
-      }
-      renderQuad(smallCell(0, 0, payload.viz.q1_titulo), payload.viz.q1_dados, C.brown, 'h');
-      renderQuad(smallCell(cellW + 20, 0, payload.viz.q2_titulo), payload.viz.q2_dados, C.orangeDeep, 'h');
-      renderQuad(smallCell(0, cellH + 25, payload.viz.q3_titulo), payload.viz.q3_dados, C.mark, '%');
-      renderQuad(smallCell(cellW + 20, cellH + 25, payload.viz.q4_titulo), payload.viz.q4_dados, C.orange, '', 4);
+      g.append('text').attr('x', -margin.left + 4).attr('y', -26).attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).attr('letter-spacing','0.1em').style('text-transform','uppercase').text('% DE ESCOLAS RURAIS COM TURMA MULTISSERIADA');
+      const x = d3.scaleLinear().domain([0, 100]).range([0, w]);
+      const yBand = d3.scaleBand().domain(bars.map(b => b.label)).range([0, h]).padding(0.32);
+      [0,25,50,75,100].forEach(t => {
+        g.append('line').attr('x1',x(t)).attr('x2',x(t)).attr('y1',0).attr('y2',h).attr('stroke',C.rule).attr('stroke-dasharray','2,3').attr('stroke-width',0.5);
+        g.append('text').attr('x',x(t)).attr('y',h+16).attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).text(t+'%');
+      });
+      bars.forEach(b => {
+        const cor = b.label === 'Norte' ? C.orangeDeep : C.brownSoft || C.brown;
+        g.append('rect').attr('x',0).attr('y',yBand(b.label)).attr('width',x(b.value)).attr('height',yBand.bandwidth())
+          .attr('fill', b.label === 'Norte' ? C.orangeDeep : C.orange).attr('opacity', b.label === 'Norte' ? 0.95 : 0.6);
+        g.append('text').attr('x',x(b.value)+6).attr('y',yBand(b.label)+yBand.bandwidth()/2).attr('dy','0.35em').attr('font-family','Work Sans').attr('font-size',12).attr('font-weight',700).attr('fill',C.ink).text(String(b.value).replace('.',',')+'%');
+        g.append('text').attr('x',-10).attr('y',yBand(b.label)+yBand.bandwidth()/2).attr('dy','0.35em').attr('text-anchor','end').attr('font-family','Work Sans').attr('font-size',11).attr('fill',C.inkSoft).text(b.label);
+      });
+      g.append('text').attr('x',w/2).attr('y',-10).attr('text-anchor','middle').attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill',C.mark).attr('font-weight',600).text(payload.viz.anotacao);
     }
   },
 
-  /* ============= L6 — Bolsa Família ============= */
+  /* ============= L6 — PNAE / merenda (contrafactual) ============= */
   'L6': {
-    eyebrow: 'Leitura 06 · Contrafactual · Bolsa Família / Auxílio Brasil',
-    title: 'A condicionalidade da escola é uma <em>âncora de permanência</em>.',
-    text: `<p>O Bolsa Família condiciona o benefício à frequência escolar. Estudos quasi-experimentais (Cedeplar/UFMG, IPEA, Banco Mundial) mostram que beneficiários têm <strong>frequência e permanência significativamente maiores</strong> que famílias elegíveis não cobertas.</p>
-    <p>Programas de transferência condicionada não são "ajuda" no sentido caritativo — são parte da infraestrutura que permite que famílias pobres mantenham filhos na escola em vez de no trabalho. Sem o programa, a peneira da renda volta a operar com força sobre os 20% mais pobres.</p>`,
-    source: `Fonte: Cedeplar/UFMG · Banco Mundial · IPEA TD 2447 · estudos quasi-experimentais
-      <span class="evidence-badge strong" style="display:inline-flex;margin-left:0.5rem;">
-        <span class="dot"></span> Evidência forte
-        <span class="tooltip">Múltiplos estudos quasi-experimentais com microdados longitudinais convergem sobre o efeito do Bolsa Família na permanência escolar.</span>
-      </span>`,
+    eyebrow: 'Leitura 06 · Contrafactual · Programa Nacional de Alimentação Escolar (PNAE)',
+    title: '',
+    text: '',
+    source: '',
     quali: {
       mark: 'Em diálogo com a pesquisa qualitativa',
-      text: `<strong>Reay (2017)</strong> contrasta com a leitura otimista do programa: transferência condicionada não basta sem reconhecimento do aluno como sujeito legítimo. <strong>Passos (2010)</strong> complementa: a juventude negra apropria-se do programa em chave de luta política, não apenas de "ajuda" — o estado garante a permanência material, mas o pertencimento simbólico permanece em disputa.`,
-      ref: 'Reay, D. (2017) · Miseducation · Passos, J. C. dos (2010) · Educar em Revista.'
+      text: `<strong>Cavalleiro (2000)</strong> ajuda a ler o que a merenda materializa: o reconhecimento institucional do corpo da criança. Onde a etnografia documenta o silenciamento de raça e classe na escola, a alimentação escolar é o gesto contrário — o Estado dizendo, na rotina, que aquele corpo importa o suficiente para ser nutrido. Tirá-la não é cortar um benefício; é retirar uma âncora.`,
+      ref: 'Cavalleiro, E. S. (2000) · Do silêncio do lar ao silêncio escolar.'
     },
     counterfactual: true,
-    titleOff: 'Sem o programa, <em>1 em cada 5</em> dos mais pobres não chega ao fim do EM.',
-    cfKey: 'bf',
+    titleOff: 'Sem o PNAE, <em>36,5 milhões</em> de estudantes perdem a refeição garantida.',
+    cfKey: 'pnae',
     viz: (el, payload) => {
       if (!payload) return;
       const palette = { orange: C.orange, orangeSoft: C.orangeSoft, brown: C.brown, counterfactual: C.counterfactual };
-      cfRenderers.bf = makeCounterfactualViz(el, {
+      const maxv = Math.max(...payload.viz.bars.map(b => b.real));
+      cfRenderers.pnae = makeCounterfactualViz(el, {
         W: 560, H: 320,
-        xMax: 100, ticks: 5,
-        xLabel: '% CONCLUEM ENSINO MÉDIO ATÉ 19 ANOS',
+        xMax: Math.ceil(maxv / 5) * 5, ticks: 4, sufixo: ' mi',
+        xLabel: 'MATRÍCULAS DA REDE PÚBLICA ATENDIDAS PELO PNAE (MILHÕES)',
         bars: payload.viz.bars.map(b => ({
           label: b.label, real: b.real, off: b.off, color: palette[b.color_key] || C.orange
         }))
@@ -1517,38 +1529,52 @@ const stories = {
     }
   },
 
-  /* ============= L8 ============= */
+  /* ============= L8 — funil racial da trajetória ============= */
   'L8': {
-    eyebrow: 'Leitura 08 · SAEB 2023 · 3º EM · autodeclaração de abandono × raça',
-    title: 'Quem já <em>abandonou</em> ao menos uma vez — e ainda está respondendo.',
-    text: `<p>De cada 100 estudantes pretos e pardos matriculados no 1º ano do EM em 2022, em 2023 estão: <strong>71 no 2º ano</strong>, <strong>9 repetindo</strong>, <strong>5 migraram para EJA</strong>, e <strong>15 não estão em nenhum dos três</strong> — saíram do sistema. Entre brancos, esse último grupo é de 8.</p>
-    <p>É uma diferença de quase o dobro. E o resíduo é territorialmente concentrado: desproporcionalmente do Norte e Nordeste. A "coorte que não voltou" não é distribuída — é geograficamente, racialmente, historicamente situada.</p>`,
-    source: 'Fonte: SAEB 2023 · 3º EM · TX_RESP_Q20 (autodeclaração de abandono) × TX_RESP_Q04 (cor/raça) · escolas públicas',
+    eyebrow: 'Leitura 08 · SAEB 2023 · composição racial em 3 pontos da trajetória',
+    title: '',
+    text: '',
+    source: '',
     quali: {
       mark: 'Em diálogo com a pesquisa qualitativa',
-      text: `<strong>Fine (1991)</strong> contrasta com a leitura do número como "evasão": dropping out is the consequence of a long process of being framed and silenced. A coorte ausente do Censo Escolar 2022-2023 lida em chave Fine deixa de ser "evasão" e vira <em>expulsão velada</em> — institucionalmente fabricada, depois nomeada como falha do aluno.`,
-      ref: 'Fine, M. (1991) · Framing dropouts, SUNY Press. Paráfrase aproximada — verificar texto integral.'
+      text: `<strong>Fine (1991)</strong> recusa a leitura da saída como "evasão": o abandono é o desfecho de um longo processo de ser enquadrado e silenciado. O funil que estreita a fatia preta/parda a cada etapa, lido em chave Fine, deixa de ser "quem desistiu" e vira <em>quem foi, aos poucos, empurrado para fora</em> — institucionalmente produzido, depois renomeado como falha individual.`,
+      ref: 'Fine, M. (1991) · Framing dropouts, SUNY Press.'
     },
     counterfactual: false,
     viz: (el, payload) => {
       if (!payload) return;
-      const palette = [C.orangeSoft, C.orange, C.brown, C.counterfactual, C.mark];
-      const data = payload.viz.bars.map((b, i) => ({ label: b.label, value: b.value, color: palette[i % palette.length], n: b.n }));
-      const s = svgIn(el, 560, 340);
-      const margin = { top: 50, right: 30, bottom: 30, left: 90 };
+      const etapas = payload.viz.etapas;
+      const corDe = c => c === 'alto' ? C.orange : (c === 'baixo' ? C.brown : C.mark);
+      const s = svgIn(el, 560, 320);
+      const margin = { top: 48, right: 28, bottom: 46, left: 92 };
       const w = 560 - margin.left - margin.right;
-      const h = 340 - margin.top - margin.bottom;
+      const h = 320 - margin.top - margin.bottom;
       const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-      g.append('text').attr('x', 0).attr('y', -28).attr('font-family','Work Sans').attr('font-size',9).attr('fill', C.inkFaint).attr('letter-spacing','0.12em').style('text-transform','uppercase').text(payload.viz.indicador.toUpperCase());
-      const xMax = Math.max(20, Math.max(...data.map(d=>d.value)) * 1.3);
-      const x = d3.scaleLinear().domain([0, xMax]).range([0, w]);
-      const yBand = d3.scaleBand().domain(data.map(d=>d.label)).range([0, h]).padding(0.3);
-      data.forEach(d => {
-        g.append('rect').attr('x', 0).attr('y', yBand(d.label)).attr('width', x(d.value)).attr('height', yBand.bandwidth()).attr('fill', d.color).attr('opacity', 0.85);
-        g.append('text').attr('x', x(d.value) + 6).attr('y', yBand(d.label) + yBand.bandwidth()/2).attr('dy','0.35em').attr('font-family','Work Sans').attr('font-size',13).attr('font-weight',700).attr('fill', C.ink).text(d.value + '%');
-        g.append('text').attr('x', -10).attr('y', yBand(d.label) + yBand.bandwidth()/2).attr('dy','0.35em').attr('text-anchor','end').attr('font-family','Work Sans').attr('font-size',10.5).attr('font-weight',600).attr('fill', C.inkSoft).text(d.label);
+      g.append('text').attr('x', -margin.left + 4).attr('y', -26).attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).attr('letter-spacing','0.1em').style('text-transform','uppercase').text('COMPOSIÇÃO RACIAL EM CADA PONTO DA TRAJETÓRIA (%)');
+      const x = d3.scaleLinear().domain([0, 100]).range([0, w]);
+      const yBand = d3.scaleBand().domain(etapas.map(e => e.etapa)).range([0, h]).padding(0.4);
+      etapas.forEach(e => {
+        let acc = 0;
+        e.segmentos.forEach(seg => {
+          g.append('rect').attr('x', x(acc)).attr('y', yBand(e.etapa)).attr('width', x(seg.valor)).attr('height', yBand.bandwidth())
+            .attr('fill', corDe(seg.cor)).attr('opacity', 0.9).attr('stroke','white').attr('stroke-width',1);
+          if (seg.valor > 7) g.append('text').attr('x', x(acc) + x(seg.valor)/2).attr('y', yBand(e.etapa) + yBand.bandwidth()/2 + 4).attr('text-anchor','middle')
+            .attr('font-family','Work Sans').attr('font-size',11).attr('font-weight',700).attr('fill','white').text(String(seg.valor).replace('.',',') + '%');
+          acc += seg.valor;
+        });
+        g.append('text').attr('x', -10).attr('y', yBand(e.etapa) + yBand.bandwidth()/2).attr('dy','0.35em').attr('text-anchor','end')
+          .attr('font-family','Work Sans').attr('font-size',11).attr('font-weight',600).attr('fill',C.inkSoft).text(e.etapa);
       });
-      g.append('text').attr('x', w/2).attr('y', h + 18).attr('text-anchor','middle').attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill', C.mark).attr('font-weight',600).text(payload.viz.anotacao);
+      // seta destacando a fatia preta/parda encolhendo
+      const yPrimeira = yBand(etapas[0].etapa) + yBand.bandwidth();
+      const yUltima = yBand(etapas[etapas.length-1].etapa);
+      g.append('text').attr('x', w/2).attr('y', h + 30).attr('text-anchor','middle').attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill',C.mark).attr('font-weight',600).text(payload.viz.anotacao);
+      // legenda
+      const leg = g.append('g').attr('transform', `translate(0, ${-14})`);
+      [['Brancos e amarelos','alto'],['Pretos e pardos','baixo'],['Indígenas','mark']].forEach((it,i) => {
+        leg.append('rect').attr('x', i*150).attr('y', 0).attr('width',10).attr('height',10).attr('fill',corDe(it[1])).attr('opacity',0.9);
+        leg.append('text').attr('x', i*150+15).attr('y',9).attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkSoft).text(it[0]);
+      });
     }
   },
 
@@ -1600,17 +1626,24 @@ const _storyPatches = {
   },
   L2: {
     dataKey: 'L2',
-    title: 'A escolaridade da <em>mãe</em> explica mais do que a do pai. E ela é, ela mesma, <em>racialmente marcada</em>.',
-    text: `<p>Quando a mãe nunca completou o Ensino Fundamental, a proficiência média do filho no 9º ano é <strong>{{narrativa.prof_mae_nao_ef}}</strong> pontos SAEB. Quando a mãe tem ensino superior completo, sobe para <strong>{{narrativa.prof_mae_sup}}</strong> — uma diferença de <strong>+{{narrativa.gap_mae_pontos}} pontos</strong>. A curva do pai sobe também, mas menos: +{{narrativa.gap_pai_pontos}} pontos do extremo ao extremo.</p>
-    <p>O ponto crítico: a variável "escolaridade da mãe" carrega, em si, a marca racial da geração anterior. O SAEB mede o que a mãe estudou; não mede o que a mãe ensina.</p>`
+    eyebrow: 'Leitura 02 · SAEB 2023 · 5º EF · proficiência LP por escola',
+    title: 'O gap racial não é só entre escolas. Ele está <em>dentro da mesma sala</em>.',
+    text: `<p>A diferença de proficiência em Língua Portuguesa entre estudantes brancos e pretos/pardos no 5º ano é de <strong>{{narrativa.gap_bruto}} pontos</strong> SAEB. A explicação fácil seria: eles estudam em escolas diferentes. Vamos testar — olhando <em>dentro</em> de cada escola, comparando colegas da mesma instituição.</p>
+    <p>O gap não desaparece. Dentro da mesma escola, ele continua: em média <strong>{{narrativa.gap_intra_medio}} pontos</strong>. Em <strong>{{narrativa.pct_escolas_gap_branco}}% das escolas</strong> com massa crítica dos dois grupos, os estudantes brancos estão acima dos pretos e pardos. Cerca de <strong>{{narrativa.pct_sobrevive}}% do gap nacional sobrevive</strong> à mesma professora, à mesma estrutura, ao mesmo bairro. Não é só a escola que a criança frequenta — é o que acontece com ela ali dentro.</p>`,
+    source: 'Fonte: SAEB 2023 — microdados aluno · 5º EF · escolas públicas · {{narrativa.n_escolas}} escolas com massa crítica de estudantes brancos e pretos/pardos'
   },
   L3: {
     dataKey: 'L3',
-    title: 'A infraestrutura básica é uma <em>política educacional</em>.',
-    text: `<p>Em <strong>{{narrativa.pct_escolas_faltando}}%</strong> das escolas brasileiras falta ao menos um item básico: água potável, banheiro acessível (PNE) ou alimentação escolar. Quando comparamos UFs no quartil com <em>mais</em> infraestrutura vs <em>menos</em>: a aprendizagem adequada em LP varia <strong>{{narrativa.gap_adequado_pp}} pontos percentuais</strong>; a proficiência média varia {{narrativa.gap_pontos}} pontos na escala SAEB.</p>
-    <p>Sem o básico, o gap regional se aprofunda. Garantir água, banheiro e comida não é benefício — é a condição de possibilidade da aprendizagem.</p>`,
-    source: 'Fonte: Censo Escolar 2025 (IN_AGUA_POTAVEL + IN_BANHEIRO_PNE + IN_ALIMENTACAO) × SAEB 2023 5º EF · agregado por UF',
-    callout: '<strong>Resultado:</strong> nas UFs do quartil de menor infraestrutura, apenas <strong>{{narrativa.adequado_q1}}%</strong> dos alunos atingem aprendizagem adequada em LP. No quartil com mais infraestrutura: <strong>{{narrativa.adequado_q4}}%</strong>. Diferença: <strong>{{narrativa.gap_adequado_pp}} pp</strong>.'
+    eyebrow: 'Leitura 03 · Contrafactual · SAEB 2023 9º EF · decomposição do gap racial',
+    title: 'Igualando renda e trabalho, ainda sobram <em>{{narrativa.gap_residuo}} pontos</em> de gap racial.',
+    text: `<p>O gap de proficiência entre estudantes brancos e pretos/pardos no 9º ano é de <strong>{{narrativa.gap_bruto}} pontos</strong>. De onde ele vem? Uma explicação comum: estudantes negros trabalham mais e são mais pobres. Vamos testar — descascando o gap camada por camada.</p>
+    <p>Igualar a carga de trabalho (doméstico e remunerado) tira apenas <strong>{{narrativa.camada_trabalho}} ponto</strong>. Igualar também a renda tira mais <strong>{{narrativa.camada_renda}}</strong>. E aí o gap para de encolher: sobram <strong>{{narrativa.gap_residuo}} pontos</strong> — <strong>{{narrativa.pct_residuo}}% do gap original</strong> — que não são nem trabalho nem renda. Esse resíduo é o nome técnico de uma coisa só: raça.</p>`,
+    source: `Fonte: SAEB 2023 9º EF · escolas públicas · decomposição por padronização (estratos de carga de trabalho × quintil de INSE)
+      <span class="evidence-badge moderate" style="display:inline-flex;margin-left:0.5rem;">
+        <span class="dot"></span> Evidência indireta
+        <span class="tooltip">Decomposição descritiva por padronização — compara estudantes brancos e pretos/pardos com a mesma carga de trabalho e a mesma faixa de renda. Não é modelo causal: o resíduo capta tudo o que não foi igualado, e é interpretado como efeito de raça à luz da literatura.</span>
+      </span>`,
+    callout: '<strong>O resíduo:</strong> mesmo comparando estudantes brancos e pretos/pardos com a <strong>mesma carga de trabalho</strong> e a <strong>mesma faixa de renda</strong>, sobram <strong>{{narrativa.gap_residuo}} pontos</strong> de diferença — {{narrativa.pct_residuo}}% do gap original. Não é classe. Não é jornada. É raça.'
   },
   L4: {
     dataKey: 'L4',
@@ -1621,18 +1654,24 @@ const _storyPatches = {
   },
   L5: {
     dataKey: 'L5',
-    title: 'Casa que pesa, escola que falta — permanência é <em>quatro coisas ao mesmo tempo</em>.',
-    text: `<p><strong>Meninas pretas e pardas</strong> declaram em média <strong>{{narrativa.horas_meninas_pretas}}h semanais</strong> de trabalho doméstico — meninos brancos declaram {{narrativa.horas_meninos_brancos}}h, uma diferença de <strong>{{narrativa.diff_meninas_pretas_meninos_brancos}}h por semana</strong>. No outro extremo do mesmo recorte, o sentimento de segurança na escola (escala 1–4) vai de {{narrativa.seg_meninos_brancos}} para meninos brancos a {{narrativa.seg_meninas_pretas}} para meninas pretas/pardas — não é o trabalho doméstico só nem o clima escolar só; é os dois operando sobre o mesmo corpo.</p>
-    <p>Sobrepõe-se a uma escola que falha em infraestrutura básica: <strong>{{narrativa.sem_pne_rural}}% das rurais sem banheiro PNE</strong>, contra {{narrativa.sem_pne_urbana}}% das urbanas. Permanência é simultaneamente: <strong>tempo</strong> (o que a casa cobra), <strong>trabalho fora</strong> (o que a renda obriga), <strong>infraestrutura</strong> (o que a escola não dá) e <strong>clima</strong> (o que o ambiente comunica). Tratar como problema isolado é tratar como problema errado.</p>`,
-    source: 'Fonte: SAEB 2023 9º EF (Q21c/d trabalho · Q23a-i clima/segurança) · Censo Escolar 2025 (IN_BANHEIRO_PNE × TP_LOCALIZACAO)'
+    eyebrow: 'Leitura 05 · Censo Escolar 2025 · turmas multisseriadas na escola rural',
+    title: 'A sala onde uma professora conduz <em>cinco séries</em> ao mesmo tempo.',
+    text: `<p>Na escola rural brasileira, a turma multisseriada é a regra, não a exceção: <strong>{{narrativa.n_escolas_multi}} escolas públicas</strong> têm ao menos uma — <strong>{{narrativa.n_turmas_multi}} turmas</strong> no total. No Norte, <strong>{{narrativa.pct_rural_norte}}% das escolas rurais</strong> funcionam assim; na média nacional rural, {{narrativa.pct_rural_nacional}}%.</p>
+    <p>Uma professora conduz, na mesma sala e ao mesmo tempo, crianças de séries diferentes. Isso costuma ser lido como pura precariedade — e há precariedade. Mas é também um modo de fazer escola enraizado no território ribeirinho e do campo. Para a criança que se alfabetiza ali e segue estudando, concluir a trajetória é uma <strong>conquista de permanência</strong> que a escola urbana seriada nunca precisou enfrentar. A leitura interseccional, aqui, não é de déficit: é de reconhecer uma experiência escolar particular — e o valor de atravessá-la.</p>`,
+    source: 'Fonte: Censo Escolar 2025 — QT_TUR_FUND_AI_MULTIETAPA + QT_TUR_FUND_AF_MULTI · rede pública · escolas de localização rural'
   },
   L6: {
     dataKey: 'L6',
-    title: 'A condicionalidade da escola é uma <em>âncora de permanência</em>.',
-    text: `<p>O Bolsa Família condiciona o benefício à frequência escolar. Em abril/2025, foram <strong>{{narrativa.bf_total_beneficios}} benefícios</strong> repassados em <strong>{{narrativa.bf_n_municipios}} municípios</strong>, totalizando <strong>R$ {{narrativa.bf_total_brl_bilhoes}} bilhões</strong> (Portal da Transparência).</p>
-    <p>A literatura econômica brasileira estima que o programa responde por uma redução de {{narrativa.reducao_evasao_pp_lo}} a {{narrativa.reducao_evasao_pp_hi}} pontos percentuais na taxa de evasão entre adolescentes pobres. Programa não é "ajuda" — é parte da infraestrutura que permite que famílias pobres mantenham filhos na escola.</p>`,
-    source: 'Fonte: Folha do Novo Bolsa Família abr/2025 (Portal da Transparência) · estimativas de evasão: Cedeplar/UFMG, IPEA TD 2447, Banco Mundial',
-    callout: 'Em <strong>abril/2025</strong>, o Novo Bolsa Família repassou <strong>R$ {{narrativa.bf_total_brl_bilhoes}} bilhões</strong> a <strong>{{narrativa.bf_total_beneficios}}</strong> benefícios em <strong>{{narrativa.bf_n_municipios}}</strong> municípios. Estimativa de impacto na permanência: <strong>{{narrativa.reducao_evasao_pp_lo}}–{{narrativa.reducao_evasao_pp_hi}} pp</strong> de redução na evasão.'
+    eyebrow: 'Leitura 06 · Contrafactual · Programa Nacional de Alimentação Escolar (PNAE)',
+    title: 'A merenda é <em>infraestrutura de permanência</em> — não um benefício.',
+    text: `<p>O Programa Nacional de Alimentação Escolar (PNAE) alcança <strong>{{narrativa.total_pnae_milhoes}} milhões de estudantes</strong> — <strong>{{narrativa.pct_cobertura}}% da rede pública</strong>. É quase universal: praticamente toda criança de escola pública conta com a refeição.</p>
+    <p>Em territórios de insegurança alimentar, a merenda é a refeição mais garantida do dia — por isso ela não é um detalhe da rotina, é uma âncora de permanência. A literatura sobre interrupções do programa (pandemia, atrasos de repasse) associa a falta da merenda a quedas de <strong>{{narrativa.queda_frequencia_lo}} a {{narrativa.queda_frequencia_hi}} pontos percentuais na frequência escolar</strong>. Tirar a merenda não corta um benefício: solta a âncora.</p>`,
+    source: `Fonte: Censo Escolar 2025 — IN_ALIMENTACAO × matrículas da rede pública
+      <span class="evidence-badge strong" style="display:inline-flex;margin-left:0.5rem;">
+        <span class="dot"></span> Evidência forte (frequência)
+        <span class="tooltip">A cobertura do PNAE é dado direto do Censo Escolar 2025. O efeito sobre frequência escolar vem da literatura sobre interrupções do programa — robusto para frequência/permanência, não para nota.</span>
+      </span>`,
+    callout: '<strong>Escala:</strong> o PNAE atende <strong>{{narrativa.total_pnae_milhoes}} milhões</strong> de estudantes ({{narrativa.pct_cobertura}}% da rede pública). Onde a insegurança alimentar é maior, é a refeição mais garantida do dia. Sem o programa, a literatura estima queda de <strong>{{narrativa.queda_frequencia_lo}}–{{narrativa.queda_frequencia_hi}} pp</strong> na frequência escolar.'
   },
   L7: {
     dataKey: 'L7',
@@ -1643,10 +1682,12 @@ const _storyPatches = {
   },
   L8: {
     dataKey: 'L8',
-    title: 'Quem <em>já abandonou</em> ao menos uma vez — e ainda está respondendo.',
-    text: `<p>Entre estudantes do 3º ano do Ensino Médio (escolas públicas) que ainda estão no SAEB, <strong>{{narrativa.pct_pretos}}% dos pretos</strong>, {{narrativa.pct_pardos}}% dos pardos e {{narrativa.pct_indigenas}}% dos indígenas declaram ter abandonado a escola pelo menos uma vez — contra <strong>{{narrativa.pct_brancos}}% dos brancos</strong>. Razões: pretos {{narrativa.razao_pretos_brancos}}× brancos; indígenas {{narrativa.razao_indigenas_brancos}}× brancos.</p>
-    <p><em>Aviso metodológico:</em> esta é autodeclaração de quem voltou. Quem efetivamente abandonou JÁ NÃO está no SAEB — o número real do abandono é maior. Para a taxa oficial, ver Taxas de Rendimento INEP (pendente de download manual).</p>`,
-    source: 'Fonte: SAEB 2023 · 3º EM · TX_RESP_Q20 (autodeclaração) × TX_RESP_Q04 (raça/cor) · escolas públicas'
+    eyebrow: 'Leitura 08 · SAEB 2023 · composição racial em 3 pontos da trajetória',
+    title: 'O funil tem cor: a cada série, <em>menos estudantes negros</em>.',
+    text: `<p>O SAEB é aplicado em três pontos da educação básica: 5º ano, 9º ano e 3º ano do Ensino Médio. Comparar a composição racial de cada um revela um funil. No 5º ano, <strong>{{narrativa.preta_5ef}}%</strong> dos estudantes são pretos ou pardos. No 9º ano, {{narrativa.preta_9ef}}%. No 3º ano do EM, <strong>{{narrativa.preta_3em}}%</strong>.</p>
+    <p>A fatia preta/parda encolhe <strong>{{narrativa.queda_preta_pp}} pontos percentuais</strong> ao longo do percurso — enquanto a fatia branca cresce de {{narrativa.branca_5ef}}% para {{narrativa.branca_3em}}%. Quem chega ao fim do Ensino Médio é proporcionalmente mais branco do que quem estava no início. O funil não é neutro: ele tem cor.</p>
+    <p><em>Aviso metodológico:</em> é uma coorte sintética — cada etapa é uma geração diferente avaliada em 2023, não os mesmos estudantes seguidos no tempo. A leitura é da forma do funil, não de indivíduos.</p>`,
+    source: 'Fonte: SAEB 2023 — microdados aluno · 5º EF, 9º EF e 3º EM · escolas públicas · cor/raça autodeclarada (TX_RESP_Q04)'
   },
   L9: {
     dataKey: 'L9',
@@ -1678,6 +1719,7 @@ function makeCounterfactualViz(target, config) {
   const yBand = d3.scaleBand().domain(config.bars.map(b => b.label))
     .range([0, h]).padding(0.3);
 
+  const sufixo = config.sufixo || '%';
   const ticks = config.ticks || 5;
   const xVals = x.ticks(ticks);
   xVals.forEach(t => {
@@ -1686,7 +1728,7 @@ function makeCounterfactualViz(target, config) {
       .attr('stroke', C.rule).attr('stroke-dasharray', '2,3').attr('stroke-width', 0.5);
     g.append('text').attr('x', x(t)).attr('y', h + 18).attr('text-anchor', 'middle')
       .attr('font-family', 'Work Sans').attr('font-size', 9).attr('fill', C.inkFaint)
-      .text(t + '%');
+      .text(t + sufixo);
   });
 
   if (config.xLabel) {
@@ -1726,7 +1768,7 @@ function makeCounterfactualViz(target, config) {
       .attr('x', x(d.real) + 6).attr('y', yBand.bandwidth()/2)
       .attr('dy', '0.35em')
       .attr('font-family', 'Work Sans').attr('font-size', 13).attr('font-weight', 700)
-      .attr('fill', C.ink).text(d.real + '%');
+      .attr('fill', C.ink).text(d.real + sufixo);
     grp.append('text').attr('class', 'glabel')
       .attr('x', -10).attr('y', yBand.bandwidth()/2)
       .attr('dy', '0.35em').attr('text-anchor', 'end')
@@ -1754,17 +1796,18 @@ function makeCounterfactualViz(target, config) {
           const i = d3.interpolateNumber(parseFloat(this.textContent) || target, target);
           return function(t) {
             const v = i(t);
-            this.textContent = (Math.round(v*10)/10) + '%';
+            this.textContent = (Math.round(v*10)/10) + sufixo;
           };
         });
       grp.select('.ghost').transition().duration(800)
         .attr('width', x(ghostTarget))
         .attr('opacity', scenario === 'off' ? 0.7 : 0);
       const diffVal = Math.abs(d.real - d.off);
+      const diffSuf = sufixo === '%' ? ' pp' : sufixo;
       grp.select('.diff').transition().duration(500)
         .attr('opacity', scenario === 'off' ? 1 : 0)
         .attr('x', Math.max(x(target), x(ghostTarget)) + 50)
-        .text(scenario === 'off' ? '−' + (Math.round(diffVal*10)/10) + ' pp' : '');
+        .text(scenario === 'off' ? '−' + (Math.round(diffVal*10)/10) + diffSuf : '');
     });
   }
 

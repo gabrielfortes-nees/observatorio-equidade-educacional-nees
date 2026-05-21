@@ -1,52 +1,56 @@
 {
   "meta": {
     "leitura": "L6",
-    "titulo_curto": "Bolsa Família como âncora de permanência",
-    "eyebrow": "Leitura 06 · Contrafactual · Bolsa Família / Auxílio Brasil",
-    "fonte": "Folha do Novo Bolsa Família · abr/2025 (Portal da Transparência) — 20.363.840 benefícios em 5.570 municípios · R$ 13.6 bilhões repassados",
+    "titulo_curto": "A merenda como âncora de permanência",
+    "eyebrow": "Leitura 06 · Contrafactual · Programa Nacional de Alimentação Escolar (PNAE)",
+    "fonte": "Censo Escolar 2025 — IN_ALIMENTACAO × matrículas da rede pública · efeito sobre frequência ancorado na literatura sobre interrupções do PNAE",
     "contrafactual": true,
-    "cf_key": "bf",
-    "evidencia": "Bars de conclusão de EM mostradas são estimativas convergentes da literatura (IPEA TD 2447, Cedeplar/UFMG, Banco Mundial). Dados reais da folha BF abr/2025 alimentam o callout.",
-    "gerado_em": "2026-05-11 00:42:35"
+    "cf_key": "pnae",
+    "evidencia": "A cobertura do PNAE é dado direto do Censo Escolar 2025. O efeito sobre frequência escolar vem da literatura (estudos sobre pandemia e atrasos de repasse) — selo: evidência forte para frequência/permanência, não para nota.",
+    "gerado_em": "2026-05-21 18:42:15"
   },
   "narrativa": {
-    "bf_total_beneficios": 20363840,
-    "bf_total_brl_bilhoes": 13.6,
-    "bf_valor_medio": 666.56,
-    "bf_n_municipios": 5570,
-    "reducao_evasao_pp_lo": 3,
-    "reducao_evasao_pp_hi": 7
+    "total_pnae_milhoes": 36.5,
+    "pct_cobertura": 99.3,
+    "queda_frequencia_lo": 3,
+    "queda_frequencia_hi": 9
   },
   "viz": {
-    "indicador": "% concluem ensino médio até 19 anos",
-    "titulo_real": "Real (com programa)",
-    "titulo_off": "Sem o programa (estimativa contrafactual da literatura)",
+    "indicador": "Matrículas da rede pública atendidas pelo PNAE (milhões)",
+    "titulo_real": "Com o PNAE — a refeição garantida na escola",
+    "titulo_off": "Sem o PNAE — a âncora que desaparece",
     "bars": [
       {
-        "label": "20% mais ricos",
-        "real": 92,
-        "off": 91,
+        "label": "Sudeste",
+        "real": 13.46,
+        "off": 0,
         "color_key": "orange"
       },
       {
-        "label": "Renda média",
-        "real": 75,
-        "off": 71,
+        "label": "Nordeste",
+        "real": 10.8,
+        "off": 0,
         "color_key": "orangeSoft"
       },
       {
-        "label": "40% mais pobres",
-        "real": 58,
-        "off": 51,
+        "label": "Sul",
+        "real": 5.07,
+        "off": 0,
         "color_key": "brown"
       },
       {
-        "label": "20% mais pobres",
-        "real": 47,
-        "off": 38,
+        "label": "Norte",
+        "real": 4.2,
+        "off": 0,
         "color_key": "counterfactual"
+      },
+      {
+        "label": "Centro-Oeste",
+        "real": 2.99,
+        "off": 0,
+        "color_key": "orange"
       }
     ],
-    "callout": "Em abril/2025, o Novo Bolsa Família repassou R$ 13.6 bilhões a 20.363.840 benefícios em 5.570 municípios. A literatura econômica brasileira estima que o programa responde por uma redução de 3 a 7 pontos percentuais na taxa de evasão entre adolescentes de famílias de baixa renda."
+    "callout": "O PNAE alcança 36.5 milhões de estudantes — 99.3% da rede pública. Em regiões de insegurança alimentar, é a refeição mais garantida do dia da criança. A literatura sobre interrupções do programa (pandemia, atrasos de repasse) associa a falta da merenda a quedas de 3 a 9 pontos percentuais na frequência escolar."
   }
 }

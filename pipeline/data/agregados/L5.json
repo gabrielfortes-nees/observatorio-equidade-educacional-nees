@@ -1,90 +1,46 @@
 {
   "meta": {
     "leitura": "L5",
-    "titulo_curto": "Permanência é quatro coisas ao mesmo tempo",
-    "eyebrow": "Leitura 05 · SAEB 2023 9º EF (Q21c, Q21d, Q23a-i) + Censo Escolar 2025 (infra × localização)",
-    "fonte": "SAEB 2023 — uso do tempo e clima escolar · Censo Escolar 2025 — IN_BANHEIRO_PNE × TP_LOCALIZACAO",
-    "gerado_em": "2026-05-11 01:16:06"
+    "titulo_curto": "A sala onde cabem cinco séries",
+    "eyebrow": "Leitura 05 · Censo Escolar 2025 · turmas multisseriadas na escola rural",
+    "fonte": "Censo Escolar 2025 — QT_TUR_FUND_AI_MULTIETAPA + QT_TUR_FUND_AF_MULTI · rede pública · escolas de localização rural",
+    "gerado_em": "2026-05-21 18:42:14"
   },
   "narrativa": {
-    "horas_meninos_brancos": 10.2,
-    "horas_meninas_brancas": 14.6,
-    "horas_meninos_pretos": 10.4,
-    "horas_meninas_pretas": 14.9,
-    "diff_meninas_pretas_meninos_brancos": 4.7,
-    "seg_meninos_brancos": 2.96,
-    "seg_meninas_pretas": 2.97,
-    "sem_pne_rural": 69.2,
-    "sem_pne_urbana": 32.7
+    "n_escolas_multi": 30679,
+    "n_turmas_multi": 58206,
+    "pct_rural_norte": 77.5,
+    "pct_rural_nacional": 58.2
   },
   "viz": {
-    "q1_titulo": "1. HORAS SEMANAIS DE TRABALHO DOMÉSTICO",
-    "q1_dados": [
+    "indicador": "% de escolas rurais da rede pública com ao menos uma turma multisseriada",
+    "bars": [
       {
-        "label": "Meninos brancos",
-        "v": 10.2
+        "label": "Norte",
+        "value": 77.5,
+        "n_escolas": 13225
       },
       {
-        "label": "Meninas brancas",
-        "v": 14.6
+        "label": "Nordeste",
+        "value": 55.2,
+        "n_escolas": 25700
       },
       {
-        "label": "Meninos pretos/pardos",
-        "v": 10.4
+        "label": "Centro-Oeste",
+        "value": 49.4,
+        "n_escolas": 1437
       },
       {
-        "label": "Meninas pretas/pardas",
-        "v": 14.9
+        "label": "Sul",
+        "value": 36.2,
+        "n_escolas": 3835
+      },
+      {
+        "label": "Sudeste",
+        "value": 44.5,
+        "n_escolas": 5869
       }
     ],
-    "q2_titulo": "2. HORAS SEMANAIS DE TRABALHO FORA DE CASA",
-    "q2_dados": [
-      {
-        "label": "Meninos brancos",
-        "v": 7.3
-      },
-      {
-        "label": "Meninas brancas",
-        "v": 4.1
-      },
-      {
-        "label": "Meninos pretos/pardos",
-        "v": 8.2
-      },
-      {
-        "label": "Meninas pretas/pardas",
-        "v": 4
-      }
-    ],
-    "q3_titulo": "3. % ESCOLAS SEM BANHEIRO PNE — POR LOCALIZAÇÃO",
-    "q3_dados": [
-      {
-        "label": "Rural",
-        "v": 69.2
-      },
-      {
-        "label": "Urbana",
-        "v": 32.7
-      }
-    ],
-    "q4_titulo": "4. SENTIMENTO DE SEGURANÇA NA ESCOLA (esc. 1–4)",
-    "q4_dados": [
-      {
-        "label": "Meninos brancos",
-        "v": 2.96
-      },
-      {
-        "label": "Meninas brancas",
-        "v": 2.91
-      },
-      {
-        "label": "Meninos pretos/pardos",
-        "v": 3.01
-      },
-      {
-        "label": "Meninas pretas/pardas",
-        "v": 2.97
-      }
-    ]
+    "anotacao": "no Norte, 78% das escolas rurais"
   }
 }
