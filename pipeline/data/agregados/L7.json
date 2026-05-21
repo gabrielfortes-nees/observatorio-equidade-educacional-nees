@@ -1,38 +1,55 @@
 {
   "meta": {
     "leitura": "L7",
-    "titulo_curto": "Reprovação como porta do abandono",
-    "eyebrow": "Leitura 07 · SAEB 2023 · 9º ano · Q19 (reprovação) × Q20 (abandono)",
-    "fonte": "SAEB 2023 — TX_RESP_Q19 × TX_RESP_Q20 · escolas públicas · razão de chances por tabela de contingência",
-    "n_total": 1941859,
-    "gerado_em": "2026-05-11 00:42:38"
+    "titulo_curto": "A reprovação como porta do abandono",
+    "eyebrow": "Leitura 07 · SAEB 2023 · 9º EF · reprovação, abandono e raça",
+    "fonte": "SAEB 2023 — microdados aluno · 9º EF · escolas públicas · TX_RESP_Q19 × Q20 × Q04",
+    "n_total": 1842218,
+    "gerado_em": "2026-05-21 20:06:24"
   },
   "narrativa": {
-    "razao_chance_1x": 4.63,
-    "razao_chance_2x": 8.37,
-    "pct_abandono_nunca_reprov": 3,
-    "pct_abandono_1x": 13.9,
-    "pct_abandono_2x": 25.1
+    "abandono_nunca": 2.9,
+    "abandono_uma": 13.7,
+    "abandono_duas": 24.7,
+    "reprov_branca": 16.5,
+    "reprov_preta": 21.8,
+    "gap_reprov": 5.3
   },
   "viz": {
-    "indicador": "% que declaram ter abandonado pelo menos uma vez",
-    "bars": [
+    "indicador": "% que declara já ter abandonado, por nível de reprovação · e distribuição da reprovação por raça",
+    "porta_titulo": "A PORTA · % QUE JÁ ABANDONOU, POR REPROVAÇÃO",
+    "porta": [
       {
-        "label": "Nunca foi reprovado",
-        "value": 3,
-        "n": 1547781
+        "reprovacao": "Nunca reprovou",
+        "pct_abandono": 2.9,
+        "n": 1475363
       },
       {
-        "label": "Reprovou 1 vez",
-        "value": 13.9,
-        "n": 301104
+        "reprovacao": "Reprovou 1 vez",
+        "pct_abandono": 13.7,
+        "n": 281161
       },
       {
-        "label": "Reprovou 2+ vezes",
-        "value": 25.1,
-        "n": 92974
+        "reprovacao": "Reprovou 2+ vezes",
+        "pct_abandono": 24.7,
+        "n": 85694
       }
     ],
-    "anotacao": "4.6× chance"
+    "distribuicao_titulo": "QUEM CHEGA À PORTA · DISTRIBUIÇÃO DA REPROVAÇÃO POR RAÇA",
+    "distribuicao": [
+      {
+        "raca": "Brancos e amarelos",
+        "nunca": 83.5,
+        "uma": 12.8,
+        "duas": 3.7
+      },
+      {
+        "raca": "Pretos e pardos",
+        "nunca": 78.2,
+        "uma": 16.6,
+        "duas": 5.2
+      }
+    ],
+    "anotacao": "21,8% dos estudantes pretos/pardos já reprovaram, contra 16,5% dos brancos"
   }
 }

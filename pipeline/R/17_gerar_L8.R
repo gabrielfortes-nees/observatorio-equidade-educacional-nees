@@ -64,7 +64,7 @@ L8 <- list(
         )
       )
     }),
-    anotacao = sprintf("a fatia preta/parda encolhe %.1f pp do 5º EF ao 3º EM", queda_preta)
+    anotacao = gsub("\\.", ",", sprintf("a fatia preta/parda encolhe %.1f pp do 5º EF ao 3º EM", queda_preta))
   )
 )
 

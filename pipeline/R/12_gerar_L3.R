@@ -84,7 +84,7 @@ L3 <- list(
   meta = list(
     leitura = "L3",
     titulo_curto = "O gap que sobra mesmo assim",
-    eyebrow = "Leitura 03 · Contrafactual · SAEB 2023 9º EF · decomposição do gap racial",
+    eyebrow = "Leitura 03 · E se… · SAEB 2023 9º EF · decomposição do gap racial",
     fonte = "SAEB 2023 — microdados aluno · 9º EF · escolas públicas · decomposição por padronização (estratos de carga de trabalho × quintil de INSE)",
     contrafactual = TRUE,
     cf_key = "residuo",
@@ -102,7 +102,7 @@ L3 <- list(
     indicador = "Gap de proficiência LP entre estudantes brancos e pretos/pardos (pontos SAEB)",
     gap_bruto = round(gap_bruto, 1),
     segmentos = segmentos,
-    anotacao = sprintf("mesmo igualando renda e trabalho, sobram %.1f pontos", gap_residuo)
+    anotacao = gsub("\\.", ",", sprintf("mesmo igualando renda e trabalho, sobram %.1f pontos", gap_residuo))
   )
 )
 

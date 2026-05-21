@@ -2,12 +2,12 @@
   "meta": {
     "leitura": "L3",
     "titulo_curto": "O gap que sobra mesmo assim",
-    "eyebrow": "Leitura 03 · Contrafactual · SAEB 2023 9º EF · decomposição do gap racial",
+    "eyebrow": "Leitura 03 · E se… · SAEB 2023 9º EF · decomposição do gap racial",
     "fonte": "SAEB 2023 — microdados aluno · 9º EF · escolas públicas · decomposição por padronização (estratos de carga de trabalho × quintil de INSE)",
     "contrafactual": true,
     "cf_key": "residuo",
     "evidencia": "Padronização por estratos (standardization) — compara estudantes brancos e pretos/pardos com a mesma carga de trabalho e a mesma faixa de renda. Não é modelo causal; é decomposição descritiva. Selo: evidência indireta.",
-    "gerado_em": "2026-05-21 18:42:14"
+    "gerado_em": "2026-05-21 20:06:18"
   },
   "narrativa": {
     "gap_bruto": 15.7,
@@ -39,6 +39,6 @@
         "grupo": "residuo"
       }
     ],
-    "anotacao": "mesmo igualando renda e trabalho, sobram 11.7 pontos"
+    "anotacao": "mesmo igualando renda e trabalho, sobram 11,7 pontos"
   }
 }

@@ -52,9 +52,9 @@ bars <- list(
 L9 <- list(
   meta = list(
     leitura = "L9",
-    titulo_curto = "Sem Lei de Cotas, conclusão por raça regrediria",
-    eyebrow = "Leitura 09 · Contrafactual · Lei 12.711/2012 · efeito-horizonte",
-    fonte = "Censo da Educação Superior 2024 (INEP) — QT_ING_* × TP_CATEGORIA_ADMINISTRATIVA · contrafactual ancorado em Censo Sup. 2010-2012 e ANDIFES",
+    titulo_curto = "A Lei de Cotas e a composição racial das federais",
+    eyebrow = "Leitura 09 · E se… · Censo da Educação Superior 2024 · Lei de Cotas",
+    fonte = "Censo da Educação Superior 2024 (INEP) · QT_ING_* × TP_CATEGORIA_ADMINISTRATIVA · cenário ancorado em Censo Sup. 2010-2012 e ANDIFES",
     contrafactual = TRUE,
     cf_key = "cotas",
     gerado_em = format(Sys.time(), "%Y-%m-%d %H:%M:%S")

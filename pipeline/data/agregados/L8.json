@@ -5,7 +5,7 @@
     "eyebrow": "Leitura 08 · SAEB 2023 · composição racial em 3 pontos da trajetória",
     "fonte": "SAEB 2023 — microdados aluno · escolas públicas · 5º EF, 9º EF e 3º EM · cor/raça autodeclarada (TX_RESP_Q04)",
     "aviso_metodologico": "Comparação entre etapas (coorte sintética), não rastreamento individual. Cada etapa é uma geração diferente avaliada em 2023 — a leitura é da forma do funil, não de indivíduos seguidos no tempo.",
-    "gerado_em": "2026-05-21 18:42:22"
+    "gerado_em": "2026-05-21 20:06:34"
   },
   "narrativa": {
     "preta_5ef": 64.4,
@@ -84,6 +84,6 @@
         ]
       }
     ],
-    "anotacao": "a fatia preta/parda encolhe 3.7 pp do 5º EF ao 3º EM"
+    "anotacao": "a fatia preta/parda encolhe 3,7 pp do 5º EF ao 3º EM"
   }
 }
