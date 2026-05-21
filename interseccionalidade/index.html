@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Interseccionalidade nos dados · Observatório de Equidade Educacional</title>
+<meta name="description" content="Por que olhar os dados educacionais com lente interseccional — e como a média esconde os extremos. Observatório de Equidade Educacional, NEES/UFAL." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root {
+    --orange: #E67E22;
+    --orange-deep: #D35400;
+    --orange-soft: #F5B271;
+    --orange-pale: #FBE4CC;
+    --brown: #5A3825;
+    --brown-soft: #8B5A3C;
+    --cream: #FAF4E8;
+    --cream-warm: #F5EBD7;
+    --paper: #FCF8F0;
+    --ink: #2A1F18;
+    --ink-soft: #5A4A3F;
+    --ink-faint: #9A8B7E;
+    --rule: #D6C9B8;
+    --mark: #A82E2E;
+    --counterfactual: #6B2D2D;
+    --fs-base: 18px;          /* controlado pela barra de acessibilidade */
+  }
+  /* Modo de alto contraste */
+  body.alto-contraste {
+    --paper: #FFFFFF;
+    --cream: #F2F2F2;
+    --cream-warm: #EAEAEA;
+    --ink: #000000;
+    --ink-soft: #1A1A1A;
+    --ink-faint: #444444;
+    --rule: #767676;
+    --orange-deep: #9A3A00;
+    --brown: #3A2417;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    font-size: var(--fs-base);
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+  .sans { font-family: 'Work Sans', sans-serif; }
+  em { font-style: italic; color: var(--orange-deep); font-weight: 500; }
+  body.alto-contraste em { color: var(--mark); }
+
+  /* ============= NAV / BRAND BAR ============= */
+  nav.brand-bar {
+    border-bottom: 1px solid var(--rule);
+    padding: 1rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(8px);
+    background: rgba(250, 244, 232, 0.94);
+  }
+  body.alto-contraste nav.brand-bar { background: #FFFFFF; }
+  nav.brand-bar .logo {
+    display: flex; align-items: center; gap: 0.7rem;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 700; color: var(--orange-deep);
+    font-size: 0.95rem; letter-spacing: -0.01em;
+  }
+  /* PLACEHOLDER DA LOGO — substituir .logo-mark por <img src="logo-observatorio.svg"> quando o arquivo chegar */
+  nav.brand-bar .logo-mark {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--orange); position: relative; overflow: hidden;
+    flex-shrink: 0;
+  }
+  nav.brand-bar .logo-mark::before {
+    content: ''; position: absolute;
+    top: 50%; left: 0; width: 100%; height: 50%;
+    background: var(--orange-deep);
+  }
+  nav.brand-bar .nav-links {
+    display: flex; gap: 1.8rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem; color: var(--brown);
+  }
+  nav.brand-bar .nav-links a { color: inherit; text-decoration: none; transition: color 0.2s; }
+  nav.brand-bar .nav-links a:hover { color: var(--orange-deep); }
+  nav.brand-bar .nav-links a.current { color: var(--orange-deep); font-weight: 600; }
+
+  /* ============= BARRA DE ACESSIBILIDADE ============= */
+  .a11y-bar {
+    position: fixed; right: 1rem; bottom: 1rem; z-index: 200;
+    display: flex; flex-direction: column; gap: 0.4rem;
+    background: white; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 0.6rem; box-shadow: 0 6px 24px rgba(90,56,37,0.15);
+  }
+  body.alto-contraste .a11y-bar { border-color: #000; }
+  .a11y-bar .a11y-title {
+    font-family: 'Work Sans', sans-serif; font-size: 0.6rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-faint); text-align: center; margin-bottom: 0.1rem;
+  }
+  .a11y-bar .a11y-row { display: flex; gap: 0.35rem; }
+  .a11y-bar button {
+    font-family: 'Work Sans', sans-serif; font-weight: 700;
+    border: 1px solid var(--rule); border-radius: 5px;
+    background: var(--cream); color: var(--brown);
+    cursor: pointer; padding: 0.4rem 0.6rem; font-size: 0.82rem;
+    transition: all 0.18s; min-width: 38px;
+  }
+  .a11y-bar button:hover { background: var(--orange-pale); border-color: var(--orange-soft); }
+  .a11y-bar button.ativo { background: var(--orange-deep); color: white; border-color: var(--orange-deep); }
+  .a11y-bar button.wide { width: 100%; font-size: 0.72rem; letter-spacing: 0.04em; }
+
+  /* ============= HERO / ABERTURA ============= */
+  .hero {
+    max-width: 880px; margin: 0 auto;
+    padding: 4.5rem 2.5rem 2.5rem;
+    text-align: center;
+  }
+  .hero .breadcrumb {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.74rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--orange-deep);
+    font-weight: 700; margin-bottom: 1.6rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+    font-weight: 600; line-height: 1.12;
+    letter-spacing: -0.02em; margin-bottom: 1.4rem;
+  }
+  .hero .lede {
+    font-size: 1.15rem; color: var(--ink-soft);
+    line-height: 1.7; max-width: 680px; margin: 0 auto;
+  }
+  .hero .scroll-cue {
+    margin-top: 2.6rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .hero .scroll-cue::after { content: ' ↓'; }
+
+  /* ============= SEÇÃO CONCEITO ============= */
+  .conceito {
+    background: var(--cream); border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .conceito-inner {
+    max-width: 880px; margin: 0 auto; padding: 3.2rem 2.5rem;
+  }
+  .conceito-inner .rotulo {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.74rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--orange-deep);
+    font-weight: 700; margin-bottom: 1rem;
+  }
+  .conceito-inner h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 600; line-height: 1.2; margin-bottom: 1.2rem;
+  }
+  .conceito-inner p {
+    font-size: 1.08rem; color: var(--ink-soft);
+    margin-bottom: 1rem; line-height: 1.7;
+  }
+  .conceito-inner p:last-child { margin-bottom: 0; }
+
+  /* ============= DEMONSTRAÇÃO PROGRESSIVA ============= */
+  .demo {
+    max-width: 980px; margin: 0 auto; padding: 3.5rem 2.5rem;
+  }
+  .demo .rotulo {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.74rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--orange-deep);
+    font-weight: 700; margin-bottom: 0.8rem; text-align: center;
+  }
+  .demo h2 {
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
+    font-weight: 600; text-align: center; margin-bottom: 0.5rem;
+  }
+  .demo .demo-sub {
+    text-align: center; color: var(--ink-soft);
+    font-size: 1rem; margin-bottom: 2rem;
+  }
+  .demo-card {
+    background: white; border: 1px solid var(--rule);
+    border-radius: 8px; padding: 2rem 2rem 1.6rem;
+    box-shadow: 0 4px 20px rgba(90,56,37,0.05);
+  }
+  body.alto-contraste .demo-card { border-color: #000; }
+  .demo-step-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 1rem; margin-bottom: 0.3rem; flex-wrap: wrap;
+  }
+  .demo-step-head h3 {
+    font-size: 1.3rem; font-weight: 600; color: var(--ink);
+  }
+  .demo-step-num {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-faint); font-weight: 600;
+  }
+  .demo-legenda {
+    font-size: 0.98rem; color: var(--ink-soft);
+    min-height: 3.2em; margin-bottom: 0.5rem;
+  }
+  .demo-legenda strong { color: var(--mark); font-weight: 600; }
+  #demo-svg { width: 100%; height: auto; display: block; }
+
+  /* controles */
+  .demo-controls {
+    display: flex; align-items: center; justify-content: center;
+    gap: 1.2rem; margin-top: 1.4rem;
+  }
+  .demo-controls button {
+    font-family: 'Work Sans', sans-serif; font-weight: 700;
+    font-size: 0.82rem; letter-spacing: 0.06em;
+    border-radius: 6px; cursor: pointer; padding: 0.7rem 1.5rem;
+    transition: all 0.2s; border: 1.5px solid var(--orange-deep);
+  }
+  .demo-controls .btn-prev {
+    background: white; color: var(--orange-deep);
+  }
+  .demo-controls .btn-prev:hover:not(:disabled) { background: var(--orange-pale); }
+  .demo-controls .btn-next {
+    background: var(--orange-deep); color: white;
+  }
+  .demo-controls .btn-next:hover:not(:disabled) { background: var(--brown); border-color: var(--brown); }
+  .demo-controls button:disabled { opacity: 0.35; cursor: not-allowed; }
+  .demo-dots { display: flex; gap: 0.5rem; }
+  .demo-dots .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--rule); cursor: pointer; transition: all 0.2s;
+    border: none; padding: 0;
+  }
+  .demo-dots .dot.ativo { background: var(--orange-deep); transform: scale(1.3); }
+  .demo-fonte {
+    text-align: center; font-family: 'Work Sans', sans-serif;
+    font-size: 0.76rem; color: var(--ink-faint); margin-top: 1.4rem;
+  }
+
+  /* ============= DOIS CAMINHOS ============= */
+  .caminhos {
+    background: var(--cream); border-top: 1px solid var(--rule);
+  }
+  .caminhos-inner {
+    max-width: 1100px; margin: 0 auto; padding: 3.5rem 2.5rem 4rem;
+  }
+  .caminhos-inner > .rotulo {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.74rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--orange-deep);
+    font-weight: 700; margin-bottom: 0.6rem; text-align: center;
+  }
+  .caminhos-inner > h2 {
+    font-size: clamp(1.5rem, 2.8vw, 2rem); font-weight: 600;
+    text-align: center; margin-bottom: 2rem;
+  }
+  .caminho-cards {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
+  }
+  .caminho {
+    background: white; border: 1px solid var(--rule);
+    border-radius: 8px; padding: 2.2rem 2rem;
+    text-decoration: none; color: var(--ink);
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+    transition: all 0.25s ease; min-height: 250px;
+  }
+  body.alto-contraste .caminho { border-color: #000; }
+  .caminho::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 5px; background: var(--orange); transition: height 0.3s;
+  }
+  .caminho.sugerido::before { background: var(--orange-deep); }
+  .caminho:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(90,56,37,0.13);
+    border-color: var(--orange-soft);
+  }
+  .caminho:hover::before { height: 7px; }
+  .caminho .tag {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.68rem; letter-spacing: 0.16em;
+    text-transform: uppercase; font-weight: 700;
+    color: var(--orange-deep); margin-bottom: 0.9rem;
+  }
+  .caminho .tag.destaque {
+    display: inline-block; background: var(--orange-deep); color: white;
+    padding: 0.25rem 0.6rem; border-radius: 3px; align-self: flex-start;
+  }
+  .caminho h3 {
+    font-size: 1.5rem; font-weight: 600; line-height: 1.18;
+    margin-bottom: 0.7rem;
+  }
+  .caminho p {
+    font-size: 0.96rem; color: var(--ink-soft); margin-bottom: 1.4rem;
+  }
+  .caminho .ir {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--orange-deep); font-weight: 700;
+    margin-top: auto; padding-top: 0.9rem; border-top: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .caminho .ir::after { content: '→'; font-size: 1.1rem; transition: transform 0.25s; }
+  .caminho:hover .ir::after { transform: translateX(5px); }
+
+  /* ============= FOOTER ============= */
+  footer {
+    background: var(--brown); color: var(--cream-warm);
+    padding: 2.8rem 2.5rem;
+  }
+  body.alto-contraste footer { background: #000; }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; flex-wrap: wrap; gap: 2rem;
+    align-items: flex-start; justify-content: space-between;
+  }
+  .footer-inner .footer-brand {
+    font-family: 'Work Sans', sans-serif; font-weight: 700;
+    font-size: 0.95rem; display: flex; align-items: center; gap: 0.6rem;
+  }
+  /* PLACEHOLDER LOGO BRANCA — substituir por <img src="logo-nees-branca.svg"> */
+  .footer-inner .logo-mark-branca {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--cream-warm); position: relative; overflow: hidden; flex-shrink: 0;
+  }
+  .footer-inner .logo-mark-branca::before {
+    content: ''; position: absolute; top: 50%; left: 0;
+    width: 100%; height: 50%; background: var(--orange-soft);
+  }
+  .footer-inner p {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.82rem; line-height: 1.6; color: var(--cream-warm);
+    max-width: 460px;
+  }
+  .footer-inner a { color: var(--orange-soft); }
+  .footer-meta {
+    font-size: 0.74rem; color: var(--orange-soft);
+    letter-spacing: 0.05em; margin-top: 0.6rem;
+  }
+
+  /* ============= RESPONSIVO ============= */
+  @media (max-width: 720px) {
+    nav.brand-bar { padding: 0.9rem 1.3rem; }
+    nav.brand-bar .nav-links { display: none; }
+    .hero, .conceito-inner, .demo, .caminhos-inner { padding-left: 1.3rem; padding-right: 1.3rem; }
+    .caminho-cards { grid-template-columns: 1fr; }
+    .a11y-bar { right: 0.5rem; bottom: 0.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============= NAV ============= -->
+<nav class="brand-bar">
+  <div class="logo">
+    <!-- TROCAR pelo arquivo da logo do Observatório quando disponível -->
+    <div class="logo-mark" aria-hidden="true"></div>
+    <span>Observatório de Equidade Educacional</span>
+  </div>
+  <div class="nav-links">
+    <a href="#" class="current">Interseccionalidade</a>
+    <a href="../prototipo/travessias.html">Travessias</a>
+    <a href="../prototipo/insights3_dinamico.html">Painel de Dados</a>
+  </div>
+</nav>
+
+<!-- ============= BARRA DE ACESSIBILIDADE ============= -->
+<div class="a11y-bar" role="region" aria-label="Opções de acessibilidade">
+  <div class="a11y-title">Acessibilidade</div>
+  <div class="a11y-row">
+    <button id="fonte-menos" aria-label="Diminuir tamanho da fonte">A−</button>
+    <button id="fonte-reset" aria-label="Tamanho de fonte padrão">A</button>
+    <button id="fonte-mais" aria-label="Aumentar tamanho da fonte">A+</button>
+  </div>
+  <button id="contraste" class="wide" aria-pressed="false">Alto contraste</button>
+</div>
+
+<!-- ============= HERO ============= -->
+<header class="hero">
+  <div class="breadcrumb">Plataforma de leitura crítica</div>
+  <h1>A média conta uma história.<br>O <em>resto</em> conta outra.</h1>
+  <p class="lede">Antes de entrar nas plataformas do Observatório, vale entender por que olhamos os dados educacionais com lente interseccional — e por que um único número quase nunca é suficiente.</p>
+  <div class="scroll-cue sans">Role para começar</div>
+</header>
+
+<!-- ============= CONCEITO ============= -->
+<section class="conceito">
+  <div class="conceito-inner">
+    <div class="rotulo">Por que interseccionalidade</div>
+    <h2>Não é apenas <em>cruzar</em> variáveis. É reconhecer o que a média apagou.</h2>
+    <p>Olhar os dados com lente interseccional vai além de combinar marcadores sociodemográficos — raça, sexo, território, classe. O objetivo é dar conta de algo mais difícil: <strong>reconhecer invisibilidades e opressões históricas escondidas dentro dos números</strong>.</p>
+    <p>Indicadores médios — a nota média, a taxa média, o percentual nacional — são úteis para a manchete, mas têm um efeito colateral: eles <em>achatam</em> a desigualdade. Os extremos, justamente onde a injustiça é mais aguda, desaparecem dentro da média. A pessoa no topo e a pessoa no chão somem no mesmo número.</p>
+    <p>A lente interseccional desfaz esse achatamento. Ela mostra <strong>quem está dentro da média</strong> — e revela que, quase sempre, a média não fala de quase ninguém.</p>
+  </div>
+</section>
+
+<!-- ============= DEMONSTRAÇÃO PROGRESSIVA ============= -->
+<section class="demo">
+  <div class="rotulo">Veja acontecer</div>
+  <h2>Uma média se desfazendo, passo a passo</h2>
+  <p class="demo-sub sans">Aprendizagem adequada em Língua Portuguesa — 5º ano do Ensino Fundamental. Avance e veja o número único virar oito.</p>
+
+  <div class="demo-card">
+    <div class="demo-step-head">
+      <h3 id="demo-titulo">A média nacional</h3>
+      <span class="demo-step-num" id="demo-num">Passo 1 de 4</span>
+    </div>
+    <p class="demo-legenda" id="demo-legenda">Um número só. É o que vai para as manchetes.</p>
+    <svg id="demo-svg" viewBox="0 0 760 360" role="img" aria-label="Gráfico de barras da aprendizagem adequada por grupo"></svg>
+
+    <div class="demo-controls">
+      <button class="btn-prev" id="btn-prev" disabled aria-label="Passo anterior">‹ Anterior</button>
+      <div class="demo-dots" id="demo-dots" role="tablist" aria-label="Passos da demonstração"></div>
+      <button class="btn-next" id="btn-next" aria-label="Próximo passo">Próximo ›</button>
+    </div>
+    <p class="demo-fonte" id="demo-fonte"></p>
+  </div>
+</section>
+
+<!-- ============= DOIS CAMINHOS ============= -->
+<section class="caminhos">
+  <div class="caminhos-inner">
+    <div class="rotulo">Continue a leitura</div>
+    <h2>Dois caminhos pelos dados</h2>
+    <div class="caminho-cards">
+
+      <a class="caminho sugerido" href="../prototipo/travessias.html">
+        <span class="tag destaque">Caminho sugerido · comece aqui</span>
+        <h3>Travessias — uma <em>jornada</em> interseccional</h3>
+        <p>Duas crianças nascem no mesmo dia. Acompanhe Helena e Davi por dezesseis anos, em seis atos, e veja cada marca social se acumular na trajetória. É a porta de entrada — uma história antes dos números.</p>
+        <span class="ir">Iniciar a jornada</span>
+      </a>
+
+      <a class="caminho" href="../prototipo/insights3_dinamico.html">
+        <span class="tag">Para quem já fez a jornada</span>
+        <h3>Painel — nove <em>leituras</em> + mapa navegável</h3>
+        <p>Três dimensões — desempenho, permanência e abandono — em nove leituras com cenários contrafactuais. Mapa do Brasil com seis recortes interseccionais. O aprofundamento, para quem já entende o porquê.</p>
+        <span class="ir">Explorar o painel</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============= FOOTER ============= -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">
+        <!-- TROCAR pela logo branca do Observatório/NEES -->
+        <div class="logo-mark-branca" aria-hidden="true"></div>
+        <span>Observatório de Equidade Educacional</span>
+      </div>
+      <p class="footer-meta">NEES · Universidade Federal de Alagoas · 2026</p>
+    </div>
+    <p>
+      Iniciativa do Núcleo de Estudos em Educação e Sociedade (NEES/UFAL).
+      Dados oficiais de INEP, IBGE, FNDE e Portal da Transparência.<br>
+      <a href="https://github.com/gabrielfortes-nees/observatorio-equidade-educacional-nees/tree/main/handoff" target="_blank" rel="noopener">Documentação técnica e metodológica</a>
+      · <a href="https://github.com/gabrielfortes-nees/observatorio-equidade-educacional-nees" target="_blank" rel="noopener">Código aberto no GitHub</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ====================================================================
+   BARRA DE ACESSIBILIDADE
+   ==================================================================== */
+(function () {
+  const root = document.documentElement;
+  const tamanhos = [16, 18, 20, 23];          // px — A−, padrão, A+, A++
+  let idx = 1;
+  const aplica = () => root.style.setProperty('--fs-base', tamanhos[idx] + 'px');
+  document.getElementById('fonte-menos').addEventListener('click', () => { idx = Math.max(0, idx - 1); aplica(); });
+  document.getElementById('fonte-mais').addEventListener('click', () => { idx = Math.min(tamanhos.length - 1, idx + 1); aplica(); });
+  document.getElementById('fonte-reset').addEventListener('click', () => { idx = 1; aplica(); });
+
+  const btnContraste = document.getElementById('contraste');
+  btnContraste.addEventListener('click', () => {
+    const ativo = document.body.classList.toggle('alto-contraste');
+    btnContraste.classList.toggle('ativo', ativo);
+    btnContraste.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+    if (window.__demoRender) window.__demoRender();   // re-renderiza o gráfico nas novas cores
+  });
+})();
+
+/* ====================================================================
+   DEMONSTRAÇÃO PROGRESSIVA
+   ==================================================================== */
+(async function () {
+  let demo;
+  try {
+    demo = await fetch('./landing_demo.json').then(r => r.json());
+  } catch (e) {
+    document.getElementById('demo-legenda').textContent = 'Não foi possível carregar os dados da demonstração.';
+    console.error(e);
+    return;
+  }
+
+  const passos = demo.passos;
+  const TOTAL = passos.length;
+  let atual = 0;
+
+  const reduzMov = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DUR = reduzMov ? 0 : 750;
+
+  const svg = d3.select('#demo-svg');
+  const W = 760, H = 360;
+  const margin = { top: 18, right: 70, bottom: 38, left: 188 };
+  const w = W - margin.left - margin.right;
+  const h = H - margin.top - margin.bottom;
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const cor = () => {
+    const cs = getComputedStyle(document.body);
+    return {
+      alto:   cs.getPropertyValue('--orange-deep').trim() || '#D35400',
+      baixo:  cs.getPropertyValue('--brown').trim() || '#5A3825',
+      neutro: cs.getPropertyValue('--ink-faint').trim() || '#9A8B7E',
+      mark:   cs.getPropertyValue('--mark').trim() || '#A82E2E',
+      rule:   cs.getPropertyValue('--rule').trim() || '#D6C9B8',
+      ink:    cs.getPropertyValue('--ink').trim() || '#2A1F18',
+      inkft:  cs.getPropertyValue('--ink-faint').trim() || '#9A8B7E'
+    };
+  };
+
+  const x = d3.scaleLinear().domain([0, 80]).range([0, w]);
+  const mediaBrasil = demo.passos[0].barras[0].value;
+
+  function render() {
+    const C = cor();
+    const passo = passos[atual];
+    const barras = passo.barras;
+
+    // textos
+    document.getElementById('demo-titulo').textContent = passo.titulo;
+    document.getElementById('demo-num').textContent = `Passo ${atual + 1} de ${TOTAL}`;
+    document.getElementById('demo-legenda').innerHTML = passo.legenda;
+    document.getElementById('demo-fonte').textContent = demo.meta.fonte;
+
+    const yBand = d3.scaleBand()
+      .domain(barras.map((d, i) => i))
+      .range([0, h]).padding(barras.length > 4 ? 0.28 : 0.42);
+
+    // ----- eixo X (uma vez) -----
+    let eixo = g.select('.eixo-x');
+    if (eixo.empty()) {
+      eixo = g.append('g').attr('class', 'eixo-x');
+      eixo.append('line').attr('class', 'base');
+      [0, 20, 40, 60, 80].forEach(t => {
+        eixo.append('text').attr('class', 'tick').attr('data-t', t)
+          .attr('x', x(t)).attr('y', h + 22).attr('text-anchor', 'middle')
+          .attr('font-family', 'Work Sans').attr('font-size', 11)
+          .text(t + '%');
+      });
+    }
+    eixo.select('.base')
+      .attr('x1', 0).attr('x2', w).attr('y1', h).attr('y2', h)
+      .attr('stroke', C.rule);
+    eixo.selectAll('.tick').attr('fill', C.inkft);
+
+    // ----- linha da média nacional (referência fixa) -----
+    let media = g.select('.linha-media');
+    if (media.empty()) {
+      media = g.append('g').attr('class', 'linha-media');
+      media.append('line');
+      media.append('text');
+    }
+    media.select('line')
+      .attr('x1', x(mediaBrasil)).attr('x2', x(mediaBrasil))
+      .attr('y1', -4).attr('y2', h)
+      .attr('stroke', C.mark).attr('stroke-dasharray', '3,4').attr('stroke-width', 1.2);
+    media.select('text')
+      .attr('x', x(mediaBrasil)).attr('y', -8).attr('text-anchor', 'middle')
+      .attr('font-family', 'Work Sans').attr('font-size', 10).attr('font-weight', 700)
+      .attr('fill', C.mark)
+      .text('média ' + String(mediaBrasil).replace('.', ',') + '%');
+
+    // ----- barras (data join com transição) -----
+    const grupos = g.selectAll('.barra').data(barras, (d, i) => i + '-' + barras.length);
+
+    // saída
+    grupos.exit()
+      .transition().duration(DUR / 2).style('opacity', 0).remove();
+
+    // entrada
+    const entra = grupos.enter().append('g').attr('class', 'barra').style('opacity', 0);
+    entra.append('rect').attr('class', 'corpo').attr('x', 0).attr('width', 0);
+    entra.append('text').attr('class', 'rotulo-grp');
+    entra.append('text').attr('class', 'valor');
+
+    // entrada + atualização
+    const todos = entra.merge(grupos);
+    todos.transition().duration(DUR).style('opacity', 1);
+
+    todos.each(function (d, i) {
+      const sel = d3.select(this);
+      const corBarra = d.grupo === 'neutro' ? C.neutro : (d.grupo === 'alto' ? C.alto : C.baixo);
+      const yy = yBand(i), bh = yBand.bandwidth();
+
+      sel.select('.corpo')
+        .attr('y', yy).attr('height', bh).attr('rx', 2)
+        .attr('fill', corBarra)
+        .transition().duration(DUR)
+        .attr('width', x(d.value));
+
+      sel.select('.rotulo-grp')
+        .attr('x', -12).attr('y', yy + bh / 2).attr('dy', '0.35em')
+        .attr('text-anchor', 'end')
+        .attr('font-family', 'Work Sans')
+        .attr('font-size', barras.length > 4 ? 10.5 : 12.5)
+        .attr('fill', C.ink)
+        .text(d.label);
+
+      sel.select('.valor')
+        .attr('y', yy + bh / 2).attr('dy', '0.35em')
+        .attr('font-family', 'Work Sans')
+        .attr('font-size', barras.length > 4 ? 11 : 14)
+        .attr('font-weight', 700)
+        .attr('fill', C.ink)
+        .transition().duration(DUR)
+        .attr('x', x(d.value) + 7)
+        .tween('text', function () {
+          const no = d3.interpolateNumber(parseFloat(this.textContent) || 0, d.value);
+          return function (t) { this.textContent = (Math.round(no(t) * 10) / 10).toString().replace('.', ',') + '%'; };
+        });
+    });
+
+    // controles
+    document.getElementById('btn-prev').disabled = (atual === 0);
+    document.getElementById('btn-next').disabled = (atual === TOTAL - 1);
+    document.querySelectorAll('#demo-dots .dot').forEach((dot, i) => {
+      dot.classList.toggle('ativo', i === atual);
+      dot.setAttribute('aria-selected', i === atual ? 'true' : 'false');
+    });
+  }
+  window.__demoRender = render;   // permite re-render quando muda contraste
+
+  // dots
+  const dotsWrap = document.getElementById('demo-dots');
+  passos.forEach((p, i) => {
+    const b = document.createElement('button');
+    b.className = 'dot';
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-label', 'Ir para o passo ' + (i + 1));
+    b.addEventListener('click', () => { atual = i; render(); });
+    dotsWrap.appendChild(b);
+  });
+
+  document.getElementById('btn-prev').addEventListener('click', () => {
+    if (atual > 0) { atual--; render(); }
+  });
+  document.getElementById('btn-next').addEventListener('click', () => {
+    if (atual < TOTAL - 1) { atual++; render(); }
+  });
+  // teclado
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' && atual < TOTAL - 1) { atual++; render(); }
+    if (e.key === 'ArrowLeft' && atual > 0) { atual--; render(); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

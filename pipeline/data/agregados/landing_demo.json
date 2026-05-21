@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "fonte": "SAEB 2023 · 5º ano EF · escolas públicas · corte oficial INEP (proficiência ≥ 225)",
+    "indicador": "% de estudantes com aprendizagem adequada em Língua Portuguesa",
+    "gerado_em": "2026-05-21 08:35:19"
+  },
+  "passos": [
+    {
+      "titulo": "A média nacional",
+      "legenda": "Um número só. É o que vai para as manchetes.",
+      "barras": [
+        {
+          "label": "Todos os estudantes",
+          "value": 39.7,
+          "grupo": "neutro"
+        }
+      ]
+    },
+    {
+      "titulo": "Quando se separa por raça/cor",
+      "legenda": "A média se divide em dois. A distância começa a aparecer.",
+      "barras": [
+        {
+          "label": "Brancos e amarelos",
+          "value": 45.6,
+          "grupo": "alto"
+        },
+        {
+          "label": "Pretos e pardos",
+          "value": 36.6,
+          "grupo": "baixo"
+        }
+      ]
+    },
+    {
+      "titulo": "Quando se acrescenta o sexo",
+      "legenda": "Quatro grupos. Cada marcador social desloca o número.",
+      "barras": [
+        {
+          "label": "Meninas brancas",
+          "value": 48.9,
+          "grupo": "alto"
+        },
+        {
+          "label": "Meninos brancos",
+          "value": 42.6,
+          "grupo": "alto"
+        },
+        {
+          "label": "Meninas pretas/pardas",
+          "value": 39.7,
+          "grupo": "baixo"
+        },
+        {
+          "label": "Meninos pretos/pardos",
+          "value": 33.5,
+          "grupo": "baixo"
+        }
+      ]
+    },
+    {
+      "titulo": "Quando se acrescenta o nível socioeconômico",
+      "legenda": "Oito grupos. Do topo (Meninas brancas · NSE alto, 63,6%) ao chão (Meninos pretos · NSE baixo, 23,7%): 39,9 pontos percentuais que a média escondia inteiros.",
+      "barras": [
+        {
+          "label": "Meninas brancas · NSE alto",
+          "value": 63.6,
+          "grupo": "alto"
+        },
+        {
+          "label": "Meninos brancos · NSE alto",
+          "value": 55.8,
+          "grupo": "alto"
+        },
+        {
+          "label": "Meninas pretas · NSE alto",
+          "value": 53.2,
+          "grupo": "baixo"
+        },
+        {
+          "label": "Meninos pretos · NSE alto",
+          "value": 44.2,
+          "grupo": "baixo"
+        },
+        {
+          "label": "Meninas brancas · NSE baixo",
+          "value": 30.6,
+          "grupo": "alto"
+        },
+        {
+          "label": "Meninas pretas · NSE baixo",
+          "value": 29.4,
+          "grupo": "baixo"
+        },
+        {
+          "label": "Meninos brancos · NSE baixo",
+          "value": 25.4,
+          "grupo": "alto"
+        },
+        {
+          "label": "Meninos pretos · NSE baixo",
+          "value": 23.7,
+          "grupo": "baixo"
+        }
+      ]
+    }
+  ],
+  "sintese": {
+    "media": 39.7,
+    "topo_label": "Meninas brancas · NSE alto",
+    "topo_value": 63.6,
+    "chao_label": "Meninos pretos · NSE baixo",
+    "chao_value": 23.7,
+    "amplitude": 39.9
+  }
+}
