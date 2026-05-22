@@ -899,7 +899,7 @@
   <p class="lede">A escola brasileira é desigual, mas a desigualdade não é uniforme. Ela cruza raça, gênero, território e classe de formas que os indicadores médios não conseguem mostrar. Cada leitura aqui combina um dado quantitativo aberto com a pesquisa qualitativa brasileira que ajuda a interpretá-lo. Selecione uma dimensão para começar.</p>
   <div class="meta">
     <span>9 leituras interseccionais</span>
-    <span><strong>3 cenários "E se…"</strong> · explore o que mudaria em situações hipotéticas</span>
+    <span><strong>2 cenários "E se…"</strong> · explore o que mudaria em situações hipotéticas</span>
     <span>Em diálogo com pesquisa qualitativa brasileira e crítica internacional</span>
   </div>
 </header>
@@ -1080,9 +1080,9 @@ const readings = {
     counterfactual: false
   },
   L3: {
-    tabNum: 'Leitura 03 · E se…',
-    tabText: 'Igualando renda e trabalho, 75% da diferença racial permanece.',
-    counterfactual: true
+    tabNum: 'Leitura 03',
+    tabText: 'A desvantagem racial muda de tamanho conforme a classe.',
+    counterfactual: false
   },
   L4: {
     tabNum: 'Leitura 04',
@@ -1202,84 +1202,70 @@ const stories = {
     }
   },
 
-  /* ============= L3 — decomposição da diferença · E se… ============= */
+  /* ============= L3 — raça × classe (interseção) ============= */
   'L3': {
-    eyebrow: 'Leitura 03 · E se… · SAEB 2023 9º EF · decomposição da diferença',
+    eyebrow: 'Leitura 03 · SAEB 2023 · 9º EF · raça e classe',
     title: '',
     text: '',
     source: '',
-    quali: {
-      mark: 'Em diálogo com a pesquisa qualitativa',
-      text: `<strong>Gomes (2012)</strong> ajuda a nomear o resíduo: a escola não é uma instituição neutra que apenas reflete desigualdades de fora — ela própria produz e reitera hierarquias raciais no currículo, na avaliação e na convivência. A diferença que permanece depois de igualar renda e trabalho não é um mistério estatístico; é o nome técnico para racismo institucional.`,
-      ref: 'Gomes, N. L. (2012) · Relações étnico-raciais, educação e descolonização dos currículos · Currículo sem Fronteiras.'
-    },
-    counterfactual: true,
-    titleOff: '<em>{{narrativa.raca_pct_residuo}}%</em> da diferença racial não é trabalho nem renda.',
-    cfKey: 'residuo',
-    toggleReal: 'Diferença observada',
-    toggleOff: 'E se igualássemos renda e trabalho',
+    quali: { mark: '', text: '', ref: '' },
+    counterfactual: false,
     viz: (el, payload) => {
       if (!payload) return;
-      const decs = payload.viz.decomposicoes;
-      const s = svgIn(el, 560, 352);
-      const margL = 34, margR = 78, margT = 50;
+      const v = payload.viz;
+      const grupos = v.grupos;
+      const s = svgIn(el, 560, 340);
+      const margL = 34, margR = 40, margT = 56, margB = 76;
       const w = 560 - margL - margR;
+      const h = 340 - margT - margB;
       const g = s.append('g').attr('transform', `translate(${margL},${margT})`);
-      g.append('text').attr('x', 0).attr('y', -30).attr('font-family','Work Sans').attr('font-size',9)
+      g.append('text').attr('x',0).attr('y',-34).attr('font-family','Work Sans').attr('font-size',9)
         .attr('fill',C.inkFaint).attr('letter-spacing','0.08em').style('text-transform','uppercase')
-        .text('DIFERENÇA DE PROFICIÊNCIA EM LP NO 9º ANO (PONTOS SAEB)');
-      const xMax = Math.max(...decs.map(d => d.bruto)) * 1.03;
-      const x = d3.scaleLinear().domain([0, xMax]).range([0, w]);
-      const rowH = 122, barH = 46;
-      const partes = [];
-      decs.forEach((d, i) => {
-        const y0 = i * rowH;
-        g.append('text').attr('x', 0).attr('y', y0 + 2).attr('font-family','Work Sans')
-          .attr('font-size',12.5).attr('font-weight',700).attr('fill',C.ink).text(d.rotulo);
-        g.append('text').attr('x', 0).attr('y', y0 + 18).attr('font-family','Lora').attr('font-style','italic')
-          .attr('font-size',10).attr('fill',C.inkSoft).text(d.sub);
-        const barY = y0 + 30;
-        const wExp = x(d.explicado), wRes = x(d.residuo);
-        const rectExp = g.append('rect').attr('x', 0).attr('y', barY).attr('width', wExp).attr('height', barH)
-          .attr('fill', C.orangeSoft).attr('opacity', 0.92);
-        const rectRes = g.append('rect').attr('x', wExp).attr('y', barY).attr('width', wRes).attr('height', barH)
-          .attr('fill', C.mark).attr('opacity', 0.92).attr('stroke','white').attr('stroke-width', wExp > 1 ? 1.5 : 0);
-        const valExp = g.append('text').attr('x', wExp/2).attr('y', barY + barH/2).attr('dy','0.35em')
-          .attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size',11).attr('font-weight',700)
-          .attr('fill', C.ink).attr('opacity', wExp > 24 ? 1 : 0).text(String(d.explicado).replace('.',','));
-        const valRes = g.append('text').attr('x', wExp + wRes/2).attr('y', barY + barH/2).attr('dy','0.35em')
-          .attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size',12).attr('font-weight',700)
-          .attr('fill','white').text(String(d.residuo).replace('.',',') + ' · ' + d.pct_residuo + '%');
-        const totLbl = g.append('text').attr('x', x(d.bruto) + 8).attr('y', barY + barH/2).attr('dy','0.35em')
-          .attr('font-family','Work Sans').attr('font-size',10.5).attr('font-weight',600).attr('fill',C.inkSoft)
-          .text(String(d.bruto).replace('.',',') + ' pts');
-        g.append('text').attr('x', 0).attr('y', y0 + 94).attr('font-family','Lora').attr('font-style','italic')
-          .attr('font-size',9.5).attr('fill', C.inkSoft)
-          .text(d.explicado > 0
-            ? ('Trabalho e renda explicam ' + String(d.explicado).replace('.',',') + ' dos ' + String(d.bruto).replace('.',',') + ' pontos.')
-            : 'Trabalho e renda não explicam essa diferença.');
-        partes.push({ d, rectExp, rectRes, valExp, valRes, totLbl, wExp, wRes });
+        .text(v.indicador.toUpperCase());
+      const vals = grupos.reduce((a,gr)=>a.concat([gr.preto,gr.branco]),[]);
+      const xmin = Math.floor((Math.min(...vals) - 14)/5)*5;
+      const xmax = Math.ceil((Math.max(v.corte_adequado, Math.max(...vals)) + 6)/5)*5;
+      const x = d3.scaleLinear().domain([xmin, xmax]).range([0, w]);
+      x.ticks(6).forEach(t => {
+        g.append('line').attr('x1',x(t)).attr('x2',x(t)).attr('y1',0).attr('y2',h)
+          .attr('stroke',C.rule).attr('stroke-dasharray','2,3').attr('stroke-width',0.5);
+        g.append('text').attr('x',x(t)).attr('y',h+16).attr('text-anchor','middle')
+          .attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).text(t);
       });
-      const legY = decs.length * rowH - 14;
-      const leg = g.append('g').attr('transform', `translate(0, ${legY})`);
-      leg.append('rect').attr('x',0).attr('y',0).attr('width',11).attr('height',11).attr('fill',C.orangeSoft).attr('opacity',0.92);
-      leg.append('text').attr('x',16).attr('y',9.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('explicado por trabalho e renda');
-      leg.append('rect').attr('x',210).attr('y',0).attr('width',11).attr('height',11).attr('fill',C.mark).attr('opacity',0.92);
-      leg.append('text').attr('x',226).attr('y',9.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('resíduo (não explicado pela classe)');
-      g.append('text').attr('x',0).attr('y', legY + 30).attr('font-family','Lora').attr('font-style','italic')
-        .attr('font-size',10.5).attr('fill',C.mark).attr('font-weight',600).text(payload.viz.anotacao);
-
-      cfRenderers.residuo = { update: (scenario) => {
-        const off = scenario === 'off';
-        partes.forEach(p => {
-          const xRes = off ? 0 : p.wExp;
-          p.rectExp.transition().duration(700).attr('width', off ? 0 : p.wExp).attr('opacity', off ? 0 : 0.92);
-          p.rectRes.transition().duration(700).attr('x', xRes);
-          p.valExp.transition().duration(700).attr('opacity', (off || p.wExp <= 24) ? 0 : 1);
-          p.valRes.transition().duration(700).attr('x', xRes + p.wRes/2);
-          p.totLbl.transition().duration(700).attr('opacity', off ? 0 : 1);
+      const xc = x(v.corte_adequado);
+      g.append('line').attr('x1',xc).attr('x2',xc).attr('y1',-6).attr('y2',h)
+        .attr('stroke',C.mark).attr('stroke-width',1).attr('stroke-dasharray','4,3');
+      g.append('text').attr('x',xc).attr('y',-12).attr('text-anchor','middle')
+        .attr('font-family','Lora').attr('font-style','italic').attr('font-size',9.5).attr('fill',C.mark)
+        .text('nível adequado (' + v.corte_adequado + ')');
+      const rowY = [h*0.30, h*0.74];
+      grupos.forEach((gr,i) => {
+        const yy = rowY[i];
+        g.append('text').attr('x',0).attr('y',yy-26).attr('font-family','Work Sans')
+          .attr('font-size',10.5).attr('font-weight',700).attr('fill',C.ink).text(gr.rotulo);
+        g.append('line').attr('x1',x(gr.preto)).attr('x2',x(gr.branco)).attr('y1',yy).attr('y2',yy)
+          .attr('stroke',C.inkFaint).attr('stroke-width',3).attr('opacity',0.55);
+        g.append('text').attr('x',(x(gr.preto)+x(gr.branco))/2).attr('y',yy-10).attr('text-anchor','middle')
+          .attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('font-weight',700)
+          .attr('fill',C.mark).text(gr.gap + ' pontos');
+        [['preto', gr.preto, gr.n_preto, C.brown],['branco', gr.branco, gr.n_branco, C.orange]].forEach(d => {
+          const cx = x(d[1]);
+          g.append('circle').attr('cx',cx).attr('cy',yy).attr('r',8).attr('fill',d[3]);
+          g.append('text').attr('x',cx).attr('y',yy+24).attr('text-anchor','middle')
+            .attr('font-family','Work Sans').attr('font-size',12).attr('font-weight',700)
+            .attr('fill', d[0]==='preto'?C.brown:C.orangeDeep).text(d[1]);
+          g.append('text').attr('x',cx).attr('y',yy+37).attr('text-anchor','middle')
+            .attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkFaint)
+            .text(Math.round(d[2]/1000) + ' mil');
         });
-      }};
+      });
+      const leg = g.append('g').attr('transform',`translate(0,${h+34})`);
+      leg.append('circle').attr('cx',6).attr('cy',0).attr('r',6).attr('fill',C.brown);
+      leg.append('text').attr('x',17).attr('y',3.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('pretos e pardos');
+      leg.append('circle').attr('cx',135).attr('cy',0).attr('r',6).attr('fill',C.orange);
+      leg.append('text').attr('x',146).attr('y',3.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('brancos e amarelos');
+      g.append('text').attr('x',0).attr('y',h+54).attr('font-family','Lora').attr('font-style','italic')
+        .attr('font-size',10.5).attr('fill',C.mark).attr('font-weight',600).text(v.anotacao);
     }
   },
 
@@ -1659,21 +1645,16 @@ const _storyPatches = {
   },
   L3: {
     dataKey: 'L3',
-    eyebrow: 'Leitura 03 · E se… · SAEB 2023 9º EF · decomposição da diferença',
-    title: 'Mesmo igualando renda e trabalho, sobram <em>{{narrativa.raca_residuo}} pontos</em>.',
-    text: `<p><strong>O indicador.</strong> A diferença de proficiência em Língua Portuguesa entre estudantes brancos e pretos/pardos do 9º ano: {{narrativa.raca_bruto}} pontos na escala SAEB. A pergunta é quanto dessa diferença é desigualdade de classe.</p>
-    <p><strong>A lógica.</strong> Para responder, comparamos estudantes brancos e pretos/pardos que vivem a mesma situação de classe: a mesma carga de trabalho (doméstico e remunerado) e a mesma faixa de renda. Trabalho e renda, juntos, explicam cerca de {{narrativa.raca_explicado}} pontos. O que sobra, {{narrativa.raca_residuo}} pontos ({{narrativa.raca_pct_residuo}}% da diferença original), é o resíduo: a parte que não é trabalho nem renda.</p>
-    <p><strong>O espelho do gênero.</strong> A mesma conta aplicada à diferença entre meninas e meninos ({{narrativa.sexo_bruto}} pontos, com as meninas à frente em leitura) mostra outro padrão: ali, trabalho e renda não explicam quase nada. O contraste afina a leitura racial: a diferença racial tinha, sim, um componente de classe; descontamos esse componente e a maior parte permaneceu.</p>`,
-    source: `Fonte: SAEB 2023 9º EF · escolas públicas · decomposição por padronização (estratos de carga de trabalho × quintil de INSE)
-      <span class="evidence-badge moderate" style="display:inline-flex;margin-left:0.5rem;">
-        <span class="dot"></span> Evidência indireta
-        <span class="tooltip">Decomposição descritiva por padronização: compara estudantes brancos e pretos/pardos com a mesma carga de trabalho e a mesma faixa de renda. Não é modelo causal; o resíduo capta tudo o que não foi igualado.</span>
-      </span>`,
-    callout: '<strong>O resíduo.</strong> Comparados estudantes brancos e pretos/pardos com a mesma carga de trabalho e a mesma renda, ainda restam <strong>{{narrativa.raca_residuo}} pontos</strong> de diferença, {{narrativa.raca_pct_residuo}}% da diferença original.',
+    eyebrow: 'Leitura 03 · SAEB 2023 · 9º EF · raça e classe',
+    title: 'Raça e classe não se somam; <em>se cruzam</em>.',
+    text: `<p><strong>O indicador.</strong> A proficiência média em Língua Portuguesa no 9º ano, lida em quatro posições do cruzamento entre raça e classe: estudantes brancos e pretos/pardos, no quintil mais rico e no mais pobre de renda (INSE).</p>
+    <p><strong>O que os dados mostram.</strong> Entre os estudantes mais ricos, os brancos atingem {{narrativa.branco_rico}} pontos e os pretos e pardos, {{narrativa.preto_rico}}: uma diferença racial de {{narrativa.gap_ricos}} pontos. Entre os mais pobres, {{narrativa.branco_pobre}} contra {{narrativa.preto_pobre}}, diferença de {{narrativa.gap_pobres}}. A desvantagem racial não tem o mesmo tamanho nos dois grupos. Um modelo que apenas somasse "desvantagem de classe + desvantagem racial" exigiria que ela fosse fixa; ela depende da classe.</p>
+    <p><strong>Como ler.</strong> A diferença racial menor entre os mais pobres não significa que a raça pese menos ali. É efeito de piso: a pobreza já derrubou todos. O estudante branco e pobre ({{narrativa.branco_pobre}}) está logo acima do preto e pobre ({{narrativa.preto_pobre}}), e os dois ficam muito abaixo do branco e rico, que com {{narrativa.branco_rico}} pontos é o único dos quatro grupos a alcançar o patamar adequado. A desvantagem racial abre distância onde ainda há distância a abrir.</p>`,
+    source: 'Fonte: SAEB 2023 · microdados aluno · 9º EF · escolas públicas · proficiência em LP por raça/cor (Q04) × quintil de INSE (Q1 e Q5)',
     quali: {
       mark: 'A leitura interseccional',
-      text: `Quando a diferença não cede ao se igualar renda e trabalho, o que resta precisa de outro nome. Gomes (2012) o oferece: a escola não apenas reflete desigualdades externas; produz hierarquias raciais no currículo, na avaliação e na convivência. O resíduo de {{narrativa.raca_residuo}} pontos é a medida do que a literatura chama de racismo institucional. É também a resposta a um argumento corrente: a desigualdade racial na escola não se reduz a desigualdade de classe.`,
-      ref: 'Gomes, N. L. (2012) · Relações étnico-raciais, educação e descolonização dos currículos · Currículo sem Fronteiras.'
+      text: `O modelo aditivo (descontar a classe e chamar o resto de raça) pressupõe que dá para separar as duas. Hasenbalg (1979) mostrou que não: no Brasil, raça e classe operam num ciclo cumulativo, uma realimentando a outra. Os dados confirmam: a desvantagem racial não tem tamanho fixo, depende da classe. E a co-constituição aparece já na contagem: a posição preto-e-pobre reúne {{narrativa.n_preto_pobre_mil}} mil estudantes, contra {{narrativa.n_branco_pobre_mil}} mil brancos e pobres. Na escola pública, ser pobre é, em larga medida, ser negro.`,
+      ref: 'Hasenbalg, C. A. (1979) · Discriminação e desigualdades raciais no Brasil.'
     }
   },
   L4: {

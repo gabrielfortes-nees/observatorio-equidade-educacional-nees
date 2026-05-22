@@ -1,45 +1,42 @@
 {
   "meta": {
     "leitura": "L3",
-    "titulo_curto": "Quanto da diferença a classe explica",
-    "eyebrow": "Leitura 03 · E se… · SAEB 2023 9º EF · decomposição da diferença",
-    "fonte": "SAEB 2023 9º EF · escolas públicas · decomposição por padronização (estratos de carga de trabalho × quintil de INSE)",
-    "cenario": true,
-    "cf_key": "residuo",
-    "evidencia": "Padronização por estratos: compara estudantes com a mesma carga de trabalho e a mesma faixa de renda. Não é modelo causal; é decomposição descritiva. Selo: evidência indireta.",
-    "gerado_em": "2026-05-22 08:52:27"
+    "titulo_curto": "Raça e classe não se somam, se cruzam",
+    "eyebrow": "Leitura 03 · SAEB 2023 · 9º EF · raça e classe",
+    "fonte": "SAEB 2023 · microdados aluno · 9º EF · escolas públicas · proficiência em LP por raça/cor (Q04) × quintil de INSE (extremos: Q1 e Q5)",
+    "gerado_em": "2026-05-22 11:05:17"
   },
   "narrativa": {
-    "raca_bruto": 15.7,
-    "raca_trabalho": 0.2,
-    "raca_renda": 3.8,
-    "raca_explicado": 4,
-    "raca_residuo": 11.7,
-    "raca_pct_residuo": 75,
-    "sexo_bruto": 14.4,
-    "sexo_residuo": 15.4,
-    "sexo_pct_residuo": 107
+    "branco_rico": 275,
+    "branco_pobre": 248,
+    "preto_rico": 259,
+    "preto_pobre": 240,
+    "gap_ricos": 16,
+    "gap_pobres": 8,
+    "n_preto_pobre_mil": 292,
+    "n_branco_pobre_mil": 80
   },
   "viz": {
-    "indicador": "Diferença de proficiência em LP no 9º ano (pontos SAEB) e quanto dela a classe explica",
-    "decomposicoes": [
+    "indicador": "Proficiência média em LP no 9º ano (pontos SAEB)",
+    "corte_adequado": 275,
+    "grupos": [
       {
-        "rotulo": "Diferença racial",
-        "sub": "brancos − pretos e pardos",
-        "bruto": 15.7,
-        "explicado": 4,
-        "residuo": 11.7,
-        "pct_residuo": 75
+        "rotulo": "Entre os estudantes mais ricos",
+        "preto": 259,
+        "branco": 275,
+        "gap": 16,
+        "n_preto": 175948,
+        "n_branco": 190147
       },
       {
-        "rotulo": "Diferença de gênero",
-        "sub": "meninas − meninos",
-        "bruto": 14.4,
-        "explicado": 0,
-        "residuo": 14.4,
-        "pct_residuo": 100
+        "rotulo": "Entre os estudantes mais pobres",
+        "preto": 240,
+        "branco": 248,
+        "gap": 8,
+        "n_preto": 292369,
+        "n_branco": 80470
       }
     ],
-    "anotacao": "Igualadas a renda e a carga de trabalho, 75% da diferença racial ainda permanece"
+    "anotacao": "A diferença racial não é fixa: 16 pontos entre os ricos, 8 entre os pobres"
   }
 }
