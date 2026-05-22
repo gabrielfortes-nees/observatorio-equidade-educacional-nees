@@ -5,7 +5,7 @@
     "eyebrow": "Leitura 04 · Censo Escolar 2025 + Censo Demográfico 2022 · cobertura de creche por UF",
     "fonte": "QT_MAT_INF_CRE (Censo Escolar 2025) / pop 0-3 anos (SIDRA t9514) × SAEB 2023 5º EF — agregado por UF (quintis das 27 unidades)",
     "n_ufs": 27,
-    "gerado_em": "2026-05-22 08:52:30"
+    "gerado_em": "2026-05-22 10:07:50"
   },
   "narrativa": {
     "cobertura_q1": 19,
@@ -18,7 +18,7 @@
     "gap_pp": 14.7
   },
   "viz": {
-    "panel_a_titulo": "A · % CRIANÇAS 0-3 EM CRECHE — POR QUINTIL DE UFS",
+    "panel_a_titulo": "A · % DE CRIANÇAS DE 0 A 3 ANOS EM CRECHE · POR GRUPO DE ESTADOS",
     "panel_a_dados": [
       {
         "q": 1,
@@ -47,7 +47,7 @@
       }
     ],
     "meta_pne": 50,
-    "panel_b_titulo": "B · % APRENDIZAGEM ADEQUADA LP — 5º ANO — MESMA QUINTILIZAÇÃO",
+    "panel_b_titulo": "B · % COM APRENDIZAGEM ADEQUADA EM LP · 5º ANO · MESMO AGRUPAMENTO",
     "panel_b_dados": [
       {
         "q": 1,
@@ -75,6 +75,6 @@
         "n": 6
       }
     ],
-    "anotacao": "mesma forma da curva, dez anos depois"
+    "anotacao": "Os dois indicadores desenham a mesma curva"
   }
 }

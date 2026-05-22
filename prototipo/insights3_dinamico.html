@@ -1188,7 +1188,7 @@ const stories = {
         g.append('rect').attr('x', x(d.centro)).attr('y', y(d.n)).attr('width', x.bandwidth()).attr('height', h - y(d.n))
           .attr('fill', d.lado === 'branco' ? C.orangeDeep : C.brown).attr('opacity', 0.85);
         if (d.n > 0) g.append('text').attr('x', x(d.centro) + x.bandwidth()/2).attr('y', y(d.n) - 4).attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkSoft).text(d.n);
-        g.append('text').attr('x', x(d.centro) + x.bandwidth()/2).attr('y', h + 14).attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkFaint).text(d.centro > 0 ? '+' + d.centro : d.centro);
+        g.append('text').attr('x', x(d.centro) + x.bandwidth()/2).attr('y', h + 14).attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkFaint).text(Math.abs(d.centro));
       });
       // linha do zero
       const zeroBin = hist.find(d => d.centro === 5);
@@ -1253,6 +1253,11 @@ const stories = {
         const totLbl = g.append('text').attr('x', x(d.bruto) + 8).attr('y', barY + barH/2).attr('dy','0.35em')
           .attr('font-family','Work Sans').attr('font-size',10.5).attr('font-weight',600).attr('fill',C.inkSoft)
           .text(String(d.bruto).replace('.',',') + ' pts');
+        g.append('text').attr('x', 0).attr('y', y0 + 94).attr('font-family','Lora').attr('font-style','italic')
+          .attr('font-size',9.5).attr('fill', C.inkSoft)
+          .text(d.explicado > 0
+            ? ('Trabalho e renda explicam ' + String(d.explicado).replace('.',',') + ' dos ' + String(d.bruto).replace('.',',') + ' pontos.')
+            : 'Trabalho e renda não explicam essa diferença.');
         partes.push({ d, rectExp, rectRes, valExp, valRes, totLbl, wExp, wRes });
       });
       const legY = decs.length * rowH - 14;
@@ -1296,12 +1301,12 @@ const stories = {
       const palette = [C.brown, C.orangeSoft, C.orange, C.orange, C.orangeDeep];
       const cobertura = payload.viz.panel_a_dados.map((d, i) => ({ ...d, color: palette[i] }));
       const saeb = payload.viz.panel_b_dados.map((d, i) => ({ ...d, color: palette[i] }));
-      const s = svgIn(el, 560, 360);
+      const s = svgIn(el, 560, 392);
       const margin = { top: 30, right: 30, bottom: 30, left: 50 };
       const w = 560 - margin.left - margin.right;
-      const h = (360 - margin.top - margin.bottom) / 2 - 10;
+      const h = (392 - margin.top - margin.bottom) / 2 - 32;
       const g1 = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-      const g2 = s.append('g').attr('transform', `translate(${margin.left},${margin.top + h + 30})`);
+      const g2 = s.append('g').attr('transform', `translate(${margin.left},${margin.top + h + 40})`);
       const x = d3.scaleLinear().domain([1,5]).range([0, w]);
       g1.append('text').attr('x', 0).attr('y', -8).attr('font-family','Work Sans').attr('font-size',9).attr('fill', C.inkFaint).attr('letter-spacing','0.12em').style('text-transform','uppercase').text(payload.viz.panel_a_titulo);
       const yAmax = Math.max(60, Math.max(...cobertura.map(d=>d.value)) + 10);
@@ -1312,7 +1317,7 @@ const stories = {
         g1.append('text').attr('x', x(d.q)).attr('y', yA(d.value) - 5).attr('text-anchor', 'middle').attr('font-family','Work Sans').attr('font-size',10).attr('font-weight',700).attr('fill', C.ink).text(d.value + '%');
       });
       g1.append('line').attr('x1', 0).attr('x2', w).attr('y1', yA(payload.viz.meta_pne)).attr('y2', yA(payload.viz.meta_pne)).attr('stroke', C.mark).attr('stroke-dasharray', '3,3').attr('stroke-width', 1);
-      g1.append('text').attr('x', w-4).attr('y', yA(payload.viz.meta_pne) - 4).attr('text-anchor', 'end').attr('font-family','Lora').attr('font-style','italic').attr('font-size',10).attr('fill', C.mark).text('meta PNE — ' + payload.viz.meta_pne + '%');
+      g1.append('text').attr('x', w-4).attr('y', yA(payload.viz.meta_pne) - 4).attr('text-anchor', 'end').attr('font-family','Lora').attr('font-style','italic').attr('font-size',10).attr('fill', C.mark).text('meta PNE: ' + payload.viz.meta_pne + '%');
       g2.append('text').attr('x', 0).attr('y', -8).attr('font-family','Work Sans').attr('font-size',9).attr('fill', C.inkFaint).attr('letter-spacing','0.12em').style('text-transform','uppercase').text(payload.viz.panel_b_titulo);
       const yBmax = Math.max(80, Math.max(...saeb.map(d=>d.value)) + 10);
       const yB = d3.scaleLinear().domain([0, yBmax]).range([h, 0]);
@@ -1321,7 +1326,7 @@ const stories = {
         g2.append('text').attr('x', x(d.q)).attr('y', yB(d.value) - 5).attr('text-anchor', 'middle').attr('font-family','Work Sans').attr('font-size',10).attr('font-weight',700).attr('fill', C.ink).text(d.value + '%');
         g2.append('text').attr('x', x(d.q)).attr('y', h + 16).attr('text-anchor', 'middle').attr('font-family','Work Sans').attr('font-size',9).attr('fill', C.inkFaint).text('Q' + d.q);
       });
-      g2.append('text').attr('x', w/2).attr('y', h + 18).attr('text-anchor', 'middle').attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill', C.mark).attr('font-weight',600).attr('opacity', 0).text(payload.viz.anotacao).transition().delay(800).duration(500).attr('opacity', 1);
+      g2.append('text').attr('x', w/2).attr('y', h + 40).attr('text-anchor', 'middle').attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill', C.mark).attr('font-weight',600).attr('opacity', 0).text(payload.viz.anotacao).transition().delay(800).duration(500).attr('opacity', 1);
     }
   },
 
@@ -1378,55 +1383,57 @@ const stories = {
     viz: (el, payload) => {
       if (!payload) return;
       const regs = payload.viz.bars;
-      const s = svgIn(el, 560, 360);
-      const margL = 96, margR = 56, margT = 56, margB = 40;
+      const s = svgIn(el, 560, 404);
+      const margL = 116, margR = 28, margT = 64, margB = 40;
       const w = 560 - margL - margR;
-      const h = 360 - margT - margB;
+      const h = 404 - margT - margB;
       const g = s.append('g').attr('transform', `translate(${margL},${margT})`);
-      g.append('text').attr('x', -margL + 4).attr('y', -34).attr('font-family','Work Sans').attr('font-size',9)
-        .attr('fill',C.inkFaint).attr('letter-spacing','0.08em').style('text-transform','uppercase')
-        .text('MATRÍCULAS QUE DEPENDEM DE TRANSPORTE ESCOLAR (%)');
-      const x = d3.scaleLinear().domain([0, 80]).range([0, w]);
-      const yReg = d3.scaleBand().domain(regs.map(r => r.regiao)).range([0, h]).padding(0.3);
-      const ySub = d3.scaleBand().domain(['rural','urbana']).range([0, yReg.bandwidth()]).padding(0.22);
-      [0,20,40,60,80].forEach(t => {
-        g.append('line').attr('x1',x(t)).attr('x2',x(t)).attr('y1',0).attr('y2',h)
-          .attr('stroke',C.rule).attr('stroke-dasharray','2,3').attr('stroke-width',0.5);
-        g.append('text').attr('x',x(t)).attr('y',h+16).attr('text-anchor','middle')
-          .attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).text(t+'%');
-      });
-      const lg = g.append('g').attr('transform','translate(0,-20)');
-      lg.append('rect').attr('x',0).attr('y',0).attr('width',11).attr('height',11).attr('fill',C.orange).attr('opacity',0.92);
-      lg.append('text').attr('x',16).attr('y',9.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('escola rural');
-      lg.append('rect').attr('x',110).attr('y',0).attr('width',11).attr('height',11).attr('fill',C.counterfactual).attr('opacity',0.55);
-      lg.append('text').attr('x',126).attr('y',9.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('escola urbana');
+      g.append('text').attr('x', -margL + 4).attr('y', -44).attr('font-family','Work Sans').attr('font-size',9)
+        .attr('fill',C.inkFaint).attr('letter-spacing','0.07em').style('text-transform','uppercase')
+        .text('MATRÍCULAS DA REDE PÚBLICA, POR DEPENDÊNCIA DO TRANSPORTE (%)');
+      const x = d3.scaleLinear().domain([0, 100]).range([0, w]);
+      const yReg = d3.scaleBand().domain(regs.map(r => r.regiao)).range([0, h]).padding(0.34);
+      const ySub = d3.scaleBand().domain(['rural','urbana']).range([0, yReg.bandwidth()]).padding(0.3);
+      /* legenda */
+      const lg = g.append('g').attr('transform','translate(0,-26)');
+      const legSw = lg.append('rect').attr('x',0).attr('y',0).attr('width',11).attr('height',11).attr('fill',C.orange).attr('opacity',0.95);
+      const legTx = lg.append('text').attr('x',16).attr('y',9.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('depende do transporte público');
+      lg.append('rect').attr('x',220).attr('y',0).attr('width',11).attr('height',11).attr('fill',C.orangePale).attr('stroke',C.rule).attr('stroke-width',1);
+      lg.append('text').attr('x',236).attr('y',9.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('não depende');
       const partes = [];
       regs.forEach(r => {
-        g.append('text').attr('x',-10).attr('y',yReg(r.regiao)+yReg.bandwidth()/2).attr('dy','0.35em')
-          .attr('text-anchor','end').attr('font-family','Work Sans').attr('font-size',11).attr('font-weight',600)
+        g.append('text').attr('x',-50).attr('y',yReg(r.regiao)+yReg.bandwidth()/2).attr('dy','0.35em')
+          .attr('text-anchor','end').attr('font-family','Work Sans').attr('font-size',9).attr('font-weight',700)
           .attr('fill',C.inkSoft).text(r.regiao);
-        [['rural', r.rural, C.orange, 0.92],['urbana', r.urbana, C.counterfactual, 0.55]].forEach(par => {
-          const val = par[1], cor = par[2], op = par[3];
+        [['rural', r.rural],['urbana', r.urbana]].forEach(par => {
+          const dep = par[1];
           const yy = yReg(r.regiao) + ySub(par[0]);
-          const ghost = g.append('rect').attr('x',0).attr('y',yy).attr('width',x(val)).attr('height',ySub.bandwidth())
-            .attr('fill','none').attr('stroke',C.counterfactual).attr('stroke-width',1).attr('stroke-dasharray','3,3').attr('opacity',0);
-          const rect = g.append('rect').attr('x',0).attr('y',yy).attr('width',x(val)).attr('height',ySub.bandwidth())
-            .attr('fill',cor).attr('opacity',op);
-          const lbl = g.append('text').attr('x',x(val)+5).attr('y',yy+ySub.bandwidth()/2).attr('dy','0.35em')
-            .attr('font-family','Work Sans').attr('font-size',10).attr('font-weight',700).attr('fill',C.ink)
-            .text(String(val).replace('.',',')+'%');
-          partes.push({ rect, ghost, lbl, val, op });
+          const bh = ySub.bandwidth();
+          g.append('text').attr('x',-8).attr('y',yy+bh/2).attr('dy','0.35em').attr('text-anchor','end')
+            .attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkFaint).text(par[0]);
+          g.append('rect').attr('x',0).attr('y',yy).attr('width',w).attr('height',bh)
+            .attr('fill',C.orangePale).attr('stroke',C.rule).attr('stroke-width',1);
+          const rectDep = g.append('rect').attr('x',0).attr('y',yy).attr('width',x(dep)).attr('height',bh)
+            .attr('fill',C.orange).attr('opacity',0.95);
+          const dentro = x(dep) > 44;
+          const lbl = g.append('text')
+            .attr('x', dentro ? x(dep) - 6 : x(dep) + 6).attr('y', yy + bh/2).attr('dy','0.35em')
+            .attr('text-anchor', dentro ? 'end' : 'start')
+            .attr('font-family','Work Sans').attr('font-size',10).attr('font-weight',700)
+            .attr('fill', dentro ? 'white' : C.ink).text(String(dep).replace('.',',')+'%');
+          partes.push({ rectDep, lbl, dep, dentro });
         });
       });
-      g.append('text').attr('x',0).attr('y',h+32).attr('font-family','Lora').attr('font-style','italic')
+      g.append('text').attr('x',0).attr('y',h+30).attr('font-family','Lora').attr('font-style','italic')
         .attr('font-size',10.5).attr('fill',C.mark).attr('font-weight',600).text(payload.viz.anotacao);
 
       cfRenderers.transporte = { update: (scenario) => {
         const off = scenario === 'off';
+        legSw.transition().duration(500).attr('fill', off ? C.mark : C.orange);
+        legTx.text(off ? 'não chega à escola' : 'depende do transporte público');
         partes.forEach(p => {
-          p.rect.transition().duration(700).attr('width', off ? 0 : x(p.val)).attr('opacity', off ? 0 : p.op);
-          p.ghost.transition().duration(700).attr('opacity', off ? 0.7 : 0);
-          p.lbl.transition().duration(700).attr('x', off ? 5 : x(p.val)+5).attr('opacity', off ? 0.4 : 1);
+          p.rectDep.transition().duration(700).attr('fill', off ? C.mark : C.orange);
+          p.lbl.transition().duration(700).attr('fill', p.dentro ? 'white' : (off ? C.mark : C.ink));
         });
       }};
     }
@@ -1701,7 +1708,7 @@ const _storyPatches = {
     eyebrow: 'Leitura 06 · E se… · Censo Escolar 2025 · transporte escolar público',
     title: 'O transporte é a condição de <em>chegar</em> à escola.',
     text: `<p><strong>O indicador.</strong> A parcela das matrículas da rede pública que depende de transporte escolar público para chegar à escola, comparada entre as redes urbana e rural de cada região. A pergunta é sobre a condição material anterior a qualquer aprendizagem: o deslocamento.</p>
-    <p><strong>O que os dados mostram.</strong> No país, {{narrativa.total_transp_milhoes}} milhões de estudantes dependem do transporte. E a dependência é desigual: na zona rural, {{narrativa.pct_rural}}% das matrículas precisam dele; na urbana, {{narrativa.pct_urbana}}% (cerca de {{narrativa.razao_rural_urb}} vezes menos). No campo, a escola mais próxima costuma ser distante, e o transporte é o que liga a criança a ela.</p>
+    <p><strong>O que os dados mostram.</strong> No país, {{narrativa.total_transp_milhoes}} milhões de estudantes dependem do transporte, e a dependência é desigual. Na zona rural, {{narrativa.pct_rural}}% das matrículas precisam dele; na urbana, apenas {{narrativa.pct_urbana}}%. Para a maior parte dos estudantes urbanos, a escola está ao alcance sem transporte público; se ele acabar, esse grupo quase não é afetado. No campo, onde a escola mais próxima costuma ser distante, é o transporte que liga a criança a ela.</p>
     <p><strong>A política por trás.</strong> Esse transporte é sustentado, em boa parte, pelo PNATE (Programa Nacional de Apoio ao Transporte do Escolar), do FNDE, que repassa recursos a estados e municípios. É a política que o cenário desta leitura coloca em questão.</p>`,
     source: 'Fonte: Censo Escolar 2025 · QT_TRANSP_PUBLICO × matrículas da rede pública · análise de cenário · política: PNATE/FNDE',
     callout: '<strong>O cenário.</strong> {{narrativa.total_transp_milhoes}} milhões de estudantes dependem do transporte escolar público; na zona rural, ele sustenta {{narrativa.pct_rural}}% das matrículas. Sem o transporte (sem o PNATE que o financia), a distância até a escola vira, para essas famílias, distância até o direito.',

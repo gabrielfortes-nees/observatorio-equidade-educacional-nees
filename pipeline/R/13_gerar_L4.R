@@ -75,12 +75,12 @@ L4 <- list(
     gap_pp = round(agg_q$saeb_media[nrow(agg_q)] - agg_q$saeb_media[1], 1)
   ),
   viz = list(
-    panel_a_titulo = "A · % CRIANÇAS 0-3 EM CRECHE — POR QUINTIL DE UFS",
+    panel_a_titulo = "A · % DE CRIANÇAS DE 0 A 3 ANOS EM CRECHE · POR GRUPO DE ESTADOS",
     panel_a_dados = panel_a,
     meta_pne = 50,
-    panel_b_titulo = "B · % APRENDIZAGEM ADEQUADA LP — 5º ANO — MESMA QUINTILIZAÇÃO",
+    panel_b_titulo = "B · % COM APRENDIZAGEM ADEQUADA EM LP · 5º ANO · MESMO AGRUPAMENTO",
     panel_b_dados = panel_b,
-    anotacao = "mesma forma da curva, dez anos depois"
+    anotacao = "Os dois indicadores desenham a mesma curva"
   )
 )
 
