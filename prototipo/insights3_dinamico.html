@@ -899,7 +899,7 @@
   <p class="lede">A escola brasileira é desigual, mas a desigualdade não é uniforme. Ela cruza raça, gênero, território e classe de formas que os indicadores médios não conseguem mostrar. Cada leitura aqui combina um dado quantitativo aberto com a pesquisa qualitativa brasileira que ajuda a interpretá-lo. Selecione uma dimensão para começar.</p>
   <div class="meta">
     <span>9 leituras interseccionais</span>
-    <span><strong>2 cenários "E se…"</strong> · explore o que mudaria em situações hipotéticas</span>
+    <span><strong>3 cenários "E se…"</strong> · explore o que mudaria em situações hipotéticas</span>
     <span>Em diálogo com pesquisa qualitativa brasileira e crítica internacional</span>
   </div>
 </header>
@@ -1080,9 +1080,9 @@ const readings = {
     counterfactual: false
   },
   L3: {
-    tabNum: 'Leitura 03',
-    tabText: 'A desvantagem racial muda de tamanho conforme a classe.',
-    counterfactual: false
+    tabNum: 'Leitura 03 · E se…',
+    tabText: 'Subir de renda rende menos para estudantes negros.',
+    counterfactual: true
   },
   L4: {
     tabNum: 'Leitura 04',
@@ -1202,14 +1202,18 @@ const stories = {
     }
   },
 
-  /* ============= L3 — raça × classe (interseção) ============= */
+  /* ============= L3 — raça × classe (interseção) · E se… ============= */
   'L3': {
-    eyebrow: 'Leitura 03 · SAEB 2023 · 9º EF · raça e classe',
+    eyebrow: 'Leitura 03 · E se… · SAEB 2023 · 9º EF · raça e classe',
     title: '',
     text: '',
     source: '',
     quali: { mark: '', text: '', ref: '' },
-    counterfactual: false,
+    counterfactual: true,
+    titleOff: 'Se subir de renda rendesse igual, a diferença racial no topo <em>cairia pela metade</em>.',
+    cfKey: 'mobilidade',
+    toggleReal: 'Como é hoje',
+    toggleOff: 'E se subir de renda rendesse igual',
     viz: (el, payload) => {
       if (!payload) return;
       const v = payload.viz;
@@ -1222,7 +1226,7 @@ const stories = {
       g.append('text').attr('x',0).attr('y',-34).attr('font-family','Work Sans').attr('font-size',9)
         .attr('fill',C.inkFaint).attr('letter-spacing','0.08em').style('text-transform','uppercase')
         .text(v.indicador.toUpperCase());
-      const vals = grupos.reduce((a,gr)=>a.concat([gr.preto,gr.branco]),[]);
+      const vals = grupos.reduce((a,gr)=>a.concat([gr.preto,gr.branco,gr.preto_cf]),[]);
       const xmin = Math.floor((Math.min(...vals) - 14)/5)*5;
       const xmax = Math.ceil((Math.max(v.corte_adequado, Math.max(...vals)) + 6)/5)*5;
       const x = d3.scaleLinear().domain([xmin, xmax]).range([0, w]);
@@ -1239,33 +1243,57 @@ const stories = {
         .attr('font-family','Lora').attr('font-style','italic').attr('font-size',9.5).attr('fill',C.mark)
         .text('nível adequado (' + v.corte_adequado + ')');
       const rowY = [h*0.30, h*0.74];
+      const partes = [];
       grupos.forEach((gr,i) => {
         const yy = rowY[i];
         g.append('text').attr('x',0).attr('y',yy-26).attr('font-family','Work Sans')
           .attr('font-size',10.5).attr('font-weight',700).attr('fill',C.ink).text(gr.rotulo);
-        g.append('line').attr('x1',x(gr.preto)).attr('x2',x(gr.branco)).attr('y1',yy).attr('y2',yy)
+        const ghost = g.append('circle').attr('cx',x(gr.preto)).attr('cy',yy).attr('r',8)
+          .attr('fill','none').attr('stroke',C.brown).attr('stroke-width',1).attr('stroke-dasharray','3,2').attr('opacity',0);
+        const linha = g.append('line').attr('x1',x(gr.preto)).attr('x2',x(gr.branco)).attr('y1',yy).attr('y2',yy)
           .attr('stroke',C.inkFaint).attr('stroke-width',3).attr('opacity',0.55);
-        g.append('text').attr('x',(x(gr.preto)+x(gr.branco))/2).attr('y',yy-10).attr('text-anchor','middle')
+        const gapLbl = g.append('text').attr('x',(x(gr.preto)+x(gr.branco))/2).attr('y',yy-10).attr('text-anchor','middle')
           .attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('font-weight',700)
           .attr('fill',C.mark).text(gr.gap + ' pontos');
-        [['preto', gr.preto, gr.n_preto, C.brown],['branco', gr.branco, gr.n_branco, C.orange]].forEach(d => {
-          const cx = x(d[1]);
-          g.append('circle').attr('cx',cx).attr('cy',yy).attr('r',8).attr('fill',d[3]);
-          g.append('text').attr('x',cx).attr('y',yy+24).attr('text-anchor','middle')
-            .attr('font-family','Work Sans').attr('font-size',12).attr('font-weight',700)
-            .attr('fill', d[0]==='preto'?C.brown:C.orangeDeep).text(d[1]);
-          g.append('text').attr('x',cx).attr('y',yy+37).attr('text-anchor','middle')
-            .attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkFaint)
-            .text(Math.round(d[2]/1000) + ' mil');
-        });
+        g.append('circle').attr('cx',x(gr.branco)).attr('cy',yy).attr('r',8).attr('fill',C.orange);
+        g.append('text').attr('x',x(gr.branco)).attr('y',yy+24).attr('text-anchor','middle')
+          .attr('font-family','Work Sans').attr('font-size',12).attr('font-weight',700).attr('fill',C.orangeDeep).text(gr.branco);
+        g.append('text').attr('x',x(gr.branco)).attr('y',yy+37).attr('text-anchor','middle')
+          .attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkFaint).text(Math.round(gr.n_branco/1000)+' mil');
+        const dotPreto = g.append('circle').attr('cx',x(gr.preto)).attr('cy',yy).attr('r',8).attr('fill',C.brown);
+        const valPreto = g.append('text').attr('x',x(gr.preto)).attr('y',yy+24).attr('text-anchor','middle')
+          .attr('font-family','Work Sans').attr('font-size',12).attr('font-weight',700).attr('fill',C.brown).text(gr.preto);
+        const nPreto = g.append('text').attr('x',x(gr.preto)).attr('y',yy+37).attr('text-anchor','middle')
+          .attr('font-family','Work Sans').attr('font-size',8.5).attr('fill',C.inkFaint).text(Math.round(gr.n_preto/1000)+' mil');
+        partes.push({ gr, yy, ghost, linha, gapLbl, dotPreto, valPreto, nPreto });
       });
       const leg = g.append('g').attr('transform',`translate(0,${h+34})`);
       leg.append('circle').attr('cx',6).attr('cy',0).attr('r',6).attr('fill',C.brown);
       leg.append('text').attr('x',17).attr('y',3.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('pretos e pardos');
       leg.append('circle').attr('cx',135).attr('cy',0).attr('r',6).attr('fill',C.orange);
       leg.append('text').attr('x',146).attr('y',3.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('brancos e amarelos');
-      g.append('text').attr('x',0).attr('y',h+54).attr('font-family','Lora').attr('font-style','italic')
+      const anota = g.append('text').attr('x',0).attr('y',h+54).attr('font-family','Lora').attr('font-style','italic')
         .attr('font-size',10.5).attr('fill',C.mark).attr('font-weight',600).text(v.anotacao);
+
+      cfRenderers.mobilidade = { update: (scenario) => {
+        const off = scenario === 'off';
+        anota.text(off ? v.anotacao_cf : v.anotacao);
+        partes.forEach(p => {
+          const moves = p.gr.preto_cf !== p.gr.preto;
+          const xp = off ? x(p.gr.preto_cf) : x(p.gr.preto);
+          const val = off ? p.gr.preto_cf : p.gr.preto;
+          const gap = off ? p.gr.gap_cf : p.gr.gap;
+          p.ghost.transition().duration(600).attr('opacity', (off && moves) ? 0.65 : 0);
+          p.dotPreto.transition().duration(700).attr('cx', xp);
+          p.linha.transition().duration(700).attr('x1', xp);
+          p.gapLbl.transition().duration(700).attr('x', (xp + x(p.gr.branco))/2).text(gap + ' pontos');
+          p.valPreto.transition().duration(700).attr('x', xp).tween('text', function(){
+            const ip = d3.interpolateNumber(parseFloat(this.textContent)||val, val);
+            return function(t){ this.textContent = Math.round(ip(t)); };
+          });
+          p.nPreto.transition().duration(700).attr('x', xp);
+        });
+      }};
     }
   },
 
@@ -1645,15 +1673,16 @@ const _storyPatches = {
   },
   L3: {
     dataKey: 'L3',
-    eyebrow: 'Leitura 03 · SAEB 2023 · 9º EF · raça e classe',
+    eyebrow: 'Leitura 03 · E se… · SAEB 2023 · 9º EF · raça e classe',
     title: 'Raça e classe não se somam; <em>se cruzam</em>.',
     text: `<p><strong>O indicador.</strong> A proficiência média em Língua Portuguesa no 9º ano, lida em quatro posições do cruzamento entre raça e classe: estudantes brancos e pretos/pardos, no quintil mais rico e no mais pobre de renda (INSE).</p>
-    <p><strong>O que os dados mostram.</strong> Entre os estudantes mais ricos, os brancos atingem {{narrativa.branco_rico}} pontos e os pretos e pardos, {{narrativa.preto_rico}}: uma diferença racial de {{narrativa.gap_ricos}} pontos. Entre os mais pobres, {{narrativa.branco_pobre}} contra {{narrativa.preto_pobre}}, diferença de {{narrativa.gap_pobres}}. A desvantagem racial não tem o mesmo tamanho nos dois grupos. Um modelo que apenas somasse "desvantagem de classe + desvantagem racial" exigiria que ela fosse fixa; ela depende da classe.</p>
-    <p><strong>Como ler.</strong> A diferença racial menor entre os mais pobres não significa que a raça pese menos ali. É efeito de piso: a pobreza já derrubou todos. O estudante branco e pobre ({{narrativa.branco_pobre}}) está logo acima do preto e pobre ({{narrativa.preto_pobre}}), e os dois ficam muito abaixo do branco e rico, que com {{narrativa.branco_rico}} pontos é o único dos quatro grupos a alcançar o patamar adequado. A desvantagem racial abre distância onde ainda há distância a abrir.</p>`,
-    source: 'Fonte: SAEB 2023 · microdados aluno · 9º EF · escolas públicas · proficiência em LP por raça/cor (Q04) × quintil de INSE (Q1 e Q5)',
+    <p><strong>O que os dados mostram.</strong> Entre os mais ricos, a diferença racial é de {{narrativa.gap_ricos}} pontos; entre os mais pobres, {{narrativa.gap_pobres}}. Ela não tem tamanho fixo, e a razão está no retorno da ascensão social: subir do grupo mais pobre para o mais rico rende {{narrativa.retorno_branco}} pontos de aprendizado para o estudante branco, mas só {{narrativa.retorno_preto}} para o preto ou pardo. O degrau de classe não rende igual.</p>
+    <p><strong>Como ler.</strong> A diferença racial menor entre os mais pobres não significa alívio: é efeito de piso. A pobreza já derrubou todos: o estudante branco e pobre ({{narrativa.branco_pobre}}) está logo acima do preto e pobre ({{narrativa.preto_pobre}}), e os dois ficam muito abaixo do branco e rico, que com {{narrativa.branco_rico}} pontos é o único dos quatro grupos a alcançar o patamar adequado.</p>`,
+    source: 'Fonte: SAEB 2023 · microdados aluno · 9º EF · escolas públicas · proficiência em LP por raça/cor (Q04) × quintil de INSE (Q1 e Q5) · análise de cenário',
+    callout: '<strong>O cenário.</strong> E se subir de renda rendesse o mesmo aprendizado, qualquer que seja a raça? O estudante preto e rico chegaria a <strong>{{narrativa.preto_rico_cf}} pontos</strong>, não {{narrativa.preto_rico}}, e a diferença racial no topo cairia de {{narrativa.gap_ricos}} para {{narrativa.gap_ricos_cf}}. O degrau de classe é, ele próprio, racializado.',
     quali: {
       mark: 'A leitura interseccional',
-      text: `O modelo aditivo (descontar a classe e chamar o resto de raça) pressupõe que dá para separar as duas. Hasenbalg (1979) mostrou que não: no Brasil, raça e classe operam num ciclo cumulativo, uma realimentando a outra. Os dados confirmam: a desvantagem racial não tem tamanho fixo, depende da classe. E a co-constituição aparece já na contagem: a posição preto-e-pobre reúne {{narrativa.n_preto_pobre_mil}} mil estudantes, contra {{narrativa.n_branco_pobre_mil}} mil brancos e pobres. Na escola pública, ser pobre é, em larga medida, ser negro.`,
+      text: `O modelo aditivo (descontar a classe e chamar o resto de raça) pressupõe que dá para separar as duas. Hasenbalg (1979) mostrou que não: no Brasil, raça e classe operam num ciclo cumulativo, uma realimentando a outra. O cenário desta leitura torna isso visível: subir de renda não converte em aprendizado da mesma forma para todos, porque o racismo não desaparece quando a família negra ascende. E a co-constituição aparece já na contagem: a posição preto-e-pobre reúne {{narrativa.n_preto_pobre_mil}} mil estudantes, contra {{narrativa.n_branco_pobre_mil}} mil brancos e pobres. Na escola pública, ser pobre é, em larga medida, ser negro.`,
       ref: 'Hasenbalg, C. A. (1979) · Discriminação e desigualdades raciais no Brasil.'
     }
   },

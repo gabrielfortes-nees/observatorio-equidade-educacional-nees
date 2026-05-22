@@ -2,9 +2,11 @@
   "meta": {
     "leitura": "L3",
     "titulo_curto": "Raça e classe não se somam, se cruzam",
-    "eyebrow": "Leitura 03 · SAEB 2023 · 9º EF · raça e classe",
-    "fonte": "SAEB 2023 · microdados aluno · 9º EF · escolas públicas · proficiência em LP por raça/cor (Q04) × quintil de INSE (extremos: Q1 e Q5)",
-    "gerado_em": "2026-05-22 11:05:17"
+    "eyebrow": "Leitura 03 · E se… · SAEB 2023 · 9º EF · raça e classe",
+    "fonte": "SAEB 2023 · microdados aluno · 9º EF · escolas públicas · proficiência em LP por raça/cor (Q04) × quintil de INSE (extremos: Q1 e Q5) · cenário de retorno da ascensão social",
+    "cenario": true,
+    "cf_key": "mobilidade",
+    "gerado_em": "2026-05-22 12:01:30"
   },
   "narrativa": {
     "branco_rico": 275,
@@ -13,6 +15,10 @@
     "preto_pobre": 240,
     "gap_ricos": 16,
     "gap_pobres": 8,
+    "retorno_branco": 27,
+    "retorno_preto": 19,
+    "preto_rico_cf": 267,
+    "gap_ricos_cf": 8,
     "n_preto_pobre_mil": 292,
     "n_branco_pobre_mil": 80
   },
@@ -25,6 +31,8 @@
         "preto": 259,
         "branco": 275,
         "gap": 16,
+        "preto_cf": 267,
+        "gap_cf": 8,
         "n_preto": 175948,
         "n_branco": 190147
       },
@@ -33,10 +41,13 @@
         "preto": 240,
         "branco": 248,
         "gap": 8,
+        "preto_cf": 240,
+        "gap_cf": 8,
         "n_preto": 292369,
         "n_branco": 80470
       }
     ],
-    "anotacao": "A diferença racial não é fixa: 16 pontos entre os ricos, 8 entre os pobres"
+    "anotacao": "A diferença racial não é fixa: 16 pontos entre os ricos, 8 entre os pobres",
+    "anotacao_cf": "Com retorno igual à ascensão social, a diferença racial fica em 8 pontos nos dois grupos"
   }
 }
