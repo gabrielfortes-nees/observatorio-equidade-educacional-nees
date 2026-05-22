@@ -70,11 +70,11 @@ L7 <- list(
   ),
   viz = list(
     indicador = "% que declara já ter abandonado, por nível de reprovação · e distribuição da reprovação por raça",
-    porta_titulo = "A PORTA · % QUE JÁ ABANDONOU, POR REPROVAÇÃO",
+    porta_titulo = "1 · ENTRE QUEM REPROVOU, QUANTOS DECLARAM JÁ TER ABANDONADO",
     porta = porta_lst,
-    distribuicao_titulo = "QUEM CHEGA À PORTA · DISTRIBUIÇÃO DA REPROVAÇÃO POR RAÇA",
+    distribuicao_titulo = "2 · COMO A REPROVAÇÃO SE DISTRIBUI ENTRE BRANCOS E PRETOS/PARDOS",
     distribuicao = distrib,
-    anotacao = gsub("\\.", ",", sprintf("%.1f%% dos estudantes pretos/pardos já reprovaram, contra %.1f%% dos brancos",
+    anotacao = gsub("\\.", ",", sprintf("Os estudantes pretos e pardos reprovam mais: %.1f%% contra %.1f%% dos brancos",
                        reprov_preta, reprov_branca))
   )
 )

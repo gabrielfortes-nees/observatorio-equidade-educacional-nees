@@ -1,6 +1,8 @@
-## 15 — L6 (REESCRITA): "E se... não houvesse transporte escolar?"
-## O transporte escolar público como pré-condição material da permanência —
-## sobretudo na escola rural, onde a distância é o primeiro obstáculo.
+## 15 — L6 (REESCRITA 2): "E se... não houvesse transporte escolar?"
+## O transporte escolar público (sustentado pelo PNATE — Programa Nacional de
+## Apoio ao Transporte do Escolar, do FNDE) como pré-condição material da
+## permanência. Compara a dependência do transporte entre escolas urbanas e
+## rurais, por região: no campo, a distância é o primeiro obstáculo.
 ## Base: Censo Escolar 2025 — QT_TRANSP_PUBLICO × matrículas da rede pública.
 source("/Users/gabrielfortes/Documents/Claude/Projects/Observatorio_Equidade_Educacional/pipeline/R/00_setup.R")
 
@@ -26,40 +28,36 @@ d[, regiao := fcase(
 )]
 d[, rural := tp_localizacao == 2]
 
-## ---------- % de matrículas que dependem de transporte, rural vs urbana ----------
-pct_dep <- function(sub) round(sum(sub$qt_transp_publico, na.rm=TRUE) /
-                                sum(sub$qt_mat_bas, na.rm=TRUE) * 100, 1)
-pct_rural   <- pct_dep(d[rural == TRUE])
-pct_urbana  <- pct_dep(d[rural == FALSE])
+## ---------- % de matrículas que dependem de transporte ----------
+pct_dep <- function(sub) {
+  if (nrow(sub) == 0 || sum(sub$qt_mat_bas, na.rm = TRUE) == 0) return(0)
+  round(sum(sub$qt_transp_publico, na.rm = TRUE) /
+        sum(sub$qt_mat_bas, na.rm = TRUE) * 100, 1)
+}
 
-## ---------- nº de estudantes que usam transporte, por região (escolas rurais) ----------
+## ---------- urbano x rural, por região ----------
 ordem_reg <- c("Norte", "Nordeste", "Centro-Oeste", "Sul", "Sudeste")
-por_reg <- d[rural == TRUE, .(
-  transp = sum(qt_transp_publico, na.rm = TRUE),
-  mat    = sum(qt_mat_bas, na.rm = TRUE)
-), by = regiao]
-por_reg[, pct := round(transp / mat * 100, 1)]
-por_reg <- por_reg[match(ordem_reg, regiao)]
-
-total_transp     <- d[, sum(qt_transp_publico, na.rm = TRUE)]
-total_transp_rur <- d[rural == TRUE, sum(qt_transp_publico, na.rm = TRUE)]
-
-bars <- lapply(seq_len(nrow(por_reg)), function(i) {
+bars <- lapply(ordem_reg, function(rg) {
   list(
-    label = por_reg$regiao[i],
-    real  = round(por_reg$transp[i] / 1e3, 1),   # milhares de estudantes
-    off   = 0,
-    pct   = por_reg$pct[i],
-    color_key = c("counterfactual","brown","orangeSoft","orange","orange")[i]
+    regiao = rg,
+    rural  = pct_dep(d[regiao == rg & rural == TRUE]),
+    urbana = pct_dep(d[regiao == rg & rural == FALSE])
   )
 })
+
+## ---------- números nacionais ----------
+pct_rural  <- pct_dep(d[rural == TRUE])
+pct_urbana <- pct_dep(d[rural == FALSE])
+total_transp     <- d[, sum(qt_transp_publico, na.rm = TRUE)]
+total_transp_rur <- d[rural == TRUE, sum(qt_transp_publico, na.rm = TRUE)]
+razao_rural_urb  <- round(pct_rural / pct_urbana, 1)
 
 L6 <- list(
   meta = list(
     leitura = "L6",
     titulo_curto = "O transporte que liga a criança à escola",
     eyebrow = "Leitura 06 · E se… · Censo Escolar 2025 · transporte escolar público",
-    fonte = "Censo Escolar 2025 — QT_TRANSP_PUBLICO × matrículas da rede pública · análise de cenário",
+    fonte = "Censo Escolar 2025 · QT_TRANSP_PUBLICO × matrículas da rede pública · análise de cenário · política: PNATE/FNDE",
     cenario = TRUE,
     cf_key = "transporte",
     gerado_em = format(Sys.time(), "%Y-%m-%d %H:%M:%S")
@@ -68,17 +66,19 @@ L6 <- list(
     total_transp_milhoes = round(total_transp / 1e6, 1),
     total_transp_rural_milhoes = round(total_transp_rur / 1e6, 1),
     pct_rural = pct_rural,
-    pct_urbana = pct_urbana
+    pct_urbana = pct_urbana,
+    razao_rural_urb = razao_rural_urb
   ),
   viz = list(
-    indicador = "Estudantes de escolas rurais que dependem de transporte escolar público (milhares)",
-    titulo_real = "Estudantes que chegam à escola pelo transporte público",
+    indicador = "Matrículas da rede pública que dependem de transporte escolar público (%)",
+    titulo_real = "Quanto cada rede depende do transporte escolar",
     titulo_off  = "E se não houvesse transporte — quem deixaria de chegar",
     bars = bars,
-    anotacao = sprintf("nas escolas rurais, %.0f%% das matrículas dependem do transporte", pct_rural)
+    anotacao = sprintf("No campo, a dependência do transporte é cerca de %s vezes maior que na cidade",
+                       sub("\\.", ",", as.character(razao_rural_urb)))
   )
 )
 
 write_json(L6, file.path(DIR_AGG, "L6.json"), pretty = TRUE, auto_unbox = TRUE)
-cat_step(sprintf("L6 ✓ | transporte: %.1f mi estudantes (%.1f mi rurais) · rural %.0f%% vs urbana %.0f%%",
-                 total_transp/1e6, total_transp_rur/1e6, pct_rural, pct_urbana))
+cat_step(sprintf("L6 ✓ | dependência do transporte: rural %.1f%% vs urbana %.1f%% (%.1fx) · %.1f mi estudantes",
+                 pct_rural, pct_urbana, razao_rural_urb, total_transp / 1e6))

@@ -1076,12 +1076,12 @@ const readings = {
   },
   L2: {
     tabNum: 'Leitura 02',
-    tabText: 'Dentro da mesma escola, o gap racial não some.',
+    tabText: 'Dentro da mesma escola, a diferença racial não some.',
     counterfactual: false
   },
   L3: {
     tabNum: 'Leitura 03 · E se…',
-    tabText: 'Igualando renda e trabalho, 75% do gap racial fica.',
+    tabText: 'Igualando renda e trabalho, 75% da diferença racial permanece.',
     counterfactual: true
   },
   L4: {
@@ -1127,7 +1127,7 @@ const stories = {
     eyebrow: 'Leitura 01 · SAEB 2023 · 5º ano · Língua Portuguesa',
     title: 'A escola brasileira ensina, em média, <em>metade</em>. A outra metade depende de quem você é.',
     text: `<p>O SAEB diz que <strong>53% dos estudantes do 5º ano</strong> atingem aprendizagem adequada em Língua Portuguesa. É a média que vai para as manchetes. Quando se desagrega por raça/cor, a faixa abre: brancos e amarelos chegam a 60%; pretos, pardos e indígenas, a 46,5%.</p>
-    <p>Mas o gap racial bruto — <strong>13,5 pontos percentuais</strong> — é apenas o início. Cruzando raça com sexo e quintil socioeconômico do aluno, a faixa interseccional vai de <strong>31% (meninas pretas, 1º quintil INSE) a 64% (meninos brancos, 5º quintil INSE)</strong>. A média de 53% não fala de quase ninguém.</p>`,
+    <p>Mas a diferença racial bruta — <strong>13,5 pontos percentuais</strong> — é apenas o início. Cruzando raça com sexo e quintil socioeconômico do aluno, a faixa interseccional vai de <strong>31% (meninas pretas, 1º quintil INSE) a 64% (meninos brancos, 5º quintil INSE)</strong>. A média de 53% não fala de quase ninguém.</p>`,
     source: 'Fonte: SAEB 2023 · microdados aluno · Inep/MEC · cruzamentos por raça (Q04), sexo (Q01) e INSE quintilizado',
     quali: {
       mark: 'Em diálogo com a pesquisa qualitativa',
@@ -1160,15 +1160,15 @@ const stories = {
     }
   },
 
-  /* ============= L2 — gap intra-escola ============= */
+  /* ============= L2 — diferença intra-escola ============= */
   'L2': {
     eyebrow: 'Leitura 02 · SAEB 2023 · 5º EF · proficiência por escola',
-    title: 'O gap racial não é só entre escolas. Ele está <em>dentro da mesma sala</em>.',
+    title: 'A diferença racial não é só entre escolas. Ela está <em>dentro da mesma sala</em>.',
     text: '',
     source: '',
     quali: {
       mark: 'Em diálogo com a pesquisa qualitativa',
-      text: `<strong>Carvalho (2009)</strong> documenta como alfabetizadoras categorizam estudantes negros — especialmente meninos — com mais marcações de "indisciplina" e mais classificações de fracasso. O gap que sobrevive dentro da mesma escola encontra eco nessa etnografia: não é só a escola que a criança frequenta; é o olhar avaliador que recai sobre o corpo dela ali dentro.`,
+      text: `<strong>Carvalho (2009)</strong> documenta como alfabetizadoras categorizam estudantes negros — especialmente meninos — com mais marcações de "indisciplina" e mais classificações de fracasso. A diferença que sobrevive dentro da mesma escola encontra eco nessa etnografia: não é só a escola que a criança frequenta; é o olhar avaliador que recai sobre o corpo dela ali dentro.`,
       ref: 'Carvalho, M. P. de (2009) · Cadernos de Pesquisa, v.39, n.138.'
     },
     counterfactual: false,
@@ -1183,7 +1183,7 @@ const stories = {
       const x = d3.scaleBand().domain(hist.map(d => d.centro)).range([0, w]).padding(0.14);
       const yMax = Math.max(...hist.map(d => d.n));
       const y = d3.scaleLinear().domain([0, yMax]).range([h, 0]);
-      g.append('text').attr('x', 0).attr('y', -30).attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).attr('letter-spacing','0.12em').style('text-transform','uppercase').text('Nº DE ESCOLAS POR TAMANHO DO GAP INTERNO (BRANCO − PRETO/PARDO)');
+      g.append('text').attr('x', 0).attr('y', -30).attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).attr('letter-spacing','0.1em').style('text-transform','uppercase').text('NÚMERO DE ESCOLAS, PELA DIFERENÇA INTERNA DE PROFICIÊNCIA (PONTOS)');
       hist.forEach(d => {
         g.append('rect').attr('x', x(d.centro)).attr('y', y(d.n)).attr('width', x.bandwidth()).attr('height', h - y(d.n))
           .attr('fill', d.lado === 'branco' ? C.orangeDeep : C.brown).attr('opacity', 0.85);
@@ -1196,71 +1196,83 @@ const stories = {
         const xz = x(5) - x.step() * x.padding() / 2;
         g.append('line').attr('x1', xz).attr('x2', xz).attr('y1', -8).attr('y2', h).attr('stroke', C.ink).attr('stroke-width', 1).attr('stroke-dasharray', '2,3');
       }
-      g.append('text').attr('x', 0).attr('y', h + 38).attr('font-family','Lora').attr('font-style','italic').attr('font-size',10).attr('fill', C.brown).text('◄ gap favorece pretos/pardos');
-      g.append('text').attr('x', w).attr('y', h + 38).attr('text-anchor','end').attr('font-family','Lora').attr('font-style','italic').attr('font-size',10).attr('fill', C.orangeDeep).text('gap favorece brancos ►');
+      g.append('text').attr('x', 0).attr('y', h + 38).attr('font-family','Lora').attr('font-style','italic').attr('font-size',9.5).attr('fill', C.brown).text('◄ escolas onde pretos e pardos têm média maior');
+      g.append('text').attr('x', w).attr('y', h + 38).attr('text-anchor','end').attr('font-family','Lora').attr('font-style','italic').attr('font-size',9.5).attr('fill', C.orangeDeep).text('escolas onde os brancos têm média maior ►');
       g.append('text').attr('x', w/2).attr('y', -12).attr('text-anchor','middle').attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill', C.mark).attr('font-weight',600).text(payload.viz.anotacao);
     }
   },
 
-  /* ============= L3 — decomposição do gap · E se… ============= */
+  /* ============= L3 — decomposição da diferença · E se… ============= */
   'L3': {
-    eyebrow: 'Leitura 03 · E se… · SAEB 2023 9º EF · decomposição do gap racial',
+    eyebrow: 'Leitura 03 · E se… · SAEB 2023 9º EF · decomposição da diferença',
     title: '',
     text: '',
     source: '',
     quali: {
       mark: 'Em diálogo com a pesquisa qualitativa',
-      text: `<strong>Gomes (2012)</strong> ajuda a nomear o resíduo: a escola não é uma instituição neutra que apenas reflete desigualdades de fora — ela própria produz e reitera hierarquias raciais no currículo, na avaliação e na convivência. O gap que permanece depois de igualar renda e trabalho não é um mistério estatístico; é o nome técnico para racismo institucional.`,
+      text: `<strong>Gomes (2012)</strong> ajuda a nomear o resíduo: a escola não é uma instituição neutra que apenas reflete desigualdades de fora — ela própria produz e reitera hierarquias raciais no currículo, na avaliação e na convivência. A diferença que permanece depois de igualar renda e trabalho não é um mistério estatístico; é o nome técnico para racismo institucional.`,
       ref: 'Gomes, N. L. (2012) · Relações étnico-raciais, educação e descolonização dos currículos · Currículo sem Fronteiras.'
     },
     counterfactual: true,
-    titleOff: 'Só o resíduo: <em>{{narrativa.gap_residuo}} pontos</em> que não são renda nem trabalho.',
+    titleOff: '<em>{{narrativa.raca_pct_residuo}}%</em> da diferença racial não é trabalho nem renda.',
     cfKey: 'residuo',
-    toggleReal: 'Gap como observado',
+    toggleReal: 'Diferença observada',
     toggleOff: 'E se igualássemos renda e trabalho',
     viz: (el, payload) => {
       if (!payload) return;
-      const segs = payload.viz.segmentos;
-      const total = payload.viz.gap_bruto;
-      const s = svgIn(el, 560, 300);
-      const margin = { top: 64, right: 30, bottom: 70, left: 30 };
-      const w = 560 - margin.left - margin.right;
-      const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-      const x = d3.scaleLinear().domain([0, total * 1.04]).range([0, w]);
-      const barY = 24, barH = 58;
-      g.append('text').attr('x', 0).attr('y', -40).attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).attr('letter-spacing','0.12em').style('text-transform','uppercase').text('GAP DE PROFICIÊNCIA LP (BRANCO − PRETO/PARDO) · PONTOS SAEB');
-      g.append('text').attr('x', x(total)).attr('y', -22).attr('text-anchor','end').attr('font-family','Lora').attr('font-size',13).attr('font-weight',700).attr('fill',C.ink).text('gap bruto: ' + String(total).replace('.',',') + ' pts');
-      const corDe = seg => seg.grupo === 'residuo' ? C.mark : (seg.label.indexOf('trabalho') === 0 || seg.label.indexOf('Carga') === 0 ? C.orangeSoft : C.brown);
-      let acc = 0;
+      const decs = payload.viz.decomposicoes;
+      const s = svgIn(el, 560, 352);
+      const margL = 34, margR = 78, margT = 50;
+      const w = 560 - margL - margR;
+      const g = s.append('g').attr('transform', `translate(${margL},${margT})`);
+      g.append('text').attr('x', 0).attr('y', -30).attr('font-family','Work Sans').attr('font-size',9)
+        .attr('fill',C.inkFaint).attr('letter-spacing','0.08em').style('text-transform','uppercase')
+        .text('DIFERENÇA DE PROFICIÊNCIA EM LP NO 9º ANO (PONTOS SAEB)');
+      const xMax = Math.max(...decs.map(d => d.bruto)) * 1.03;
+      const x = d3.scaleLinear().domain([0, xMax]).range([0, w]);
+      const rowH = 122, barH = 46;
       const partes = [];
-      segs.forEach(seg => {
-        const rect = g.append('rect').attr('x', x(acc)).attr('y', barY).attr('width', x(seg.valor)).attr('height', barH)
-          .attr('fill', corDe(seg)).attr('opacity', 0.9).attr('stroke','white').attr('stroke-width',1);
-        const val = g.append('text').attr('x', x(acc) + x(seg.valor)/2).attr('y', barY + barH/2 + 4).attr('text-anchor','middle')
-          .attr('font-family','Work Sans').attr('font-size',12).attr('font-weight',700).attr('fill','white')
-          .text(String(seg.valor).replace('.',','));
-        const lbl = g.append('text').attr('x', x(acc) + x(seg.valor)/2).attr('y', barY + barH + 18).attr('text-anchor','middle')
-          .attr('font-family','Work Sans').attr('font-size',9).attr('fill', C.inkSoft).text(seg.label);
-        const dsc = g.append('text').attr('x', x(acc) + x(seg.valor)/2).attr('y', barY + barH + 31).attr('text-anchor','middle')
-          .attr('font-family','Lora').attr('font-style','italic').attr('font-size',8.5).attr('fill', C.inkFaint).text(seg.descricao);
-        partes.push({ seg, rect, val, lbl, dsc, x0: acc });
-        acc += seg.valor;
+      decs.forEach((d, i) => {
+        const y0 = i * rowH;
+        g.append('text').attr('x', 0).attr('y', y0 + 2).attr('font-family','Work Sans')
+          .attr('font-size',12.5).attr('font-weight',700).attr('fill',C.ink).text(d.rotulo);
+        g.append('text').attr('x', 0).attr('y', y0 + 18).attr('font-family','Lora').attr('font-style','italic')
+          .attr('font-size',10).attr('fill',C.inkSoft).text(d.sub);
+        const barY = y0 + 30;
+        const wExp = x(d.explicado), wRes = x(d.residuo);
+        const rectExp = g.append('rect').attr('x', 0).attr('y', barY).attr('width', wExp).attr('height', barH)
+          .attr('fill', C.orangeSoft).attr('opacity', 0.92);
+        const rectRes = g.append('rect').attr('x', wExp).attr('y', barY).attr('width', wRes).attr('height', barH)
+          .attr('fill', C.mark).attr('opacity', 0.92).attr('stroke','white').attr('stroke-width', wExp > 1 ? 1.5 : 0);
+        const valExp = g.append('text').attr('x', wExp/2).attr('y', barY + barH/2).attr('dy','0.35em')
+          .attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size',11).attr('font-weight',700)
+          .attr('fill', C.ink).attr('opacity', wExp > 24 ? 1 : 0).text(String(d.explicado).replace('.',','));
+        const valRes = g.append('text').attr('x', wExp + wRes/2).attr('y', barY + barH/2).attr('dy','0.35em')
+          .attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size',12).attr('font-weight',700)
+          .attr('fill','white').text(String(d.residuo).replace('.',',') + ' · ' + d.pct_residuo + '%');
+        const totLbl = g.append('text').attr('x', x(d.bruto) + 8).attr('y', barY + barH/2).attr('dy','0.35em')
+          .attr('font-family','Work Sans').attr('font-size',10.5).attr('font-weight',600).attr('fill',C.inkSoft)
+          .text(String(d.bruto).replace('.',',') + ' pts');
+        partes.push({ d, rectExp, rectRes, valExp, valRes, totLbl, wExp, wRes });
       });
-      const residuo = segs.find(s2 => s2.grupo === 'residuo');
-      const anota = g.append('text').attr('x', 0).attr('y', barY + barH + 52).attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill',C.mark).attr('font-weight',600).text(payload.viz.anotacao).attr('opacity',0);
-      anota.transition().delay(600).duration(500).attr('opacity',1);
+      const legY = decs.length * rowH - 14;
+      const leg = g.append('g').attr('transform', `translate(0, ${legY})`);
+      leg.append('rect').attr('x',0).attr('y',0).attr('width',11).attr('height',11).attr('fill',C.orangeSoft).attr('opacity',0.92);
+      leg.append('text').attr('x',16).attr('y',9.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('explicado por trabalho e renda');
+      leg.append('rect').attr('x',210).attr('y',0).attr('width',11).attr('height',11).attr('fill',C.mark).attr('opacity',0.92);
+      leg.append('text').attr('x',226).attr('y',9.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('resíduo (não explicado pela classe)');
+      g.append('text').attr('x',0).attr('y', legY + 30).attr('font-family','Lora').attr('font-style','italic')
+        .attr('font-size',10.5).attr('fill',C.mark).attr('font-weight',600).text(payload.viz.anotacao);
 
       cfRenderers.residuo = { update: (scenario) => {
         const off = scenario === 'off';
-        let cursor = 0;
         partes.forEach(p => {
-          const isResid = p.seg.grupo === 'residuo';
-          const wSeg = (off && !isResid) ? 0 : x(p.seg.valor);
-          const xSeg = off ? (isResid ? 0 : 0) : x(p.x0);
-          p.rect.transition().duration(700).attr('x', xSeg).attr('width', wSeg).attr('opacity', (off && !isResid) ? 0 : 0.9);
-          p.val.transition().duration(700).attr('x', xSeg + wSeg/2).attr('opacity', (off && !isResid) ? 0 : 1);
-          p.lbl.transition().duration(700).attr('x', xSeg + wSeg/2).attr('opacity', (off && !isResid) ? 0 : 1);
-          p.dsc.transition().duration(700).attr('x', xSeg + wSeg/2).attr('opacity', (off && !isResid) ? 0 : 1);
+          const xRes = off ? 0 : p.wExp;
+          p.rectExp.transition().duration(700).attr('width', off ? 0 : p.wExp).attr('opacity', off ? 0 : 0.92);
+          p.rectRes.transition().duration(700).attr('x', xRes);
+          p.valExp.transition().duration(700).attr('opacity', (off || p.wExp <= 24) ? 0 : 1);
+          p.valRes.transition().duration(700).attr('x', xRes + p.wRes/2);
+          p.totLbl.transition().duration(700).attr('opacity', off ? 0 : 1);
         });
       }};
     }
@@ -1365,19 +1377,58 @@ const stories = {
     toggleOff: 'E se não houvesse transporte',
     viz: (el, payload) => {
       if (!payload) return;
-      const palette = { orange: C.orange, orangeSoft: C.orangeSoft, brown: C.brown, counterfactual: C.counterfactual };
-      const maxv = Math.max(...payload.viz.bars.map(b => b.real));
-      const step = maxv > 600 ? 200 : (maxv > 150 ? 50 : 20);
-      cfRenderers.transporte = makeCounterfactualViz(el, {
-        W: 560, H: 320,
-        xMax: Math.ceil(maxv / step) * step, ticks: 4, sufixo: ' mil',
-        xLabel: 'MILHARES DE ESTUDANTES · ESCOLAS RURAIS',
-        legendReal: 'chegam pelo transporte público',
-        legendOff: 'cenário: sem transporte escolar',
-        bars: payload.viz.bars.map(b => ({
-          label: b.label, real: b.real, off: b.off, color: palette[b.color_key] || C.orange
-        }))
+      const regs = payload.viz.bars;
+      const s = svgIn(el, 560, 360);
+      const margL = 96, margR = 56, margT = 56, margB = 40;
+      const w = 560 - margL - margR;
+      const h = 360 - margT - margB;
+      const g = s.append('g').attr('transform', `translate(${margL},${margT})`);
+      g.append('text').attr('x', -margL + 4).attr('y', -34).attr('font-family','Work Sans').attr('font-size',9)
+        .attr('fill',C.inkFaint).attr('letter-spacing','0.08em').style('text-transform','uppercase')
+        .text('MATRÍCULAS QUE DEPENDEM DE TRANSPORTE ESCOLAR (%)');
+      const x = d3.scaleLinear().domain([0, 80]).range([0, w]);
+      const yReg = d3.scaleBand().domain(regs.map(r => r.regiao)).range([0, h]).padding(0.3);
+      const ySub = d3.scaleBand().domain(['rural','urbana']).range([0, yReg.bandwidth()]).padding(0.22);
+      [0,20,40,60,80].forEach(t => {
+        g.append('line').attr('x1',x(t)).attr('x2',x(t)).attr('y1',0).attr('y2',h)
+          .attr('stroke',C.rule).attr('stroke-dasharray','2,3').attr('stroke-width',0.5);
+        g.append('text').attr('x',x(t)).attr('y',h+16).attr('text-anchor','middle')
+          .attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).text(t+'%');
       });
+      const lg = g.append('g').attr('transform','translate(0,-20)');
+      lg.append('rect').attr('x',0).attr('y',0).attr('width',11).attr('height',11).attr('fill',C.orange).attr('opacity',0.92);
+      lg.append('text').attr('x',16).attr('y',9.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('escola rural');
+      lg.append('rect').attr('x',110).attr('y',0).attr('width',11).attr('height',11).attr('fill',C.counterfactual).attr('opacity',0.55);
+      lg.append('text').attr('x',126).attr('y',9.5).attr('font-family','Work Sans').attr('font-size',9.5).attr('fill',C.inkSoft).text('escola urbana');
+      const partes = [];
+      regs.forEach(r => {
+        g.append('text').attr('x',-10).attr('y',yReg(r.regiao)+yReg.bandwidth()/2).attr('dy','0.35em')
+          .attr('text-anchor','end').attr('font-family','Work Sans').attr('font-size',11).attr('font-weight',600)
+          .attr('fill',C.inkSoft).text(r.regiao);
+        [['rural', r.rural, C.orange, 0.92],['urbana', r.urbana, C.counterfactual, 0.55]].forEach(par => {
+          const val = par[1], cor = par[2], op = par[3];
+          const yy = yReg(r.regiao) + ySub(par[0]);
+          const ghost = g.append('rect').attr('x',0).attr('y',yy).attr('width',x(val)).attr('height',ySub.bandwidth())
+            .attr('fill','none').attr('stroke',C.counterfactual).attr('stroke-width',1).attr('stroke-dasharray','3,3').attr('opacity',0);
+          const rect = g.append('rect').attr('x',0).attr('y',yy).attr('width',x(val)).attr('height',ySub.bandwidth())
+            .attr('fill',cor).attr('opacity',op);
+          const lbl = g.append('text').attr('x',x(val)+5).attr('y',yy+ySub.bandwidth()/2).attr('dy','0.35em')
+            .attr('font-family','Work Sans').attr('font-size',10).attr('font-weight',700).attr('fill',C.ink)
+            .text(String(val).replace('.',',')+'%');
+          partes.push({ rect, ghost, lbl, val, op });
+        });
+      });
+      g.append('text').attr('x',0).attr('y',h+32).attr('font-family','Lora').attr('font-style','italic')
+        .attr('font-size',10.5).attr('fill',C.mark).attr('font-weight',600).text(payload.viz.anotacao);
+
+      cfRenderers.transporte = { update: (scenario) => {
+        const off = scenario === 'off';
+        partes.forEach(p => {
+          p.rect.transition().duration(700).attr('width', off ? 0 : x(p.val)).attr('opacity', off ? 0 : p.op);
+          p.ghost.transition().duration(700).attr('opacity', off ? 0.7 : 0);
+          p.lbl.transition().duration(700).attr('x', off ? 5 : x(p.val)+5).attr('opacity', off ? 0.4 : 1);
+        });
+      }};
     }
   },
 
@@ -1459,7 +1510,7 @@ const stories = {
         lx += c.lbl.length * 5.7 + 32;
       });
       /* anotação */
-      s.append('text').attr('x', margL).attr('y', 400).attr('font-family','Lora').attr('font-style','italic')
+      s.append('text').attr('x', 6).attr('y', 400).attr('font-family','Lora').attr('font-style','italic')
         .attr('font-size',10.5).attr('fill',C.mark).attr('font-weight',600).text(v.anotacao);
     }
   },
@@ -1473,41 +1524,59 @@ const stories = {
     quali: {
       mark: 'Em diálogo com a pesquisa qualitativa',
       text: `<strong>Fine (1991)</strong> recusa a leitura da saída como "evasão": o abandono é o desfecho de um longo processo de ser enquadrado e silenciado. O funil que estreita a fatia preta/parda a cada etapa, lido em chave Fine, deixa de ser "quem desistiu" e vira <em>quem foi, aos poucos, empurrado para fora</em> — institucionalmente produzido, depois renomeado como falha individual.`,
-      ref: 'Fine, M. (1991) · Framing dropouts, SUNY Press.'
+      ref: 'Fine, M. (1991) · SUNY Press.'
     },
     counterfactual: false,
     viz: (el, payload) => {
       if (!payload) return;
       const etapas = payload.viz.etapas;
       const corDe = c => c === 'alto' ? C.orange : (c === 'baixo' ? C.brown : C.mark);
-      const s = svgIn(el, 560, 320);
-      const margin = { top: 48, right: 28, bottom: 46, left: 92 };
+      const s = svgIn(el, 560, 340);
+      const margin = { top: 54, right: 64, bottom: 48, left: 96 };
       const w = 560 - margin.left - margin.right;
-      const h = 320 - margin.top - margin.bottom;
+      const h = 340 - margin.top - margin.bottom;
       const g = s.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-      g.append('text').attr('x', -margin.left + 4).attr('y', -26).attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkFaint).attr('letter-spacing','0.1em').style('text-transform','uppercase').text('COMPOSIÇÃO RACIAL EM CADA PONTO DA TRAJETÓRIA (%)');
+      g.append('text').attr('x', -margin.left + 4).attr('y', -30).attr('font-family','Work Sans').attr('font-size',9)
+        .attr('fill',C.inkFaint).attr('letter-spacing','0.09em').style('text-transform','uppercase')
+        .text('COMPOSIÇÃO RACIAL DOS ESTUDANTES EM CADA ETAPA (%)');
       const x = d3.scaleLinear().domain([0, 100]).range([0, w]);
-      const yBand = d3.scaleBand().domain(etapas.map(e => e.etapa)).range([0, h]).padding(0.4);
+      const yBand = d3.scaleBand().domain(etapas.map(e => e.etapa)).range([0, h]).padding(0.46);
+      /* posição da fatia preta/parda em cada etapa, para a banda do funil */
+      const rio = etapas.map(e => {
+        let acc = 0, seg = {};
+        e.segmentos.forEach(sg => {
+          if (sg.cor === 'baixo') seg = { x0: acc, x1: acc + sg.valor };
+          acc += sg.valor;
+        });
+        return { y0: yBand(e.etapa), y1: yBand(e.etapa) + yBand.bandwidth(), x0: seg.x0, x1: seg.x1 };
+      });
+      /* banda do funil: liga a fatia preta/parda de uma etapa à seguinte */
+      for (let i = 0; i < rio.length - 1; i++) {
+        const a = rio[i], b = rio[i+1];
+        g.append('path').attr('d',
+          `M ${x(a.x0)} ${a.y1} L ${x(a.x1)} ${a.y1} L ${x(b.x1)} ${b.y0} L ${x(b.x0)} ${b.y0} Z`)
+          .attr('fill', C.brown).attr('opacity', 0.18);
+      }
+      /* barras empilhadas — a fatia preta/parda em destaque, as demais esmaecidas */
       etapas.forEach(e => {
         let acc = 0;
         e.segmentos.forEach(seg => {
+          const isPreta = seg.cor === 'baixo';
           g.append('rect').attr('x', x(acc)).attr('y', yBand(e.etapa)).attr('width', x(seg.valor)).attr('height', yBand.bandwidth())
-            .attr('fill', corDe(seg.cor)).attr('opacity', 0.9).attr('stroke','white').attr('stroke-width',1);
-          if (seg.valor > 7) g.append('text').attr('x', x(acc) + x(seg.valor)/2).attr('y', yBand(e.etapa) + yBand.bandwidth()/2 + 4).attr('text-anchor','middle')
-            .attr('font-family','Work Sans').attr('font-size',11).attr('font-weight',700).attr('fill','white').text(String(seg.valor).replace('.',',') + '%');
+            .attr('fill', corDe(seg.cor)).attr('opacity', isPreta ? 0.95 : 0.5).attr('stroke','white').attr('stroke-width',1);
+          if (seg.valor > 7) g.append('text').attr('x', x(acc) + x(seg.valor)/2).attr('y', yBand(e.etapa) + yBand.bandwidth()/2).attr('dy','0.35em')
+            .attr('text-anchor','middle').attr('font-family','Work Sans').attr('font-size', isPreta ? 13 : 10).attr('font-weight',700)
+            .attr('fill', isPreta ? 'white' : C.inkSoft).text(String(seg.valor).replace('.',',') + '%');
           acc += seg.valor;
         });
         g.append('text').attr('x', -10).attr('y', yBand(e.etapa) + yBand.bandwidth()/2).attr('dy','0.35em').attr('text-anchor','end')
           .attr('font-family','Work Sans').attr('font-size',11).attr('font-weight',600).attr('fill',C.inkSoft).text(e.etapa);
       });
-      // seta destacando a fatia preta/parda encolhendo
-      const yPrimeira = yBand(etapas[0].etapa) + yBand.bandwidth();
-      const yUltima = yBand(etapas[etapas.length-1].etapa);
-      g.append('text').attr('x', w/2).attr('y', h + 30).attr('text-anchor','middle').attr('font-family','Lora').attr('font-style','italic').attr('font-size',11).attr('fill',C.mark).attr('font-weight',600).text(payload.viz.anotacao);
-      // legenda
-      const leg = g.append('g').attr('transform', `translate(0, ${-14})`);
+      g.append('text').attr('x', w/2).attr('y', h + 28).attr('text-anchor','middle').attr('font-family','Lora').attr('font-style','italic')
+        .attr('font-size',10.5).attr('fill',C.mark).attr('font-weight',600).text(payload.viz.anotacao);
+      const leg = g.append('g').attr('transform','translate(0,-16)');
       [['Brancos e amarelos','alto'],['Pretos e pardos','baixo'],['Indígenas','mark']].forEach((it,i) => {
-        leg.append('rect').attr('x', i*150).attr('y', 0).attr('width',10).attr('height',10).attr('fill',corDe(it[1])).attr('opacity',0.9);
+        leg.append('rect').attr('x', i*150).attr('y', 0).attr('width',10).attr('height',10).attr('fill',corDe(it[1])).attr('opacity', it[1]==='baixo'?0.95:0.5);
         leg.append('text').attr('x', i*150+15).attr('y',9).attr('font-family','Work Sans').attr('font-size',9).attr('fill',C.inkSoft).text(it[0]);
       });
     }
@@ -1541,7 +1610,7 @@ const stories = {
       cfRenderers.cotas = makeCounterfactualViz(el, {
         W: 560, H: 320,
         xMax: Math.ceil(xMax / 10) * 10, ticks: 5,
-        xLabel: '% INGRESSANTES EM IES PÚBLICAS FEDERAIS (2024 VS 2012)',
+        xLabel: '% DE INGRESSANTES EM IES PÚBLICAS FEDERAIS (2024 E 2012)',
         bars: payload.viz.bars.map(b => ({
           label: b.label, real: b.real, off: b.off,
           color: palette[b.color_key] || C.orange
@@ -1571,40 +1640,42 @@ const _storyPatches = {
   L2: {
     dataKey: 'L2',
     eyebrow: 'Leitura 02 · SAEB 2023 · 5º EF · proficiência por escola',
-    title: 'O mesmo gap racial aparece <em>dentro da mesma escola</em>.',
-    text: `<p><strong>O indicador.</strong> O gap de proficiência em Língua Portuguesa entre estudantes brancos e pretos/pardos do 5º ano, medido de duas formas: na média nacional e dentro de cada escola. A pergunta é onde a desigualdade racial de aprendizagem se produz.</p>
-    <p><strong>O que os dados mostram.</strong> Na média nacional, o gap é de {{narrativa.gap_bruto}} pontos. Dentro de cada escola (comparando colegas da mesma instituição), ele permanece em {{narrativa.gap_intra_medio}} pontos, cerca de {{narrativa.pct_sobrevive}}% do gap nacional. Em {{narrativa.pct_escolas_gap_branco}}% das {{narrativa.n_escolas}} escolas analisadas, a proficiência média dos estudantes brancos está acima da dos pretos e pardos.</p>`,
+    title: 'A diferença racial aparece <em>dentro da mesma escola</em>.',
+    text: `<p><strong>O indicador.</strong> A diferença de proficiência em Língua Portuguesa entre estudantes brancos e pretos/pardos do 5º ano. A pergunta é onde essa desigualdade se produz: entre escolas diferentes, ou também entre colegas de uma mesma escola.</p>
+    <p><strong>Como a conta é feita.</strong> Em cada escola que tem ao menos 10 estudantes brancos e 10 pretos/pardos, calculamos a proficiência média de cada grupo e a diferença entre as duas; é a diferença interna daquela escola. Na média do país, a diferença racial é de {{narrativa.gap_bruto}} pontos. Dentro das escolas, comparando colegas que estudam juntos, ela permanece em {{narrativa.gap_intra_medio}} pontos, cerca de {{narrativa.pct_sobrevive}}% do total. Em {{narrativa.pct_escolas_gap_branco}}% das {{narrativa.n_escolas}} escolas analisadas, a média dos estudantes brancos fica acima da dos pretos e pardos.</p>`,
     source: 'Fonte: SAEB 2023 · microdados aluno · 5º EF · escolas públicas · {{narrativa.n_escolas}} escolas com ao menos 10 estudantes brancos e 10 pretos/pardos',
     quali: {
       mark: 'A leitura interseccional',
-      text: `A segregação entre escolas (estudantes negros em instituições de menor estrutura) explica parte da desigualdade. O gap que permanece entre colegas da mesma sala mostra a outra parte: a raça também organiza a distribuição de atenção, de expectativa e de classificação dentro da instituição. Carvalho (2009) descreve esse processo na alfabetização; o gap intra-escola é a sua medida agregada.`,
+      text: `A segregação entre escolas (estudantes negros em instituições de menor estrutura) explica parte da desigualdade. A diferença que permanece entre colegas da mesma sala mostra a outra parte: a raça também organiza a distribuição de atenção, de expectativa e de classificação dentro da instituição. Carvalho (2009) descreve esse processo na alfabetização; a diferença dentro da escola é a sua medida agregada.`,
       ref: 'Carvalho, M. P. de (2009) · Cadernos de Pesquisa, v.39, n.138.'
     }
   },
   L3: {
     dataKey: 'L3',
-    eyebrow: 'Leitura 03 · E se… · SAEB 2023 9º EF · decomposição do gap racial',
-    title: 'Igualando renda e trabalho, restam <em>{{narrativa.gap_residuo}} pontos</em> de gap.',
-    text: `<p><strong>O indicador.</strong> O gap de proficiência em Língua Portuguesa entre estudantes brancos e pretos/pardos do 9º ano: {{narrativa.gap_bruto}} pontos na escala SAEB. A pergunta é quanto desse gap corresponde a desigualdade de classe e quanto resta quando a classe é descontada.</p>
-    <p><strong>A decomposição.</strong> O gap é separado em camadas. Igualar a carga de trabalho (doméstico e remunerado) reduz o gap em {{narrativa.camada_trabalho}} ponto. Igualar também a renda reduz mais {{narrativa.camada_renda}} pontos. Restam {{narrativa.gap_residuo}} pontos ({{narrativa.pct_residuo}}% do gap original) que não correspondem nem a trabalho nem a renda.</p>`,
+    eyebrow: 'Leitura 03 · E se… · SAEB 2023 9º EF · decomposição da diferença',
+    title: 'Mesmo igualando renda e trabalho, sobram <em>{{narrativa.raca_residuo}} pontos</em>.',
+    text: `<p><strong>O indicador.</strong> A diferença de proficiência em Língua Portuguesa entre estudantes brancos e pretos/pardos do 9º ano: {{narrativa.raca_bruto}} pontos na escala SAEB. A pergunta é quanto dessa diferença é desigualdade de classe.</p>
+    <p><strong>A lógica.</strong> Para responder, comparamos estudantes brancos e pretos/pardos que vivem a mesma situação de classe: a mesma carga de trabalho (doméstico e remunerado) e a mesma faixa de renda. Trabalho e renda, juntos, explicam cerca de {{narrativa.raca_explicado}} pontos. O que sobra, {{narrativa.raca_residuo}} pontos ({{narrativa.raca_pct_residuo}}% da diferença original), é o resíduo: a parte que não é trabalho nem renda.</p>
+    <p><strong>O espelho do gênero.</strong> A mesma conta aplicada à diferença entre meninas e meninos ({{narrativa.sexo_bruto}} pontos, com as meninas à frente em leitura) mostra outro padrão: ali, trabalho e renda não explicam quase nada. O contraste afina a leitura racial: a diferença racial tinha, sim, um componente de classe; descontamos esse componente e a maior parte permaneceu.</p>`,
     source: `Fonte: SAEB 2023 9º EF · escolas públicas · decomposição por padronização (estratos de carga de trabalho × quintil de INSE)
       <span class="evidence-badge moderate" style="display:inline-flex;margin-left:0.5rem;">
         <span class="dot"></span> Evidência indireta
         <span class="tooltip">Decomposição descritiva por padronização: compara estudantes brancos e pretos/pardos com a mesma carga de trabalho e a mesma faixa de renda. Não é modelo causal; o resíduo capta tudo o que não foi igualado.</span>
       </span>`,
-    callout: '<strong>O resíduo.</strong> Comparando estudantes brancos e pretos/pardos com a mesma carga de trabalho e a mesma faixa de renda, restam <strong>{{narrativa.gap_residuo}} pontos</strong> de diferença ({{narrativa.pct_residuo}}% do gap original).',
+    callout: '<strong>O resíduo.</strong> Comparados estudantes brancos e pretos/pardos com a mesma carga de trabalho e a mesma renda, ainda restam <strong>{{narrativa.raca_residuo}} pontos</strong> de diferença, {{narrativa.raca_pct_residuo}}% da diferença original.',
     quali: {
       mark: 'A leitura interseccional',
-      text: `Quando o gap não cede ao se igualar renda e trabalho, o que resta precisa de outro nome. Gomes (2012) o oferece: a escola não apenas reflete desigualdades externas; produz hierarquias raciais no currículo, na avaliação e na convivência. O resíduo de {{narrativa.gap_residuo}} pontos é a medida do que a literatura chama de racismo institucional. É também a resposta a um argumento corrente: a desigualdade racial na escola não se reduz a desigualdade de classe.`,
+      text: `Quando a diferença não cede ao se igualar renda e trabalho, o que resta precisa de outro nome. Gomes (2012) o oferece: a escola não apenas reflete desigualdades externas; produz hierarquias raciais no currículo, na avaliação e na convivência. O resíduo de {{narrativa.raca_residuo}} pontos é a medida do que a literatura chama de racismo institucional. É também a resposta a um argumento corrente: a desigualdade racial na escola não se reduz a desigualdade de classe.`,
       ref: 'Gomes, N. L. (2012) · Relações étnico-raciais, educação e descolonização dos currículos · Currículo sem Fronteiras.'
     }
   },
   L4: {
     dataKey: 'L4',
     eyebrow: 'Leitura 04 · Censo Escolar 2025 + Censo Demográfico 2022 · creche e 5º ano',
-    title: 'A creche que <em>não chegou</em> reaparece no <em>5º ano</em>.',
-    text: `<p><strong>O indicador.</strong> Dois momentos da trajetória, comparados pela mesma quintilização de municípios: a cobertura de creche para crianças de 0 a 3 anos e a proporção de estudantes com aprendizagem adequada em LP no 5º ano. A pergunta é se a desigualdade no acesso à educação infantil reaparece dez anos depois.</p>
-    <p><strong>O que os dados mostram.</strong> A cobertura nacional de creche é de {{narrativa.cobertura_nacional}}%, abaixo da meta do PNE ({{narrativa.meta_pne}}%). Entre os municípios de menor cobertura, {{narrativa.cobertura_q1}}%; entre os de maior, {{narrativa.cobertura_q5}}%. Dez anos depois, a aprendizagem no 5º ano segue a mesma ordem: {{narrativa.saeb_q1}}% no grupo de menor cobertura inicial, {{narrativa.saeb_q5}}% no de maior.</p>`,
+    title: 'Creche e 5º ano: a desigualdade tem o <em>mesmo desenho</em>.',
+    text: `<p><strong>O indicador.</strong> Dois indicadores, comparados pela mesma divisão dos estados em grupos de cobertura: o acesso à creche para crianças de 0 a 3 anos e a proporção de estudantes com aprendizagem adequada em LP no 5º ano.</p>
+    <p><strong>O que os dados mostram.</strong> A cobertura nacional de creche é de {{narrativa.cobertura_nacional}}%, abaixo da meta do PNE ({{narrativa.meta_pne}}%). Entre os estados de menor cobertura, {{narrativa.cobertura_q1}}%; entre os de maior, {{narrativa.cobertura_q5}}%. A aprendizagem no 5º ano segue a mesma ordem: {{narrativa.saeb_q1}}% no grupo de menor cobertura, {{narrativa.saeb_q5}}% no de maior.</p>
+    <p><strong>Como ler com cuidado.</strong> São dois retratos do presente, agregados por estado, não as mesmas crianças acompanhadas ao longo dos anos. A coincidência entre as duas curvas é sugestiva, mas não comprova uma relação de causa; confirmá-la exigiria dados longitudinais e mais pesquisa.</p>`,
     source: 'Fonte: Censo Escolar 2025 (QT_MAT_INF_CRE) / Censo Demográfico 2022 (SIDRA tabela 9514) × SAEB 2023 5º EF · agregado por UF',
     quali: {
       mark: 'A leitura interseccional',
@@ -1629,10 +1700,11 @@ const _storyPatches = {
     dataKey: 'L6',
     eyebrow: 'Leitura 06 · E se… · Censo Escolar 2025 · transporte escolar público',
     title: 'O transporte é a condição de <em>chegar</em> à escola.',
-    text: `<p><strong>O indicador.</strong> O número de estudantes da rede pública que dependem de transporte escolar público para chegar à escola. A pergunta é sobre a condição material anterior a qualquer aprendizagem: o deslocamento.</p>
-    <p><strong>O que os dados mostram.</strong> São {{narrativa.total_transp_milhoes}} milhões de estudantes no país, {{narrativa.total_transp_rural_milhoes}} milhões deles em escolas rurais. Na zona rural, {{narrativa.pct_rural}}% das matrículas dependem do transporte; na urbana, {{narrativa.pct_urbana}}%.</p>`,
-    source: 'Fonte: Censo Escolar 2025 · QT_TRANSP_PUBLICO × matrículas da rede pública · análise de cenário',
-    callout: '<strong>O cenário.</strong> {{narrativa.total_transp_milhoes}} milhões de estudantes dependem do transporte escolar público: {{narrativa.total_transp_rural_milhoes}} milhões em escolas rurais, onde {{narrativa.pct_rural}}% das matrículas precisam dele. Sem o transporte, a distância até a escola passa a ser, para essas famílias, distância até o direito.',
+    text: `<p><strong>O indicador.</strong> A parcela das matrículas da rede pública que depende de transporte escolar público para chegar à escola, comparada entre as redes urbana e rural de cada região. A pergunta é sobre a condição material anterior a qualquer aprendizagem: o deslocamento.</p>
+    <p><strong>O que os dados mostram.</strong> No país, {{narrativa.total_transp_milhoes}} milhões de estudantes dependem do transporte. E a dependência é desigual: na zona rural, {{narrativa.pct_rural}}% das matrículas precisam dele; na urbana, {{narrativa.pct_urbana}}% (cerca de {{narrativa.razao_rural_urb}} vezes menos). No campo, a escola mais próxima costuma ser distante, e o transporte é o que liga a criança a ela.</p>
+    <p><strong>A política por trás.</strong> Esse transporte é sustentado, em boa parte, pelo PNATE (Programa Nacional de Apoio ao Transporte do Escolar), do FNDE, que repassa recursos a estados e municípios. É a política que o cenário desta leitura coloca em questão.</p>`,
+    source: 'Fonte: Censo Escolar 2025 · QT_TRANSP_PUBLICO × matrículas da rede pública · análise de cenário · política: PNATE/FNDE',
+    callout: '<strong>O cenário.</strong> {{narrativa.total_transp_milhoes}} milhões de estudantes dependem do transporte escolar público; na zona rural, ele sustenta {{narrativa.pct_rural}}% das matrículas. Sem o transporte (sem o PNATE que o financia), a distância até a escola vira, para essas famílias, distância até o direito.',
     quali: {
       mark: 'A leitura interseccional',
       text: `O transporte escolar é a condição material que liga a criança rural à escola. Caldart, na formulação da Educação do Campo, lembra que o direito à educação no campo passa antes pelo direito de chegar até ela. A dependência do transporte é uma desigualdade territorial; recai com mais peso sobre populações rurais, indígenas e quilombolas, para quem a escola mais próxima costuma ser distante.`,
@@ -1642,13 +1714,14 @@ const _storyPatches = {
   L7: {
     dataKey: 'L7',
     eyebrow: 'Leitura 07 · SAEB 2023 · 9º EF · reprovação, abandono e raça',
-    title: 'A reprovação é a <em>porta</em> do abandono, e se abre antes para uns.',
-    text: `<p><strong>O indicador.</strong> A proporção de estudantes do 9º ano que declaram já ter abandonado a escola ao menos uma vez, cruzada com o histórico de reprovação e com a raça/cor. A pergunta tem duas partes: como a reprovação leva ao abandono e quem é mais exposto a ela.</p>
-    <p><strong>O que os dados mostram.</strong> A reprovação funciona como porta: entre quem nunca reprovou, {{narrativa.abandono_nunca}}% declaram abandono; entre quem reprovou duas vezes ou mais, {{narrativa.abandono_duas}}%. Uma vez reprovado, o risco de abandono é semelhante entre brancos e pretos/pardos. A diferença está antes da porta: {{narrativa.reprov_preta}}% dos estudantes pretos e pardos já reprovaram, contra {{narrativa.reprov_branca}}% dos brancos.</p>`,
+    title: 'Reprovar e abandonar <em>caminham juntos</em>; e reprovar tem cor.',
+    text: `<p><strong>O indicador.</strong> No questionário do SAEB, o estudante do 9º ano responde se já foi reprovado (Q19) e se já abandonou a escola por algum período (Q20). As duas respostas são autorrelato. Esta leitura cruza as duas com a cor/raça (Q04).</p>
+    <p><strong>Painel 1: reprovação e abandono andam juntos.</strong> Entre os estudantes que declaram nunca ter reprovado, {{narrativa.abandono_nunca}}% também declaram já ter abandonado a escola; entre os que reprovaram duas vezes ou mais, {{narrativa.abandono_duas}}%. As duas trajetórias aparecem associadas. Com estes dados não é possível afirmar que uma causa a outra, mas elas raramente vêm separadas.</p>
+    <p><strong>Painel 2: a reprovação tem cor.</strong> Uma vez que a reprovação aconteceu, o abandono declarado é parecido entre brancos e pretos/pardos. A diferença está em quem reprova: {{narrativa.reprov_preta}}% dos estudantes pretos e pardos já reprovaram, contra {{narrativa.reprov_branca}}% dos brancos.</p>`,
     source: 'Fonte: SAEB 2023 · microdados aluno · 9º EF · escolas públicas · TX_RESP_Q19 × Q20 × Q04',
     quali: {
       mark: 'A leitura interseccional',
-      text: `A reprovação multiplica o abandono, e não se distribui ao acaso. Patto, em estudo clássico sobre o fracasso escolar, mostrou que a reprovação não mede apenas o desempenho do aluno: mede também o julgamento que a escola faz dele. Estudantes pretos e pardos reprovarem {{narrativa.gap_reprov}} pontos percentuais mais que os brancos indica que a porta do abandono se abre primeiro para os corpos que a escola classifica como problema.`,
+      text: `A reprovação aparece lado a lado com o abandono, e não se distribui ao acaso. Patto, em estudo clássico sobre o fracasso escolar, mostrou que a reprovação não mede apenas o desempenho do estudante: mede também o julgamento que a escola faz dele. Estudantes pretos e pardos reprovarem {{narrativa.gap_reprov}} pontos percentuais mais que os brancos sugere que esse julgamento recai antes sobre os corpos que a escola tende a classificar como problema.`,
       ref: 'Patto, M. H. S. · A produção do fracasso escolar.'
     }
   },
@@ -1656,14 +1729,14 @@ const _storyPatches = {
     dataKey: 'L8',
     eyebrow: 'Leitura 08 · SAEB 2023 · composição racial em 3 pontos da trajetória',
     title: 'O funil tem cor: a cada etapa, <em>menos estudantes negros</em>.',
-    text: `<p><strong>O indicador.</strong> A composição racial dos estudantes em três pontos da educação básica (5º EF, 9º EF e 3º EM), medida pelo SAEB. A pergunta é se a trajetória escolar retém igualmente estudantes de todas as cores.</p>
-    <p><strong>O que os dados mostram.</strong> No 5º ano, {{narrativa.preta_5ef}}% dos estudantes são pretos ou pardos; no 9º ano, {{narrativa.preta_9ef}}%; no 3º ano do EM, {{narrativa.preta_3em}}%. A fatia preta/parda encolhe {{narrativa.queda_preta_pp}} pontos percentuais ao longo do percurso, enquanto a branca cresce de {{narrativa.branca_5ef}}% para {{narrativa.branca_3em}}%.</p>
-    <p><em>Nota metodológica.</em> Trata-se de coorte sintética: cada etapa é uma geração diferente avaliada em 2023, não os mesmos estudantes seguidos no tempo. A leitura é da forma do funil.</p>`,
+    text: `<p><strong>O indicador.</strong> A composição racial dos estudantes em três etapas da educação básica (5º ano EF, 9º ano EF e 3º ano EM), medida pelo SAEB. A pergunta é se a escola retém igualmente estudantes de todas as cores.</p>
+    <p><strong>O que os dados mostram.</strong> No 5º ano, {{narrativa.preta_5ef}}% dos estudantes são pretos ou pardos; no 3º ano do médio, {{narrativa.preta_3em}}%. A fatia encolhe {{narrativa.queda_preta_pp}} pontos percentuais, enquanto a branca cresce de {{narrativa.branca_5ef}}% para {{narrativa.branca_3em}}%. Pode parecer pouco; mas, sobre o total de estudantes avaliados no 3º ano, esses {{narrativa.queda_preta_pp}} pontos equivalem a cerca de <strong>{{narrativa.dif_absoluta_mil}} mil estudantes pretos e pardos</strong> a menos do que haveria se a proporção do 5º ano tivesse se mantido.</p>
+    <p><strong>Como ler.</strong> Esta não é uma turma acompanhada ao longo dos anos. É uma comparação pedagógica entre a composição racial do ensino fundamental e a do ensino médio, para refletir sobre quem a escola retém. Cada etapa é uma geração diferente avaliada em 2023.</p>`,
     source: 'Fonte: SAEB 2023 · microdados aluno · 5º EF, 9º EF e 3º EM · escolas públicas · cor/raça autodeclarada (TX_RESP_Q04)',
     quali: {
       mark: 'A leitura interseccional',
       text: `O afunilamento racial da trajetória pode ser lido como soma de escolhas individuais, ou como processo. Fine, ao estudar a saída da escola, recusou o termo "evasão": o abandono é o desfecho de um longo processo de ser enquadrado e silenciado. A fatia preta/parda que encolhe a cada etapa mede quem o sistema, aos poucos, deixou de reter.`,
-      ref: 'Fine, M. (1991) · Framing dropouts, SUNY Press.'
+      ref: 'Fine, M. (1991) · SUNY Press.'
     }
   },
   L9: {

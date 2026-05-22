@@ -1,44 +1,45 @@
 {
   "meta": {
     "leitura": "L3",
-    "titulo_curto": "O gap que sobra mesmo assim",
-    "eyebrow": "Leitura 03 · E se… · SAEB 2023 9º EF · decomposição do gap racial",
-    "fonte": "SAEB 2023 — microdados aluno · 9º EF · escolas públicas · decomposição por padronização (estratos de carga de trabalho × quintil de INSE)",
-    "contrafactual": true,
+    "titulo_curto": "Quanto da diferença a classe explica",
+    "eyebrow": "Leitura 03 · E se… · SAEB 2023 9º EF · decomposição da diferença",
+    "fonte": "SAEB 2023 9º EF · escolas públicas · decomposição por padronização (estratos de carga de trabalho × quintil de INSE)",
+    "cenario": true,
     "cf_key": "residuo",
-    "evidencia": "Padronização por estratos (standardization) — compara estudantes brancos e pretos/pardos com a mesma carga de trabalho e a mesma faixa de renda. Não é modelo causal; é decomposição descritiva. Selo: evidência indireta.",
-    "gerado_em": "2026-05-21 20:06:18"
+    "evidencia": "Padronização por estratos: compara estudantes com a mesma carga de trabalho e a mesma faixa de renda. Não é modelo causal; é decomposição descritiva. Selo: evidência indireta.",
+    "gerado_em": "2026-05-22 08:52:27"
   },
   "narrativa": {
-    "gap_bruto": 15.7,
-    "camada_trabalho": 0.2,
-    "camada_renda": 3.8,
-    "gap_residuo": 11.7,
-    "pct_residuo": 75
+    "raca_bruto": 15.7,
+    "raca_trabalho": 0.2,
+    "raca_renda": 3.8,
+    "raca_explicado": 4,
+    "raca_residuo": 11.7,
+    "raca_pct_residuo": 75,
+    "sexo_bruto": 14.4,
+    "sexo_residuo": 15.4,
+    "sexo_pct_residuo": 107
   },
   "viz": {
-    "indicador": "Gap de proficiência LP entre estudantes brancos e pretos/pardos (pontos SAEB)",
-    "gap_bruto": 15.7,
-    "segmentos": [
+    "indicador": "Diferença de proficiência em LP no 9º ano (pontos SAEB) e quanto dela a classe explica",
+    "decomposicoes": [
       {
-        "label": "Carga de trabalho",
-        "descricao": "doméstico + remunerado",
-        "valor": 0.2,
-        "grupo": "explicado"
+        "rotulo": "Diferença racial",
+        "sub": "brancos − pretos e pardos",
+        "bruto": 15.7,
+        "explicado": 4,
+        "residuo": 11.7,
+        "pct_residuo": 75
       },
       {
-        "label": "Renda (nível socioeconômico)",
-        "descricao": "quintil de INSE",
-        "valor": 3.8,
-        "grupo": "explicado"
-      },
-      {
-        "label": "Resíduo",
-        "descricao": "o que não é trabalho nem renda",
-        "valor": 11.7,
-        "grupo": "residuo"
+        "rotulo": "Diferença de gênero",
+        "sub": "meninas − meninos",
+        "bruto": 14.4,
+        "explicado": 0,
+        "residuo": 14.4,
+        "pct_residuo": 100
       }
     ],
-    "anotacao": "mesmo igualando renda e trabalho, sobram 11,7 pontos"
+    "anotacao": "Igualadas a renda e a carga de trabalho, 75% da diferença racial ainda permanece"
   }
 }

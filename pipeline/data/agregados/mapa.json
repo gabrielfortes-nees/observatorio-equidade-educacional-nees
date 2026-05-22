@@ -3,7 +3,7 @@
     "indicador": "% aprendizagem adequada em LP — 5º EF (corte oficial INEP, prof. ≥ 225)",
     "fonte": "SAEB 2023 microdados aluno · escolas públicas · 27 UFs",
     "n_total": 1802151,
-    "gerado_em": "2026-05-21 19:32:05",
+    "gerado_em": "2026-05-22 08:52:48",
     "camadas_disponiveis": ["geral", "meninos_brancos", "meninas_brancas", "meninos_pretos", "meninas_pretas", "indigenas"]
   },
   "camadas": {

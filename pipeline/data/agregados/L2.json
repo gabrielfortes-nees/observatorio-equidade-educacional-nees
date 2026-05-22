@@ -1,11 +1,11 @@
 {
   "meta": {
     "leitura": "L2",
-    "titulo_curto": "O gap racial dentro da mesma escola",
+    "titulo_curto": "A diferença racial dentro da mesma escola",
     "eyebrow": "Leitura 02 · SAEB 2023 · 5º EF · proficiência LP por escola",
-    "fonte": "SAEB 2023 — microdados aluno · escolas públicas · 20.825 escolas com ao menos 10 estudantes brancos e 10 pretos/pardos",
+    "fonte": "SAEB 2023 · microdados aluno · escolas públicas · 20.825 escolas com ao menos 10 estudantes brancos e 10 pretos/pardos",
     "n_escolas": 20825,
-    "gerado_em": "2026-05-21 19:31:30"
+    "gerado_em": "2026-05-22 08:52:19"
   },
   "narrativa": {
     "gap_bruto": 9.7,
@@ -15,7 +15,7 @@
     "n_escolas": 20825
   },
   "viz": {
-    "indicador": "Distribuição do gap de proficiência LP (branco − preto/pardo) dentro de cada escola",
+    "indicador": "Distribuição da diferença de proficiência em LP (brancos − pretos/pardos) dentro de cada escola",
     "gap_bruto": 9.7,
     "gap_intra_medio": 4,
     "histograma": [
@@ -90,6 +90,6 @@
         "lado": "branco"
       }
     ],
-    "anotacao": "62% das escolas: brancos acima de pretos/pardos"
+    "anotacao": "Em 62% das escolas analisadas, a média dos estudantes brancos fica acima da dos pretos e pardos"
   }
 }

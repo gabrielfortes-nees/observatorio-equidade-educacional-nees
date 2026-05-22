@@ -5,7 +5,7 @@
     "eyebrow": "Leitura 07 · SAEB 2023 · 9º EF · reprovação, abandono e raça",
     "fonte": "SAEB 2023 — microdados aluno · 9º EF · escolas públicas · TX_RESP_Q19 × Q20 × Q04",
     "n_total": 1842218,
-    "gerado_em": "2026-05-21 20:06:24"
+    "gerado_em": "2026-05-22 09:30:18"
   },
   "narrativa": {
     "abandono_nunca": 2.9,
@@ -17,7 +17,7 @@
   },
   "viz": {
     "indicador": "% que declara já ter abandonado, por nível de reprovação · e distribuição da reprovação por raça",
-    "porta_titulo": "A PORTA · % QUE JÁ ABANDONOU, POR REPROVAÇÃO",
+    "porta_titulo": "1 · ENTRE QUEM REPROVOU, QUANTOS DECLARAM JÁ TER ABANDONADO",
     "porta": [
       {
         "reprovacao": "Nunca reprovou",
@@ -35,7 +35,7 @@
         "n": 85694
       }
     ],
-    "distribuicao_titulo": "QUEM CHEGA À PORTA · DISTRIBUIÇÃO DA REPROVAÇÃO POR RAÇA",
+    "distribuicao_titulo": "2 · COMO A REPROVAÇÃO SE DISTRIBUI ENTRE BRANCOS E PRETOS/PARDOS",
     "distribuicao": [
       {
         "raca": "Brancos e amarelos",
@@ -50,6 +50,6 @@
         "duas": 5.2
       }
     ],
-    "anotacao": "21,8% dos estudantes pretos/pardos já reprovaram, contra 16,5% dos brancos"
+    "anotacao": "Os estudantes pretos e pardos reprovam mais: 21,8% contra 16,5% dos brancos"
   }
 }

@@ -63,9 +63,9 @@ histograma <- lapply(seq_len(n_bins), function(i) {
 L2 <- list(
   meta = list(
     leitura = "L2",
-    titulo_curto = "O gap racial dentro da mesma escola",
+    titulo_curto = "A diferença racial dentro da mesma escola",
     eyebrow = "Leitura 02 · SAEB 2023 · 5º EF · proficiência LP por escola",
-    fonte = sprintf("SAEB 2023 — microdados aluno · escolas públicas · %s escolas com ao menos %d estudantes brancos e %d pretos/pardos",
+    fonte = sprintf("SAEB 2023 · microdados aluno · escolas públicas · %s escolas com ao menos %d estudantes brancos e %d pretos/pardos",
                     format(n_escolas, big.mark = "."), MIN_GRP, MIN_GRP),
     n_escolas = n_escolas,
     gerado_em = format(Sys.time(), "%Y-%m-%d %H:%M:%S")
@@ -78,11 +78,11 @@ L2 <- list(
     n_escolas = n_escolas
   ),
   viz = list(
-    indicador = "Distribuição do gap de proficiência LP (branco − preto/pardo) dentro de cada escola",
+    indicador = "Distribuição da diferença de proficiência em LP (brancos − pretos/pardos) dentro de cada escola",
     gap_bruto = round(gap_bruto, 1),
     gap_intra_medio = round(gap_intra_medio, 1),
     histograma = histograma,
-    anotacao = sprintf("%.0f%% das escolas: brancos acima de pretos/pardos", pct_gap_branco)
+    anotacao = sprintf("Em %.0f%% das escolas analisadas, a média dos estudantes brancos fica acima da dos pretos e pardos", pct_gap_branco)
   )
 )
 

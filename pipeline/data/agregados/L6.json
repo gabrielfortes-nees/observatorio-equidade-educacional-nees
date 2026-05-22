@@ -3,58 +3,49 @@
     "leitura": "L6",
     "titulo_curto": "O transporte que liga a criança à escola",
     "eyebrow": "Leitura 06 · E se… · Censo Escolar 2025 · transporte escolar público",
-    "fonte": "Censo Escolar 2025 — QT_TRANSP_PUBLICO × matrículas da rede pública · análise de cenário",
+    "fonte": "Censo Escolar 2025 · QT_TRANSP_PUBLICO × matrículas da rede pública · análise de cenário · política: PNATE/FNDE",
     "cenario": true,
     "cf_key": "transporte",
-    "gerado_em": "2026-05-21 19:31:40"
+    "gerado_em": "2026-05-22 08:52:30"
   },
   "narrativa": {
     "total_transp_milhoes": 8.9,
     "total_transp_rural_milhoes": 2.8,
     "pct_rural": 55.5,
-    "pct_urbana": 19.3
+    "pct_urbana": 19.3,
+    "razao_rural_urb": 2.9
   },
   "viz": {
-    "indicador": "Estudantes de escolas rurais que dependem de transporte escolar público (milhares)",
-    "titulo_real": "Estudantes que chegam à escola pelo transporte público",
+    "indicador": "Matrículas da rede pública que dependem de transporte escolar público (%)",
+    "titulo_real": "Quanto cada rede depende do transporte escolar",
     "titulo_off": "E se não houvesse transporte — quem deixaria de chegar",
     "bars": [
       {
-        "label": "Norte",
-        "real": 651.6,
-        "off": 0,
-        "pct": 57.4,
-        "color_key": "counterfactual"
+        "regiao": "Norte",
+        "rural": 57.4,
+        "urbana": 12.8
       },
       {
-        "label": "Nordeste",
-        "real": 1446.1,
-        "off": 0,
-        "pct": 52.1,
-        "color_key": "brown"
+        "regiao": "Nordeste",
+        "rural": 52.1,
+        "urbana": 24.7
       },
       {
-        "label": "Centro-Oeste",
-        "real": 120.2,
-        "off": 0,
-        "pct": 55.8,
-        "color_key": "orangeSoft"
+        "regiao": "Centro-Oeste",
+        "rural": 55.8,
+        "urbana": 11.2
       },
       {
-        "label": "Sul",
-        "real": 253,
-        "off": 0,
-        "pct": 69.7,
-        "color_key": "orange"
+        "regiao": "Sul",
+        "rural": 69.7,
+        "urbana": 16.8
       },
       {
-        "label": "Sudeste",
-        "real": 331.9,
-        "off": 0,
-        "pct": 58.7,
-        "color_key": "orange"
+        "regiao": "Sudeste",
+        "rural": 58.7,
+        "urbana": 20.1
       }
     ],
-    "anotacao": "nas escolas rurais, 56% das matrículas dependem do transporte"
+    "anotacao": "No campo, a dependência do transporte é cerca de 2,9 vezes maior que na cidade"
   }
 }
