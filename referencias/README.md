@@ -4,7 +4,25 @@ Esta pasta abriga material de referência usado para avaliar, ancorar e justific
 
 A ideia: em vez de avaliar protótipos com princípios genéricos de UX, cruzá-los com critérios **vencedores de prêmios reais de visualização de dados** (Cláudio Weber Abramo, Sigma Awards, PacificVis VisStory). Isso transforma "minha opinião" em "rubrica externa replicável".
 
-## Documento principal
+## Documentos disponíveis
+
+### 1. [`Revisao_Plataformas_VisData_Premiadas.xlsx`](Revisao_Plataformas_VisData_Premiadas.xlsx)
+
+Rubrica externa de design (detalhes abaixo).
+
+### 2. [`extracao_literatura_qualitativa_v1.xlsx`](extracao_literatura_qualitativa_v1.xlsx)
+
+**Check de literatura qualitativa para as 9 leituras storytelling.** Planilha de extração com referências qualitativas (entrevistas, etnografia, estudos de caso) que ancoram e validam empiricamente cada uma das 9 leituras do observatório (L1 a L9). Use como:
+
+- **Antes de finalizar o texto de uma leitura:** verificar que a interpretação dada aos números está respaldada por evidência qualitativa publicada.
+- **Durante revisão:** se uma leitura faz uma afirmação interpretativa forte (ex: "reprovação como porta de saída"), conferir se há literatura qualitativa que sustente.
+- **Para ampliar o roteiro de cada leitura:** identificar trabalhos qualitativos cujas vozes/experiências possam ser citadas no texto da leitura.
+
+Versão v1 produzida em 05/05/2026, mantida como referência de partida (a evoluir conforme novas leituras forem agregadas).
+
+---
+
+## Documento principal — detalhe
 
 [`Revisao_Plataformas_VisData_Premiadas.xlsx`](Revisao_Plataformas_VisData_Premiadas.xlsx)
 

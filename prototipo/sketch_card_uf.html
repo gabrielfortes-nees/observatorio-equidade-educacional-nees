@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sketch · Card UF — Observatório de Equidade Educacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #E67E22;
+    --orange-deep: #D35400;
+    --orange-soft: #F5B271;
+    --orange-pale: #FBE4CC;
+    --brown: #5A3825;
+    --brown-soft: #8B5A3C;
+    --cream: #FAF4E8;
+    --paper: #FCF8F0;
+    --ink: #2A1F18;
+    --ink-soft: #5A4A3F;
+    --ink-faint: #9A8B7E;
+    --rule: #D6C9B8;
+    --green: #5B7C5E;
+    --red: #B0463C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Lora', Georgia, serif; line-height: 1.55;
+    min-height: 100vh; padding: 2rem;
+  }
+
+  /* layout demonstrativo: mapa fake à esquerda, card à direita */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .map-stub {
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    min-height: 600px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-faint);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem; letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ============= CARD ============= */
+  .card-uf {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--orange);
+    border-radius: 2px;
+    padding: 1.5rem 1.5rem 1.25rem;
+    box-shadow: 0 4px 16px rgba(90, 56, 37, 0.06);
+    position: relative;
+  }
+
+  /* header */
+  .card-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+  .card-uf-nome {
+    font-family: 'Lora', serif;
+    font-weight: 600; font-size: 1.5rem;
+    color: var(--brown);
+    letter-spacing: -0.01em;
+  }
+  .card-close {
+    background: none; border: none; cursor: pointer;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 1.1rem; color: var(--ink-faint);
+    padding: 0; line-height: 1;
+  }
+  .card-close:hover { color: var(--orange-deep); }
+
+  .card-uf-sigla {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+
+  /* indicador atual em destaque */
+  .indicador-titulo {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .indicador-spec {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .valor-row {
+    display: flex; align-items: baseline; gap: 0.8rem;
+    margin-bottom: 0.6rem;
+  }
+  .valor-num {
+    font-family: 'Lora', serif;
+    font-weight: 700; font-size: 2.6rem;
+    color: var(--orange-deep);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .valor-delta {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--green);
+  }
+  .valor-delta.neg { color: var(--red); }
+  .valor-delta.zero { color: var(--ink-faint); }
+
+  .ranking-line {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin-bottom: 1.2rem;
+  }
+  .ranking-line strong { color: var(--brown); font-weight: 600; }
+  .ranking-line .gap-br {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    background: var(--orange-pale);
+    color: var(--brown);
+    border-radius: 2px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.4rem;
+  }
+  .ranking-line .gap-br.neg { background: rgba(176, 70, 60, 0.12); color: var(--red); }
+
+  /* divisor */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 1.2rem 0 1rem;
+  }
+
+  /* mini-linha série histórica */
+  .serie-titulo {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .sparkline-wrap {
+    height: 90px;
+    width: 100%;
+    margin-bottom: 0.4rem;
+  }
+  .sparkline-legend {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    display: flex; gap: 1rem;
+    margin-bottom: 0.4rem;
+  }
+  .legend-mark {
+    display: inline-block; width: 18px; height: 2px;
+    vertical-align: middle; margin-right: 0.3rem;
+  }
+  .legend-uf { background: var(--orange-deep); }
+  .legend-br { background: var(--brown-soft); border-top: 2px dashed var(--brown-soft); height: 0; border-bottom: none; }
+
+  /* desagregações */
+  .recortes-titulo {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .recortes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.2rem;
+  }
+  .recorte-bloco {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.82rem;
+  }
+  .recorte-label {
+    width: 56px;
+    color: var(--ink-faint);
+    font-weight: 500;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .recorte-bars {
+    flex: 1;
+    display: flex;
+    gap: 0.4rem;
+  }
+  .recorte-item {
+    flex: 1;
+    text-align: center;
+    padding: 0.3rem 0.2rem;
+    border-radius: 2px;
+    background: var(--cream);
+    color: var(--brown);
+    font-weight: 600;
+  }
+  .recorte-item .lbl {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--ink-faint);
+    font-weight: 400;
+    margin-bottom: 0.15rem;
+    text-transform: lowercase;
+    letter-spacing: 0;
+  }
+
+  /* link leitura completa */
+  .card-link {
+    display: block;
+    padding: 0.7rem 1rem;
+    background: var(--orange-pale);
+    color: var(--brown);
+    text-decoration: none;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-radius: 2px;
+    text-align: center;
+    transition: background 0.15s;
+    margin-bottom: 0.6rem;
+  }
+  .card-link:hover { background: var(--orange-soft); color: white; }
+
+  /* fonte */
+  .fonte-line {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    font-style: italic;
+    text-align: right;
+  }
+
+  /* aviso de margem de erro */
+  .warn-cv {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    color: #B0463C;
+    background: rgba(176, 70, 60, 0.08);
+    padding: 0.4rem 0.6rem;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+
+  /* legenda do sketch */
+  .sketch-note {
+    max-width: 1280px;
+    margin: 2rem auto 0;
+    padding: 1.5rem;
+    background: var(--cream);
+    border-radius: 4px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .sketch-note h3 {
+    font-family: 'Lora', serif;
+    color: var(--brown);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+  .sketch-note ul { margin-left: 1.2rem; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <div class="map-stub">
+    [ mapa coroplético do Brasil — UFs clicáveis ]
+  </div>
+
+  <aside class="card-uf">
+    <div class="card-head">
+      <h2 class="card-uf-nome">Alagoas</h2>
+      <button class="card-close" aria-label="Fechar card">✕</button>
+    </div>
+    <div class="card-uf-sigla">AL · Nordeste</div>
+
+    <div class="indicador-titulo">% Adequado+</div>
+    <div class="indicador-spec">Leitura · 5º EF · Pública · 2023</div>
+
+    <div class="valor-row">
+      <div class="valor-num">31,4%</div>
+      <div class="valor-delta">↑ +2,1 pp <span style="color:var(--ink-faint); font-weight:400;">vs 2021</span></div>
+    </div>
+
+    <div class="ranking-line">
+      <strong>22º</strong> de 27 UFs
+      &nbsp;·&nbsp; Média BR: <strong>41,4%</strong>
+      <span class="gap-br neg">−10,0 pp vs BR</span>
+    </div>
+
+    <hr class="divider">
+
+    <div class="serie-titulo">Série histórica</div>
+    <div class="sparkline-wrap">
+      <svg width="100%" height="90" viewBox="0 0 340 90" preserveAspectRatio="none">
+        <!-- eixo base -->
+        <line x1="0" y1="80" x2="340" y2="80" stroke="#D6C9B8" stroke-width="1"/>
+        <!-- BR (linha tracejada marrom) -->
+        <polyline points="20,35 100,33 200,30 310,28"
+                  fill="none" stroke="#8B5A3C" stroke-width="1.6"
+                  stroke-dasharray="4 3" />
+        <!-- AL (linha sólida laranja) -->
+        <polyline points="20,68 100,62 200,55 310,48"
+                  fill="none" stroke="#D35400" stroke-width="2.2" />
+        <!-- pontos AL -->
+        <circle cx="20" cy="68" r="3" fill="#D35400" />
+        <circle cx="100" cy="62" r="3" fill="#D35400" />
+        <circle cx="200" cy="55" r="3" fill="#D35400" />
+        <circle cx="310" cy="48" r="4" fill="#D35400" stroke="#FCF8F0" stroke-width="1.5" />
+        <!-- labels ano -->
+        <text x="20" y="89" font-family="Work Sans, sans-serif" font-size="9" fill="#9A8B7E" text-anchor="middle">2017</text>
+        <text x="100" y="89" font-family="Work Sans, sans-serif" font-size="9" fill="#9A8B7E" text-anchor="middle">2019</text>
+        <text x="200" y="89" font-family="Work Sans, sans-serif" font-size="9" fill="#9A8B7E" text-anchor="middle">2021</text>
+        <text x="310" y="89" font-family="Work Sans, sans-serif" font-size="9" fill="#9A8B7E" text-anchor="middle">2023</text>
+        <!-- valores extremos -->
+        <text x="20" y="58" font-family="Work Sans, sans-serif" font-size="9" fill="#D35400" text-anchor="middle" font-weight="600">22,1</text>
+        <text x="310" y="42" font-family="Work Sans, sans-serif" font-size="9" fill="#D35400" text-anchor="middle" font-weight="600">31,4</text>
+      </svg>
+    </div>
+    <div class="sparkline-legend">
+      <span><span class="legend-mark legend-uf"></span>Alagoas</span>
+      <span><span class="legend-mark legend-br"></span>Brasil</span>
+    </div>
+
+    <hr class="divider">
+
+    <div class="recortes-titulo">Recortes</div>
+    <div class="recortes-grid">
+      <div class="recorte-bloco">
+        <div class="recorte-label">Raça</div>
+        <div class="recorte-bars">
+          <div class="recorte-item"><span class="lbl">Branca</span>38</div>
+          <div class="recorte-item"><span class="lbl">Parda</span>30</div>
+          <div class="recorte-item"><span class="lbl">Preta</span>26</div>
+        </div>
+      </div>
+      <div class="recorte-bloco">
+        <div class="recorte-label">Sexo</div>
+        <div class="recorte-bars">
+          <div class="recorte-item"><span class="lbl">Fem</span>33</div>
+          <div class="recorte-item"><span class="lbl">Masc</span>29</div>
+        </div>
+      </div>
+      <div class="recorte-bloco">
+        <div class="recorte-label">Rede</div>
+        <div class="recorte-bars">
+          <div class="recorte-item"><span class="lbl">Pública</span>31</div>
+          <div class="recorte-item"><span class="lbl">Privada</span>78</div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#" class="card-link">→ Ver leitura completa de Alagoas</a>
+
+    <div class="fonte-line">Fonte: SAEB 2017-2023 · INEP</div>
+  </aside>
+
+</div>
+
+<div class="sketch-note">
+  <h3>Notas do sketch</h3>
+  <ul>
+    <li><strong>Paleta e tipografia:</strong> usa as variáveis CSS do <code>index.html</code> (Lora serif para títulos/valores, Work Sans para metadados; orange-deep para destaque, brown para texto principal). Zero novidade visual.</li>
+    <li><strong>Largura sugerida:</strong> 380px fixo no desktop · drawer full-width no mobile (overlay sobre o mapa).</li>
+    <li><strong>Estado vazio:</strong> quando o filtro do indicador retorna NA (ex.: rede em PNADC), card mostra "indicador não desagregado por rede nesta fonte" em vez do bloco "Recortes".</li>
+    <li><strong>Alta margem de erro (PNADC pequenas UFs):</strong> quando <code>cv > 20</code>, aparece linha vermelha discreta acima dos recortes: "⚠ AC tem amostra reduzida; valores por raça com margem ampla".</li>
+    <li><strong>Sparkline:</strong> SVG inline (sem dependência). Para SAEB tem 4 pontos (2017/2019/2021/2023); para PNADC e Censo Escolar tem 10-14 pontos anuais. Linha sólida = UF, tracejada = Brasil.</li>
+    <li><strong>Link "Ver leitura completa":</strong> roteia para uma das 9 leituras OEE pré-filtrada pela UF (ex.: L8 — funil racial da trajetória, recortado para AL). Opcional na v1.</li>
+    <li><strong>Acessibilidade:</strong> botão fechar com <code>aria-label</code>; foco visível; contraste WCAG AA verificado (orange-deep em paper = 5.8:1; brown em paper = 9.4:1).</li>
+  </ul>
+</div>
+
+</body>
+</html>

@@ -44,21 +44,54 @@ Páginas dinâmicas (JS) não cedem a raspagem. Sugestão de download manual via
 
 ## Estrutura do projeto
 
+O projeto se organiza em **dois eixos de produção** e uma **infraestrutura compartilhada**:
+
 ```
 Observatorio_Equidade_Educacional/
+│
 ├── README.md                          este arquivo
-├── prototipo/                         HTMLs em D3 (insights3.html é o vigente)
+│
+├── ─── PRODUTOS DIGITAIS (site público NEES/UFAL) ───
+│
+├── index.html                         landing page (servida pelo GitHub Pages)
+├── interseccionalidade/               leituras storytelling (HTML)
+├── medio/                             sub-app Vite/Node (ensino médio)
+├── prototipo/                         HTMLs em D3 (insights3, travessias, sketches)
+│
+├── ─── PRODUTOS ACADÊMICOS (papers, submissões) ───
+│
+├── academico/                         um subdiretório por paper/projeto
+│   ├── README.md                      convenção e índice
+│   └── maihda_saeb2023/
+│       ├── manuscript/                versões do paper
+│       └── paper/                     figuras, tabelas, submission_REE/
+│
+├── ─── INFRAESTRUTURA COMPARTILHADA ───
+│
 ├── pipeline/
-│   ├── R/                             scripts R (a escrever)
+│   ├── R/                             leitores (01-05), geradores do site (10-21),
+│   │   └── exploracoes/               análises do paper MAIHDA (04-09, 30+)
 │   ├── anexos/                        dicionários oficiais INEP
 │   ├── data/
-│   │   ├── raw/                       dumps originais (ZIPs/CSV)
-│   │   ├── processed/                 parquet tratado por fonte (a gerar)
-│   │   └── agregados/                 JSONs pré-computados para o front (a gerar)
-│   └── docs/                          dicionário do projeto + notas QuantCrit
-└── handoff/                           entregáveis para time de front e back
-    └── 01_arquitetura.md              estratégia em 3 fases (criado)
+│   │   ├── raw/                       dumps originais
+│   │   ├── processed/                 parquet tratado
+│   │   └── agregados/                 JSONs para o front
+│   └── docs/
+│
+├── referencias/                       bibliografia + check de literatura qualitativa
+├── handoff/                           briefs de transição entre sessões/equipes
+│   ├── 01_arquitetura.md
+│   ├── 08_maihda_exploratorio_brief.md  ← brief do paper
+│   └── 09_oee_mapa_handoff.md           ← brief do mapa OEE (para outra janela)
+│
+└── old/                               artefatos históricos (briefing fundador + protótipos exploratórios)
 ```
+
+**Regra prática para decidir onde mexer:**
+- Vai pro site? → `index.html`, `interseccionalidade/`, `medio/`, `prototipo/`
+- Vai pra paper/revista? → `academico/<projeto>/`
+- É código/dado que alimenta os dois? → `pipeline/`
+- É referência histórica, não ativa? → `old/` (não editar lá, copiar para o lugar certo se precisar reativar)
 
 ## Status atual (2026-05-11)
 
