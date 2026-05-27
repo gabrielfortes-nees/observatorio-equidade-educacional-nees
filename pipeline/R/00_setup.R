@@ -5,9 +5,12 @@ suppressPackageStartupMessages({
   library(data.table)
   library(arrow)
   library(jsonlite)
+  library(here)
 })
 
-PROJ     <- "/Users/gabrielfortes/Documents/Claude/Projects/Observatorio_Equidade_Educacional"
+# Raiz do projeto detectada automaticamente (here usa .git, .here ou .Rproj
+# como ancora). Funciona em qualquer maquina que clone o repo.
+PROJ     <- here::here()
 DIR_RAW  <- file.path(PROJ, "pipeline/data/raw")
 DIR_PROC <- file.path(PROJ, "pipeline/data/processed")
 DIR_AGG  <- file.path(PROJ, "pipeline/data/agregados")

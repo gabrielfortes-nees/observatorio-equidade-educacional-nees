@@ -1,3 +1,19 @@
+# ===== Produção acadêmica em revisão — NÃO subir =====
+# Manuscritos, papers, drafts, submissões. Sob revisão por pares, com risco
+# de comprometer cego, ineditismo e propriedade intelectual.
+academico/
+old/
+
+# Arquivos esparsos de manuscrito que possam aparecer fora de academico/
+**/manuscript/
+**/paper/
+**/submission*/
+**/*_paper_*.docx
+**/*_paper_*.pdf
+**/*_manuscript*.docx
+**/*_manuscript*.pdf
+**/MAIHDA_Brazil_submission*
+
 # ===== Microdados originais — NÃO subir =====
 # Têm dados pessoais (CPFs, NIS no Bolsa Família) e são pesados (~4GB)
 # O time baixa direto do INEP/CGU/IBGE seguindo handoff/06_como_rodar.md
